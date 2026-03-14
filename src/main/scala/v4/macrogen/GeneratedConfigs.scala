@@ -3505,3 +3505,12 @@ object MacroGenManifest {
     ("MacroGenConfig49", classOf[MacroGenConfig49], 50)
   )
 }
+
+/**
+ * SmallBoom config for standalone elaboration via ElaborationHarness.
+ * 1-wide, ROB=32, TAGE-L BPD. The simplest stock BOOM configuration.
+ */
+class SmallBoomMacroGen extends Config(
+  new boom.v4.common.WithTAGELBPD ++
+  new boom.v4.common.WithNSmallBooms(1)
+)
