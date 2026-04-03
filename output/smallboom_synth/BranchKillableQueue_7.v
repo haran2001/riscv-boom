@@ -1,0 +1,2599 @@
+module BranchKillableQueue_7 (
+	clock,
+	reset,
+	io_enq_ready,
+	io_enq_valid,
+	io_enq_bits_uop_inst,
+	io_enq_bits_uop_debug_inst,
+	io_enq_bits_uop_is_rvc,
+	io_enq_bits_uop_debug_pc,
+	io_enq_bits_uop_iq_type_0,
+	io_enq_bits_uop_iq_type_1,
+	io_enq_bits_uop_iq_type_2,
+	io_enq_bits_uop_iq_type_3,
+	io_enq_bits_uop_fu_code_0,
+	io_enq_bits_uop_fu_code_1,
+	io_enq_bits_uop_fu_code_2,
+	io_enq_bits_uop_fu_code_3,
+	io_enq_bits_uop_fu_code_4,
+	io_enq_bits_uop_fu_code_5,
+	io_enq_bits_uop_fu_code_6,
+	io_enq_bits_uop_fu_code_7,
+	io_enq_bits_uop_fu_code_8,
+	io_enq_bits_uop_fu_code_9,
+	io_enq_bits_uop_iw_issued,
+	io_enq_bits_uop_iw_issued_partial_agen,
+	io_enq_bits_uop_iw_issued_partial_dgen,
+	io_enq_bits_uop_iw_p1_speculative_child,
+	io_enq_bits_uop_iw_p2_speculative_child,
+	io_enq_bits_uop_iw_p1_bypass_hint,
+	io_enq_bits_uop_iw_p2_bypass_hint,
+	io_enq_bits_uop_iw_p3_bypass_hint,
+	io_enq_bits_uop_br_mask,
+	io_enq_bits_uop_br_tag,
+	io_enq_bits_uop_br_type,
+	io_enq_bits_uop_is_sfb,
+	io_enq_bits_uop_is_fence,
+	io_enq_bits_uop_is_fencei,
+	io_enq_bits_uop_is_sfence,
+	io_enq_bits_uop_is_amo,
+	io_enq_bits_uop_is_eret,
+	io_enq_bits_uop_is_sys_pc2epc,
+	io_enq_bits_uop_is_rocc,
+	io_enq_bits_uop_is_mov,
+	io_enq_bits_uop_ftq_idx,
+	io_enq_bits_uop_edge_inst,
+	io_enq_bits_uop_pc_lob,
+	io_enq_bits_uop_taken,
+	io_enq_bits_uop_imm_rename,
+	io_enq_bits_uop_imm_sel,
+	io_enq_bits_uop_pimm,
+	io_enq_bits_uop_imm_packed,
+	io_enq_bits_uop_op1_sel,
+	io_enq_bits_uop_op2_sel,
+	io_enq_bits_uop_fp_ctrl_ldst,
+	io_enq_bits_uop_fp_ctrl_wen,
+	io_enq_bits_uop_fp_ctrl_ren1,
+	io_enq_bits_uop_fp_ctrl_ren2,
+	io_enq_bits_uop_fp_ctrl_ren3,
+	io_enq_bits_uop_fp_ctrl_swap12,
+	io_enq_bits_uop_fp_ctrl_swap23,
+	io_enq_bits_uop_fp_ctrl_typeTagIn,
+	io_enq_bits_uop_fp_ctrl_typeTagOut,
+	io_enq_bits_uop_fp_ctrl_fromint,
+	io_enq_bits_uop_fp_ctrl_toint,
+	io_enq_bits_uop_fp_ctrl_fastpipe,
+	io_enq_bits_uop_fp_ctrl_fma,
+	io_enq_bits_uop_fp_ctrl_div,
+	io_enq_bits_uop_fp_ctrl_sqrt,
+	io_enq_bits_uop_fp_ctrl_wflags,
+	io_enq_bits_uop_fp_ctrl_vec,
+	io_enq_bits_uop_rob_idx,
+	io_enq_bits_uop_ldq_idx,
+	io_enq_bits_uop_stq_idx,
+	io_enq_bits_uop_rxq_idx,
+	io_enq_bits_uop_pdst,
+	io_enq_bits_uop_prs1,
+	io_enq_bits_uop_prs2,
+	io_enq_bits_uop_prs3,
+	io_enq_bits_uop_ppred,
+	io_enq_bits_uop_prs1_busy,
+	io_enq_bits_uop_prs2_busy,
+	io_enq_bits_uop_prs3_busy,
+	io_enq_bits_uop_ppred_busy,
+	io_enq_bits_uop_stale_pdst,
+	io_enq_bits_uop_exception,
+	io_enq_bits_uop_exc_cause,
+	io_enq_bits_uop_mem_cmd,
+	io_enq_bits_uop_mem_size,
+	io_enq_bits_uop_mem_signed,
+	io_enq_bits_uop_uses_ldq,
+	io_enq_bits_uop_uses_stq,
+	io_enq_bits_uop_is_unique,
+	io_enq_bits_uop_flush_on_commit,
+	io_enq_bits_uop_csr_cmd,
+	io_enq_bits_uop_ldst_is_rs1,
+	io_enq_bits_uop_ldst,
+	io_enq_bits_uop_lrs1,
+	io_enq_bits_uop_lrs2,
+	io_enq_bits_uop_lrs3,
+	io_enq_bits_uop_dst_rtype,
+	io_enq_bits_uop_lrs1_rtype,
+	io_enq_bits_uop_lrs2_rtype,
+	io_enq_bits_uop_frs3_en,
+	io_enq_bits_uop_fcn_dw,
+	io_enq_bits_uop_fcn_op,
+	io_enq_bits_uop_fp_val,
+	io_enq_bits_uop_fp_rm,
+	io_enq_bits_uop_fp_typ,
+	io_enq_bits_uop_xcpt_pf_if,
+	io_enq_bits_uop_xcpt_ae_if,
+	io_enq_bits_uop_xcpt_ma_if,
+	io_enq_bits_uop_bp_debug_if,
+	io_enq_bits_uop_bp_xcpt_if,
+	io_enq_bits_uop_debug_fsrc,
+	io_enq_bits_uop_debug_tsrc,
+	io_enq_bits_data,
+	io_deq_ready,
+	io_deq_valid,
+	io_deq_bits_uop_inst,
+	io_deq_bits_uop_debug_inst,
+	io_deq_bits_uop_is_rvc,
+	io_deq_bits_uop_debug_pc,
+	io_deq_bits_uop_iq_type_0,
+	io_deq_bits_uop_iq_type_1,
+	io_deq_bits_uop_iq_type_2,
+	io_deq_bits_uop_iq_type_3,
+	io_deq_bits_uop_fu_code_0,
+	io_deq_bits_uop_fu_code_1,
+	io_deq_bits_uop_fu_code_2,
+	io_deq_bits_uop_fu_code_3,
+	io_deq_bits_uop_fu_code_4,
+	io_deq_bits_uop_fu_code_5,
+	io_deq_bits_uop_fu_code_6,
+	io_deq_bits_uop_fu_code_7,
+	io_deq_bits_uop_fu_code_8,
+	io_deq_bits_uop_fu_code_9,
+	io_deq_bits_uop_iw_issued,
+	io_deq_bits_uop_iw_issued_partial_agen,
+	io_deq_bits_uop_iw_issued_partial_dgen,
+	io_deq_bits_uop_iw_p1_speculative_child,
+	io_deq_bits_uop_iw_p2_speculative_child,
+	io_deq_bits_uop_iw_p1_bypass_hint,
+	io_deq_bits_uop_iw_p2_bypass_hint,
+	io_deq_bits_uop_iw_p3_bypass_hint,
+	io_deq_bits_uop_dis_col_sel,
+	io_deq_bits_uop_br_mask,
+	io_deq_bits_uop_br_tag,
+	io_deq_bits_uop_br_type,
+	io_deq_bits_uop_is_sfb,
+	io_deq_bits_uop_is_fence,
+	io_deq_bits_uop_is_fencei,
+	io_deq_bits_uop_is_sfence,
+	io_deq_bits_uop_is_amo,
+	io_deq_bits_uop_is_eret,
+	io_deq_bits_uop_is_sys_pc2epc,
+	io_deq_bits_uop_is_rocc,
+	io_deq_bits_uop_is_mov,
+	io_deq_bits_uop_ftq_idx,
+	io_deq_bits_uop_edge_inst,
+	io_deq_bits_uop_pc_lob,
+	io_deq_bits_uop_taken,
+	io_deq_bits_uop_imm_rename,
+	io_deq_bits_uop_imm_sel,
+	io_deq_bits_uop_pimm,
+	io_deq_bits_uop_imm_packed,
+	io_deq_bits_uop_op1_sel,
+	io_deq_bits_uop_op2_sel,
+	io_deq_bits_uop_fp_ctrl_ldst,
+	io_deq_bits_uop_fp_ctrl_wen,
+	io_deq_bits_uop_fp_ctrl_ren1,
+	io_deq_bits_uop_fp_ctrl_ren2,
+	io_deq_bits_uop_fp_ctrl_ren3,
+	io_deq_bits_uop_fp_ctrl_swap12,
+	io_deq_bits_uop_fp_ctrl_swap23,
+	io_deq_bits_uop_fp_ctrl_typeTagIn,
+	io_deq_bits_uop_fp_ctrl_typeTagOut,
+	io_deq_bits_uop_fp_ctrl_fromint,
+	io_deq_bits_uop_fp_ctrl_toint,
+	io_deq_bits_uop_fp_ctrl_fastpipe,
+	io_deq_bits_uop_fp_ctrl_fma,
+	io_deq_bits_uop_fp_ctrl_div,
+	io_deq_bits_uop_fp_ctrl_sqrt,
+	io_deq_bits_uop_fp_ctrl_wflags,
+	io_deq_bits_uop_fp_ctrl_vec,
+	io_deq_bits_uop_rob_idx,
+	io_deq_bits_uop_ldq_idx,
+	io_deq_bits_uop_stq_idx,
+	io_deq_bits_uop_rxq_idx,
+	io_deq_bits_uop_pdst,
+	io_deq_bits_uop_prs1,
+	io_deq_bits_uop_prs2,
+	io_deq_bits_uop_prs3,
+	io_deq_bits_uop_ppred,
+	io_deq_bits_uop_prs1_busy,
+	io_deq_bits_uop_prs2_busy,
+	io_deq_bits_uop_prs3_busy,
+	io_deq_bits_uop_ppred_busy,
+	io_deq_bits_uop_stale_pdst,
+	io_deq_bits_uop_exception,
+	io_deq_bits_uop_exc_cause,
+	io_deq_bits_uop_mem_cmd,
+	io_deq_bits_uop_mem_size,
+	io_deq_bits_uop_mem_signed,
+	io_deq_bits_uop_uses_ldq,
+	io_deq_bits_uop_uses_stq,
+	io_deq_bits_uop_is_unique,
+	io_deq_bits_uop_flush_on_commit,
+	io_deq_bits_uop_csr_cmd,
+	io_deq_bits_uop_ldst_is_rs1,
+	io_deq_bits_uop_ldst,
+	io_deq_bits_uop_lrs1,
+	io_deq_bits_uop_lrs2,
+	io_deq_bits_uop_lrs3,
+	io_deq_bits_uop_dst_rtype,
+	io_deq_bits_uop_lrs1_rtype,
+	io_deq_bits_uop_lrs2_rtype,
+	io_deq_bits_uop_frs3_en,
+	io_deq_bits_uop_fcn_dw,
+	io_deq_bits_uop_fcn_op,
+	io_deq_bits_uop_fp_val,
+	io_deq_bits_uop_fp_rm,
+	io_deq_bits_uop_fp_typ,
+	io_deq_bits_uop_xcpt_pf_if,
+	io_deq_bits_uop_xcpt_ae_if,
+	io_deq_bits_uop_xcpt_ma_if,
+	io_deq_bits_uop_bp_debug_if,
+	io_deq_bits_uop_bp_xcpt_if,
+	io_deq_bits_uop_debug_fsrc,
+	io_deq_bits_uop_debug_tsrc,
+	io_deq_bits_data,
+	io_brupdate_b1_resolve_mask,
+	io_brupdate_b1_mispredict_mask,
+	io_flush
+);
+	input clock;
+	input reset;
+	output wire io_enq_ready;
+	input io_enq_valid;
+	input [31:0] io_enq_bits_uop_inst;
+	input [31:0] io_enq_bits_uop_debug_inst;
+	input io_enq_bits_uop_is_rvc;
+	input [39:0] io_enq_bits_uop_debug_pc;
+	input io_enq_bits_uop_iq_type_0;
+	input io_enq_bits_uop_iq_type_1;
+	input io_enq_bits_uop_iq_type_2;
+	input io_enq_bits_uop_iq_type_3;
+	input io_enq_bits_uop_fu_code_0;
+	input io_enq_bits_uop_fu_code_1;
+	input io_enq_bits_uop_fu_code_2;
+	input io_enq_bits_uop_fu_code_3;
+	input io_enq_bits_uop_fu_code_4;
+	input io_enq_bits_uop_fu_code_5;
+	input io_enq_bits_uop_fu_code_6;
+	input io_enq_bits_uop_fu_code_7;
+	input io_enq_bits_uop_fu_code_8;
+	input io_enq_bits_uop_fu_code_9;
+	input io_enq_bits_uop_iw_issued;
+	input io_enq_bits_uop_iw_issued_partial_agen;
+	input io_enq_bits_uop_iw_issued_partial_dgen;
+	input io_enq_bits_uop_iw_p1_speculative_child;
+	input io_enq_bits_uop_iw_p2_speculative_child;
+	input io_enq_bits_uop_iw_p1_bypass_hint;
+	input io_enq_bits_uop_iw_p2_bypass_hint;
+	input io_enq_bits_uop_iw_p3_bypass_hint;
+	input [7:0] io_enq_bits_uop_br_mask;
+	input [2:0] io_enq_bits_uop_br_tag;
+	input [3:0] io_enq_bits_uop_br_type;
+	input io_enq_bits_uop_is_sfb;
+	input io_enq_bits_uop_is_fence;
+	input io_enq_bits_uop_is_fencei;
+	input io_enq_bits_uop_is_sfence;
+	input io_enq_bits_uop_is_amo;
+	input io_enq_bits_uop_is_eret;
+	input io_enq_bits_uop_is_sys_pc2epc;
+	input io_enq_bits_uop_is_rocc;
+	input io_enq_bits_uop_is_mov;
+	input [3:0] io_enq_bits_uop_ftq_idx;
+	input io_enq_bits_uop_edge_inst;
+	input [5:0] io_enq_bits_uop_pc_lob;
+	input io_enq_bits_uop_taken;
+	input io_enq_bits_uop_imm_rename;
+	input [2:0] io_enq_bits_uop_imm_sel;
+	input [4:0] io_enq_bits_uop_pimm;
+	input [19:0] io_enq_bits_uop_imm_packed;
+	input [1:0] io_enq_bits_uop_op1_sel;
+	input [2:0] io_enq_bits_uop_op2_sel;
+	input io_enq_bits_uop_fp_ctrl_ldst;
+	input io_enq_bits_uop_fp_ctrl_wen;
+	input io_enq_bits_uop_fp_ctrl_ren1;
+	input io_enq_bits_uop_fp_ctrl_ren2;
+	input io_enq_bits_uop_fp_ctrl_ren3;
+	input io_enq_bits_uop_fp_ctrl_swap12;
+	input io_enq_bits_uop_fp_ctrl_swap23;
+	input [1:0] io_enq_bits_uop_fp_ctrl_typeTagIn;
+	input [1:0] io_enq_bits_uop_fp_ctrl_typeTagOut;
+	input io_enq_bits_uop_fp_ctrl_fromint;
+	input io_enq_bits_uop_fp_ctrl_toint;
+	input io_enq_bits_uop_fp_ctrl_fastpipe;
+	input io_enq_bits_uop_fp_ctrl_fma;
+	input io_enq_bits_uop_fp_ctrl_div;
+	input io_enq_bits_uop_fp_ctrl_sqrt;
+	input io_enq_bits_uop_fp_ctrl_wflags;
+	input io_enq_bits_uop_fp_ctrl_vec;
+	input [4:0] io_enq_bits_uop_rob_idx;
+	input [3:0] io_enq_bits_uop_ldq_idx;
+	input [3:0] io_enq_bits_uop_stq_idx;
+	input [1:0] io_enq_bits_uop_rxq_idx;
+	input [5:0] io_enq_bits_uop_pdst;
+	input [5:0] io_enq_bits_uop_prs1;
+	input [5:0] io_enq_bits_uop_prs2;
+	input [5:0] io_enq_bits_uop_prs3;
+	input [3:0] io_enq_bits_uop_ppred;
+	input io_enq_bits_uop_prs1_busy;
+	input io_enq_bits_uop_prs2_busy;
+	input io_enq_bits_uop_prs3_busy;
+	input io_enq_bits_uop_ppred_busy;
+	input [5:0] io_enq_bits_uop_stale_pdst;
+	input io_enq_bits_uop_exception;
+	input [63:0] io_enq_bits_uop_exc_cause;
+	input [4:0] io_enq_bits_uop_mem_cmd;
+	input [1:0] io_enq_bits_uop_mem_size;
+	input io_enq_bits_uop_mem_signed;
+	input io_enq_bits_uop_uses_ldq;
+	input io_enq_bits_uop_uses_stq;
+	input io_enq_bits_uop_is_unique;
+	input io_enq_bits_uop_flush_on_commit;
+	input [2:0] io_enq_bits_uop_csr_cmd;
+	input io_enq_bits_uop_ldst_is_rs1;
+	input [5:0] io_enq_bits_uop_ldst;
+	input [5:0] io_enq_bits_uop_lrs1;
+	input [5:0] io_enq_bits_uop_lrs2;
+	input [5:0] io_enq_bits_uop_lrs3;
+	input [1:0] io_enq_bits_uop_dst_rtype;
+	input [1:0] io_enq_bits_uop_lrs1_rtype;
+	input [1:0] io_enq_bits_uop_lrs2_rtype;
+	input io_enq_bits_uop_frs3_en;
+	input io_enq_bits_uop_fcn_dw;
+	input [4:0] io_enq_bits_uop_fcn_op;
+	input io_enq_bits_uop_fp_val;
+	input [2:0] io_enq_bits_uop_fp_rm;
+	input [1:0] io_enq_bits_uop_fp_typ;
+	input io_enq_bits_uop_xcpt_pf_if;
+	input io_enq_bits_uop_xcpt_ae_if;
+	input io_enq_bits_uop_xcpt_ma_if;
+	input io_enq_bits_uop_bp_debug_if;
+	input io_enq_bits_uop_bp_xcpt_if;
+	input [2:0] io_enq_bits_uop_debug_fsrc;
+	input [2:0] io_enq_bits_uop_debug_tsrc;
+	input [63:0] io_enq_bits_data;
+	input io_deq_ready;
+	output wire io_deq_valid;
+	output wire [31:0] io_deq_bits_uop_inst;
+	output wire [31:0] io_deq_bits_uop_debug_inst;
+	output wire io_deq_bits_uop_is_rvc;
+	output wire [39:0] io_deq_bits_uop_debug_pc;
+	output wire io_deq_bits_uop_iq_type_0;
+	output wire io_deq_bits_uop_iq_type_1;
+	output wire io_deq_bits_uop_iq_type_2;
+	output wire io_deq_bits_uop_iq_type_3;
+	output wire io_deq_bits_uop_fu_code_0;
+	output wire io_deq_bits_uop_fu_code_1;
+	output wire io_deq_bits_uop_fu_code_2;
+	output wire io_deq_bits_uop_fu_code_3;
+	output wire io_deq_bits_uop_fu_code_4;
+	output wire io_deq_bits_uop_fu_code_5;
+	output wire io_deq_bits_uop_fu_code_6;
+	output wire io_deq_bits_uop_fu_code_7;
+	output wire io_deq_bits_uop_fu_code_8;
+	output wire io_deq_bits_uop_fu_code_9;
+	output wire io_deq_bits_uop_iw_issued;
+	output wire io_deq_bits_uop_iw_issued_partial_agen;
+	output wire io_deq_bits_uop_iw_issued_partial_dgen;
+	output wire io_deq_bits_uop_iw_p1_speculative_child;
+	output wire io_deq_bits_uop_iw_p2_speculative_child;
+	output wire io_deq_bits_uop_iw_p1_bypass_hint;
+	output wire io_deq_bits_uop_iw_p2_bypass_hint;
+	output wire io_deq_bits_uop_iw_p3_bypass_hint;
+	output wire io_deq_bits_uop_dis_col_sel;
+	output wire [7:0] io_deq_bits_uop_br_mask;
+	output wire [2:0] io_deq_bits_uop_br_tag;
+	output wire [3:0] io_deq_bits_uop_br_type;
+	output wire io_deq_bits_uop_is_sfb;
+	output wire io_deq_bits_uop_is_fence;
+	output wire io_deq_bits_uop_is_fencei;
+	output wire io_deq_bits_uop_is_sfence;
+	output wire io_deq_bits_uop_is_amo;
+	output wire io_deq_bits_uop_is_eret;
+	output wire io_deq_bits_uop_is_sys_pc2epc;
+	output wire io_deq_bits_uop_is_rocc;
+	output wire io_deq_bits_uop_is_mov;
+	output wire [3:0] io_deq_bits_uop_ftq_idx;
+	output wire io_deq_bits_uop_edge_inst;
+	output wire [5:0] io_deq_bits_uop_pc_lob;
+	output wire io_deq_bits_uop_taken;
+	output wire io_deq_bits_uop_imm_rename;
+	output wire [2:0] io_deq_bits_uop_imm_sel;
+	output wire [4:0] io_deq_bits_uop_pimm;
+	output wire [19:0] io_deq_bits_uop_imm_packed;
+	output wire [1:0] io_deq_bits_uop_op1_sel;
+	output wire [2:0] io_deq_bits_uop_op2_sel;
+	output wire io_deq_bits_uop_fp_ctrl_ldst;
+	output wire io_deq_bits_uop_fp_ctrl_wen;
+	output wire io_deq_bits_uop_fp_ctrl_ren1;
+	output wire io_deq_bits_uop_fp_ctrl_ren2;
+	output wire io_deq_bits_uop_fp_ctrl_ren3;
+	output wire io_deq_bits_uop_fp_ctrl_swap12;
+	output wire io_deq_bits_uop_fp_ctrl_swap23;
+	output wire [1:0] io_deq_bits_uop_fp_ctrl_typeTagIn;
+	output wire [1:0] io_deq_bits_uop_fp_ctrl_typeTagOut;
+	output wire io_deq_bits_uop_fp_ctrl_fromint;
+	output wire io_deq_bits_uop_fp_ctrl_toint;
+	output wire io_deq_bits_uop_fp_ctrl_fastpipe;
+	output wire io_deq_bits_uop_fp_ctrl_fma;
+	output wire io_deq_bits_uop_fp_ctrl_div;
+	output wire io_deq_bits_uop_fp_ctrl_sqrt;
+	output wire io_deq_bits_uop_fp_ctrl_wflags;
+	output wire io_deq_bits_uop_fp_ctrl_vec;
+	output wire [4:0] io_deq_bits_uop_rob_idx;
+	output wire [3:0] io_deq_bits_uop_ldq_idx;
+	output wire [3:0] io_deq_bits_uop_stq_idx;
+	output wire [1:0] io_deq_bits_uop_rxq_idx;
+	output wire [5:0] io_deq_bits_uop_pdst;
+	output wire [5:0] io_deq_bits_uop_prs1;
+	output wire [5:0] io_deq_bits_uop_prs2;
+	output wire [5:0] io_deq_bits_uop_prs3;
+	output wire [3:0] io_deq_bits_uop_ppred;
+	output wire io_deq_bits_uop_prs1_busy;
+	output wire io_deq_bits_uop_prs2_busy;
+	output wire io_deq_bits_uop_prs3_busy;
+	output wire io_deq_bits_uop_ppred_busy;
+	output wire [5:0] io_deq_bits_uop_stale_pdst;
+	output wire io_deq_bits_uop_exception;
+	output wire [63:0] io_deq_bits_uop_exc_cause;
+	output wire [4:0] io_deq_bits_uop_mem_cmd;
+	output wire [1:0] io_deq_bits_uop_mem_size;
+	output wire io_deq_bits_uop_mem_signed;
+	output wire io_deq_bits_uop_uses_ldq;
+	output wire io_deq_bits_uop_uses_stq;
+	output wire io_deq_bits_uop_is_unique;
+	output wire io_deq_bits_uop_flush_on_commit;
+	output wire [2:0] io_deq_bits_uop_csr_cmd;
+	output wire io_deq_bits_uop_ldst_is_rs1;
+	output wire [5:0] io_deq_bits_uop_ldst;
+	output wire [5:0] io_deq_bits_uop_lrs1;
+	output wire [5:0] io_deq_bits_uop_lrs2;
+	output wire [5:0] io_deq_bits_uop_lrs3;
+	output wire [1:0] io_deq_bits_uop_dst_rtype;
+	output wire [1:0] io_deq_bits_uop_lrs1_rtype;
+	output wire [1:0] io_deq_bits_uop_lrs2_rtype;
+	output wire io_deq_bits_uop_frs3_en;
+	output wire io_deq_bits_uop_fcn_dw;
+	output wire [4:0] io_deq_bits_uop_fcn_op;
+	output wire io_deq_bits_uop_fp_val;
+	output wire [2:0] io_deq_bits_uop_fp_rm;
+	output wire [1:0] io_deq_bits_uop_fp_typ;
+	output wire io_deq_bits_uop_xcpt_pf_if;
+	output wire io_deq_bits_uop_xcpt_ae_if;
+	output wire io_deq_bits_uop_xcpt_ma_if;
+	output wire io_deq_bits_uop_bp_debug_if;
+	output wire io_deq_bits_uop_bp_xcpt_if;
+	output wire [2:0] io_deq_bits_uop_debug_fsrc;
+	output wire [2:0] io_deq_bits_uop_debug_tsrc;
+	output wire [63:0] io_deq_bits_data;
+	input [7:0] io_brupdate_b1_resolve_mask;
+	input [7:0] io_brupdate_b1_mispredict_mask;
+	input io_flush;
+	reg valids_0;
+	reg valids_1;
+	reg valids_2;
+	reg valids_3;
+	reg valids_4;
+	reg valids_5;
+	reg valids_6;
+	reg valids_7;
+	reg [31:0] uops_0_inst;
+	reg [31:0] uops_0_debug_inst;
+	reg uops_0_is_rvc;
+	reg [39:0] uops_0_debug_pc;
+	reg uops_0_iq_type_0;
+	reg uops_0_iq_type_1;
+	reg uops_0_iq_type_2;
+	reg uops_0_iq_type_3;
+	reg uops_0_fu_code_0;
+	reg uops_0_fu_code_1;
+	reg uops_0_fu_code_2;
+	reg uops_0_fu_code_3;
+	reg uops_0_fu_code_4;
+	reg uops_0_fu_code_5;
+	reg uops_0_fu_code_6;
+	reg uops_0_fu_code_7;
+	reg uops_0_fu_code_8;
+	reg uops_0_fu_code_9;
+	reg uops_0_iw_issued;
+	reg uops_0_iw_issued_partial_agen;
+	reg uops_0_iw_issued_partial_dgen;
+	reg uops_0_iw_p1_speculative_child;
+	reg uops_0_iw_p2_speculative_child;
+	reg uops_0_iw_p1_bypass_hint;
+	reg uops_0_iw_p2_bypass_hint;
+	reg uops_0_iw_p3_bypass_hint;
+	reg uops_0_dis_col_sel;
+	reg [7:0] uops_0_br_mask;
+	reg [2:0] uops_0_br_tag;
+	reg [3:0] uops_0_br_type;
+	reg uops_0_is_sfb;
+	reg uops_0_is_fence;
+	reg uops_0_is_fencei;
+	reg uops_0_is_sfence;
+	reg uops_0_is_amo;
+	reg uops_0_is_eret;
+	reg uops_0_is_sys_pc2epc;
+	reg uops_0_is_rocc;
+	reg uops_0_is_mov;
+	reg [3:0] uops_0_ftq_idx;
+	reg uops_0_edge_inst;
+	reg [5:0] uops_0_pc_lob;
+	reg uops_0_taken;
+	reg uops_0_imm_rename;
+	reg [2:0] uops_0_imm_sel;
+	reg [4:0] uops_0_pimm;
+	reg [19:0] uops_0_imm_packed;
+	reg [1:0] uops_0_op1_sel;
+	reg [2:0] uops_0_op2_sel;
+	reg uops_0_fp_ctrl_ldst;
+	reg uops_0_fp_ctrl_wen;
+	reg uops_0_fp_ctrl_ren1;
+	reg uops_0_fp_ctrl_ren2;
+	reg uops_0_fp_ctrl_ren3;
+	reg uops_0_fp_ctrl_swap12;
+	reg uops_0_fp_ctrl_swap23;
+	reg [1:0] uops_0_fp_ctrl_typeTagIn;
+	reg [1:0] uops_0_fp_ctrl_typeTagOut;
+	reg uops_0_fp_ctrl_fromint;
+	reg uops_0_fp_ctrl_toint;
+	reg uops_0_fp_ctrl_fastpipe;
+	reg uops_0_fp_ctrl_fma;
+	reg uops_0_fp_ctrl_div;
+	reg uops_0_fp_ctrl_sqrt;
+	reg uops_0_fp_ctrl_wflags;
+	reg uops_0_fp_ctrl_vec;
+	reg [4:0] uops_0_rob_idx;
+	reg [3:0] uops_0_ldq_idx;
+	reg [3:0] uops_0_stq_idx;
+	reg [1:0] uops_0_rxq_idx;
+	reg [5:0] uops_0_pdst;
+	reg [5:0] uops_0_prs1;
+	reg [5:0] uops_0_prs2;
+	reg [5:0] uops_0_prs3;
+	reg [3:0] uops_0_ppred;
+	reg uops_0_prs1_busy;
+	reg uops_0_prs2_busy;
+	reg uops_0_prs3_busy;
+	reg uops_0_ppred_busy;
+	reg [5:0] uops_0_stale_pdst;
+	reg uops_0_exception;
+	reg [63:0] uops_0_exc_cause;
+	reg [4:0] uops_0_mem_cmd;
+	reg [1:0] uops_0_mem_size;
+	reg uops_0_mem_signed;
+	reg uops_0_uses_ldq;
+	reg uops_0_uses_stq;
+	reg uops_0_is_unique;
+	reg uops_0_flush_on_commit;
+	reg [2:0] uops_0_csr_cmd;
+	reg uops_0_ldst_is_rs1;
+	reg [5:0] uops_0_ldst;
+	reg [5:0] uops_0_lrs1;
+	reg [5:0] uops_0_lrs2;
+	reg [5:0] uops_0_lrs3;
+	reg [1:0] uops_0_dst_rtype;
+	reg [1:0] uops_0_lrs1_rtype;
+	reg [1:0] uops_0_lrs2_rtype;
+	reg uops_0_frs3_en;
+	reg uops_0_fcn_dw;
+	reg [4:0] uops_0_fcn_op;
+	reg uops_0_fp_val;
+	reg [2:0] uops_0_fp_rm;
+	reg [1:0] uops_0_fp_typ;
+	reg uops_0_xcpt_pf_if;
+	reg uops_0_xcpt_ae_if;
+	reg uops_0_xcpt_ma_if;
+	reg uops_0_bp_debug_if;
+	reg uops_0_bp_xcpt_if;
+	reg [2:0] uops_0_debug_fsrc;
+	reg [2:0] uops_0_debug_tsrc;
+	reg [31:0] uops_1_inst;
+	reg [31:0] uops_1_debug_inst;
+	reg uops_1_is_rvc;
+	reg [39:0] uops_1_debug_pc;
+	reg uops_1_iq_type_0;
+	reg uops_1_iq_type_1;
+	reg uops_1_iq_type_2;
+	reg uops_1_iq_type_3;
+	reg uops_1_fu_code_0;
+	reg uops_1_fu_code_1;
+	reg uops_1_fu_code_2;
+	reg uops_1_fu_code_3;
+	reg uops_1_fu_code_4;
+	reg uops_1_fu_code_5;
+	reg uops_1_fu_code_6;
+	reg uops_1_fu_code_7;
+	reg uops_1_fu_code_8;
+	reg uops_1_fu_code_9;
+	reg uops_1_iw_issued;
+	reg uops_1_iw_issued_partial_agen;
+	reg uops_1_iw_issued_partial_dgen;
+	reg uops_1_iw_p1_speculative_child;
+	reg uops_1_iw_p2_speculative_child;
+	reg uops_1_iw_p1_bypass_hint;
+	reg uops_1_iw_p2_bypass_hint;
+	reg uops_1_iw_p3_bypass_hint;
+	reg uops_1_dis_col_sel;
+	reg [7:0] uops_1_br_mask;
+	reg [2:0] uops_1_br_tag;
+	reg [3:0] uops_1_br_type;
+	reg uops_1_is_sfb;
+	reg uops_1_is_fence;
+	reg uops_1_is_fencei;
+	reg uops_1_is_sfence;
+	reg uops_1_is_amo;
+	reg uops_1_is_eret;
+	reg uops_1_is_sys_pc2epc;
+	reg uops_1_is_rocc;
+	reg uops_1_is_mov;
+	reg [3:0] uops_1_ftq_idx;
+	reg uops_1_edge_inst;
+	reg [5:0] uops_1_pc_lob;
+	reg uops_1_taken;
+	reg uops_1_imm_rename;
+	reg [2:0] uops_1_imm_sel;
+	reg [4:0] uops_1_pimm;
+	reg [19:0] uops_1_imm_packed;
+	reg [1:0] uops_1_op1_sel;
+	reg [2:0] uops_1_op2_sel;
+	reg uops_1_fp_ctrl_ldst;
+	reg uops_1_fp_ctrl_wen;
+	reg uops_1_fp_ctrl_ren1;
+	reg uops_1_fp_ctrl_ren2;
+	reg uops_1_fp_ctrl_ren3;
+	reg uops_1_fp_ctrl_swap12;
+	reg uops_1_fp_ctrl_swap23;
+	reg [1:0] uops_1_fp_ctrl_typeTagIn;
+	reg [1:0] uops_1_fp_ctrl_typeTagOut;
+	reg uops_1_fp_ctrl_fromint;
+	reg uops_1_fp_ctrl_toint;
+	reg uops_1_fp_ctrl_fastpipe;
+	reg uops_1_fp_ctrl_fma;
+	reg uops_1_fp_ctrl_div;
+	reg uops_1_fp_ctrl_sqrt;
+	reg uops_1_fp_ctrl_wflags;
+	reg uops_1_fp_ctrl_vec;
+	reg [4:0] uops_1_rob_idx;
+	reg [3:0] uops_1_ldq_idx;
+	reg [3:0] uops_1_stq_idx;
+	reg [1:0] uops_1_rxq_idx;
+	reg [5:0] uops_1_pdst;
+	reg [5:0] uops_1_prs1;
+	reg [5:0] uops_1_prs2;
+	reg [5:0] uops_1_prs3;
+	reg [3:0] uops_1_ppred;
+	reg uops_1_prs1_busy;
+	reg uops_1_prs2_busy;
+	reg uops_1_prs3_busy;
+	reg uops_1_ppred_busy;
+	reg [5:0] uops_1_stale_pdst;
+	reg uops_1_exception;
+	reg [63:0] uops_1_exc_cause;
+	reg [4:0] uops_1_mem_cmd;
+	reg [1:0] uops_1_mem_size;
+	reg uops_1_mem_signed;
+	reg uops_1_uses_ldq;
+	reg uops_1_uses_stq;
+	reg uops_1_is_unique;
+	reg uops_1_flush_on_commit;
+	reg [2:0] uops_1_csr_cmd;
+	reg uops_1_ldst_is_rs1;
+	reg [5:0] uops_1_ldst;
+	reg [5:0] uops_1_lrs1;
+	reg [5:0] uops_1_lrs2;
+	reg [5:0] uops_1_lrs3;
+	reg [1:0] uops_1_dst_rtype;
+	reg [1:0] uops_1_lrs1_rtype;
+	reg [1:0] uops_1_lrs2_rtype;
+	reg uops_1_frs3_en;
+	reg uops_1_fcn_dw;
+	reg [4:0] uops_1_fcn_op;
+	reg uops_1_fp_val;
+	reg [2:0] uops_1_fp_rm;
+	reg [1:0] uops_1_fp_typ;
+	reg uops_1_xcpt_pf_if;
+	reg uops_1_xcpt_ae_if;
+	reg uops_1_xcpt_ma_if;
+	reg uops_1_bp_debug_if;
+	reg uops_1_bp_xcpt_if;
+	reg [2:0] uops_1_debug_fsrc;
+	reg [2:0] uops_1_debug_tsrc;
+	reg [31:0] uops_2_inst;
+	reg [31:0] uops_2_debug_inst;
+	reg uops_2_is_rvc;
+	reg [39:0] uops_2_debug_pc;
+	reg uops_2_iq_type_0;
+	reg uops_2_iq_type_1;
+	reg uops_2_iq_type_2;
+	reg uops_2_iq_type_3;
+	reg uops_2_fu_code_0;
+	reg uops_2_fu_code_1;
+	reg uops_2_fu_code_2;
+	reg uops_2_fu_code_3;
+	reg uops_2_fu_code_4;
+	reg uops_2_fu_code_5;
+	reg uops_2_fu_code_6;
+	reg uops_2_fu_code_7;
+	reg uops_2_fu_code_8;
+	reg uops_2_fu_code_9;
+	reg uops_2_iw_issued;
+	reg uops_2_iw_issued_partial_agen;
+	reg uops_2_iw_issued_partial_dgen;
+	reg uops_2_iw_p1_speculative_child;
+	reg uops_2_iw_p2_speculative_child;
+	reg uops_2_iw_p1_bypass_hint;
+	reg uops_2_iw_p2_bypass_hint;
+	reg uops_2_iw_p3_bypass_hint;
+	reg uops_2_dis_col_sel;
+	reg [7:0] uops_2_br_mask;
+	reg [2:0] uops_2_br_tag;
+	reg [3:0] uops_2_br_type;
+	reg uops_2_is_sfb;
+	reg uops_2_is_fence;
+	reg uops_2_is_fencei;
+	reg uops_2_is_sfence;
+	reg uops_2_is_amo;
+	reg uops_2_is_eret;
+	reg uops_2_is_sys_pc2epc;
+	reg uops_2_is_rocc;
+	reg uops_2_is_mov;
+	reg [3:0] uops_2_ftq_idx;
+	reg uops_2_edge_inst;
+	reg [5:0] uops_2_pc_lob;
+	reg uops_2_taken;
+	reg uops_2_imm_rename;
+	reg [2:0] uops_2_imm_sel;
+	reg [4:0] uops_2_pimm;
+	reg [19:0] uops_2_imm_packed;
+	reg [1:0] uops_2_op1_sel;
+	reg [2:0] uops_2_op2_sel;
+	reg uops_2_fp_ctrl_ldst;
+	reg uops_2_fp_ctrl_wen;
+	reg uops_2_fp_ctrl_ren1;
+	reg uops_2_fp_ctrl_ren2;
+	reg uops_2_fp_ctrl_ren3;
+	reg uops_2_fp_ctrl_swap12;
+	reg uops_2_fp_ctrl_swap23;
+	reg [1:0] uops_2_fp_ctrl_typeTagIn;
+	reg [1:0] uops_2_fp_ctrl_typeTagOut;
+	reg uops_2_fp_ctrl_fromint;
+	reg uops_2_fp_ctrl_toint;
+	reg uops_2_fp_ctrl_fastpipe;
+	reg uops_2_fp_ctrl_fma;
+	reg uops_2_fp_ctrl_div;
+	reg uops_2_fp_ctrl_sqrt;
+	reg uops_2_fp_ctrl_wflags;
+	reg uops_2_fp_ctrl_vec;
+	reg [4:0] uops_2_rob_idx;
+	reg [3:0] uops_2_ldq_idx;
+	reg [3:0] uops_2_stq_idx;
+	reg [1:0] uops_2_rxq_idx;
+	reg [5:0] uops_2_pdst;
+	reg [5:0] uops_2_prs1;
+	reg [5:0] uops_2_prs2;
+	reg [5:0] uops_2_prs3;
+	reg [3:0] uops_2_ppred;
+	reg uops_2_prs1_busy;
+	reg uops_2_prs2_busy;
+	reg uops_2_prs3_busy;
+	reg uops_2_ppred_busy;
+	reg [5:0] uops_2_stale_pdst;
+	reg uops_2_exception;
+	reg [63:0] uops_2_exc_cause;
+	reg [4:0] uops_2_mem_cmd;
+	reg [1:0] uops_2_mem_size;
+	reg uops_2_mem_signed;
+	reg uops_2_uses_ldq;
+	reg uops_2_uses_stq;
+	reg uops_2_is_unique;
+	reg uops_2_flush_on_commit;
+	reg [2:0] uops_2_csr_cmd;
+	reg uops_2_ldst_is_rs1;
+	reg [5:0] uops_2_ldst;
+	reg [5:0] uops_2_lrs1;
+	reg [5:0] uops_2_lrs2;
+	reg [5:0] uops_2_lrs3;
+	reg [1:0] uops_2_dst_rtype;
+	reg [1:0] uops_2_lrs1_rtype;
+	reg [1:0] uops_2_lrs2_rtype;
+	reg uops_2_frs3_en;
+	reg uops_2_fcn_dw;
+	reg [4:0] uops_2_fcn_op;
+	reg uops_2_fp_val;
+	reg [2:0] uops_2_fp_rm;
+	reg [1:0] uops_2_fp_typ;
+	reg uops_2_xcpt_pf_if;
+	reg uops_2_xcpt_ae_if;
+	reg uops_2_xcpt_ma_if;
+	reg uops_2_bp_debug_if;
+	reg uops_2_bp_xcpt_if;
+	reg [2:0] uops_2_debug_fsrc;
+	reg [2:0] uops_2_debug_tsrc;
+	reg [31:0] uops_3_inst;
+	reg [31:0] uops_3_debug_inst;
+	reg uops_3_is_rvc;
+	reg [39:0] uops_3_debug_pc;
+	reg uops_3_iq_type_0;
+	reg uops_3_iq_type_1;
+	reg uops_3_iq_type_2;
+	reg uops_3_iq_type_3;
+	reg uops_3_fu_code_0;
+	reg uops_3_fu_code_1;
+	reg uops_3_fu_code_2;
+	reg uops_3_fu_code_3;
+	reg uops_3_fu_code_4;
+	reg uops_3_fu_code_5;
+	reg uops_3_fu_code_6;
+	reg uops_3_fu_code_7;
+	reg uops_3_fu_code_8;
+	reg uops_3_fu_code_9;
+	reg uops_3_iw_issued;
+	reg uops_3_iw_issued_partial_agen;
+	reg uops_3_iw_issued_partial_dgen;
+	reg uops_3_iw_p1_speculative_child;
+	reg uops_3_iw_p2_speculative_child;
+	reg uops_3_iw_p1_bypass_hint;
+	reg uops_3_iw_p2_bypass_hint;
+	reg uops_3_iw_p3_bypass_hint;
+	reg uops_3_dis_col_sel;
+	reg [7:0] uops_3_br_mask;
+	reg [2:0] uops_3_br_tag;
+	reg [3:0] uops_3_br_type;
+	reg uops_3_is_sfb;
+	reg uops_3_is_fence;
+	reg uops_3_is_fencei;
+	reg uops_3_is_sfence;
+	reg uops_3_is_amo;
+	reg uops_3_is_eret;
+	reg uops_3_is_sys_pc2epc;
+	reg uops_3_is_rocc;
+	reg uops_3_is_mov;
+	reg [3:0] uops_3_ftq_idx;
+	reg uops_3_edge_inst;
+	reg [5:0] uops_3_pc_lob;
+	reg uops_3_taken;
+	reg uops_3_imm_rename;
+	reg [2:0] uops_3_imm_sel;
+	reg [4:0] uops_3_pimm;
+	reg [19:0] uops_3_imm_packed;
+	reg [1:0] uops_3_op1_sel;
+	reg [2:0] uops_3_op2_sel;
+	reg uops_3_fp_ctrl_ldst;
+	reg uops_3_fp_ctrl_wen;
+	reg uops_3_fp_ctrl_ren1;
+	reg uops_3_fp_ctrl_ren2;
+	reg uops_3_fp_ctrl_ren3;
+	reg uops_3_fp_ctrl_swap12;
+	reg uops_3_fp_ctrl_swap23;
+	reg [1:0] uops_3_fp_ctrl_typeTagIn;
+	reg [1:0] uops_3_fp_ctrl_typeTagOut;
+	reg uops_3_fp_ctrl_fromint;
+	reg uops_3_fp_ctrl_toint;
+	reg uops_3_fp_ctrl_fastpipe;
+	reg uops_3_fp_ctrl_fma;
+	reg uops_3_fp_ctrl_div;
+	reg uops_3_fp_ctrl_sqrt;
+	reg uops_3_fp_ctrl_wflags;
+	reg uops_3_fp_ctrl_vec;
+	reg [4:0] uops_3_rob_idx;
+	reg [3:0] uops_3_ldq_idx;
+	reg [3:0] uops_3_stq_idx;
+	reg [1:0] uops_3_rxq_idx;
+	reg [5:0] uops_3_pdst;
+	reg [5:0] uops_3_prs1;
+	reg [5:0] uops_3_prs2;
+	reg [5:0] uops_3_prs3;
+	reg [3:0] uops_3_ppred;
+	reg uops_3_prs1_busy;
+	reg uops_3_prs2_busy;
+	reg uops_3_prs3_busy;
+	reg uops_3_ppred_busy;
+	reg [5:0] uops_3_stale_pdst;
+	reg uops_3_exception;
+	reg [63:0] uops_3_exc_cause;
+	reg [4:0] uops_3_mem_cmd;
+	reg [1:0] uops_3_mem_size;
+	reg uops_3_mem_signed;
+	reg uops_3_uses_ldq;
+	reg uops_3_uses_stq;
+	reg uops_3_is_unique;
+	reg uops_3_flush_on_commit;
+	reg [2:0] uops_3_csr_cmd;
+	reg uops_3_ldst_is_rs1;
+	reg [5:0] uops_3_ldst;
+	reg [5:0] uops_3_lrs1;
+	reg [5:0] uops_3_lrs2;
+	reg [5:0] uops_3_lrs3;
+	reg [1:0] uops_3_dst_rtype;
+	reg [1:0] uops_3_lrs1_rtype;
+	reg [1:0] uops_3_lrs2_rtype;
+	reg uops_3_frs3_en;
+	reg uops_3_fcn_dw;
+	reg [4:0] uops_3_fcn_op;
+	reg uops_3_fp_val;
+	reg [2:0] uops_3_fp_rm;
+	reg [1:0] uops_3_fp_typ;
+	reg uops_3_xcpt_pf_if;
+	reg uops_3_xcpt_ae_if;
+	reg uops_3_xcpt_ma_if;
+	reg uops_3_bp_debug_if;
+	reg uops_3_bp_xcpt_if;
+	reg [2:0] uops_3_debug_fsrc;
+	reg [2:0] uops_3_debug_tsrc;
+	reg [31:0] uops_4_inst;
+	reg [31:0] uops_4_debug_inst;
+	reg uops_4_is_rvc;
+	reg [39:0] uops_4_debug_pc;
+	reg uops_4_iq_type_0;
+	reg uops_4_iq_type_1;
+	reg uops_4_iq_type_2;
+	reg uops_4_iq_type_3;
+	reg uops_4_fu_code_0;
+	reg uops_4_fu_code_1;
+	reg uops_4_fu_code_2;
+	reg uops_4_fu_code_3;
+	reg uops_4_fu_code_4;
+	reg uops_4_fu_code_5;
+	reg uops_4_fu_code_6;
+	reg uops_4_fu_code_7;
+	reg uops_4_fu_code_8;
+	reg uops_4_fu_code_9;
+	reg uops_4_iw_issued;
+	reg uops_4_iw_issued_partial_agen;
+	reg uops_4_iw_issued_partial_dgen;
+	reg uops_4_iw_p1_speculative_child;
+	reg uops_4_iw_p2_speculative_child;
+	reg uops_4_iw_p1_bypass_hint;
+	reg uops_4_iw_p2_bypass_hint;
+	reg uops_4_iw_p3_bypass_hint;
+	reg uops_4_dis_col_sel;
+	reg [7:0] uops_4_br_mask;
+	reg [2:0] uops_4_br_tag;
+	reg [3:0] uops_4_br_type;
+	reg uops_4_is_sfb;
+	reg uops_4_is_fence;
+	reg uops_4_is_fencei;
+	reg uops_4_is_sfence;
+	reg uops_4_is_amo;
+	reg uops_4_is_eret;
+	reg uops_4_is_sys_pc2epc;
+	reg uops_4_is_rocc;
+	reg uops_4_is_mov;
+	reg [3:0] uops_4_ftq_idx;
+	reg uops_4_edge_inst;
+	reg [5:0] uops_4_pc_lob;
+	reg uops_4_taken;
+	reg uops_4_imm_rename;
+	reg [2:0] uops_4_imm_sel;
+	reg [4:0] uops_4_pimm;
+	reg [19:0] uops_4_imm_packed;
+	reg [1:0] uops_4_op1_sel;
+	reg [2:0] uops_4_op2_sel;
+	reg uops_4_fp_ctrl_ldst;
+	reg uops_4_fp_ctrl_wen;
+	reg uops_4_fp_ctrl_ren1;
+	reg uops_4_fp_ctrl_ren2;
+	reg uops_4_fp_ctrl_ren3;
+	reg uops_4_fp_ctrl_swap12;
+	reg uops_4_fp_ctrl_swap23;
+	reg [1:0] uops_4_fp_ctrl_typeTagIn;
+	reg [1:0] uops_4_fp_ctrl_typeTagOut;
+	reg uops_4_fp_ctrl_fromint;
+	reg uops_4_fp_ctrl_toint;
+	reg uops_4_fp_ctrl_fastpipe;
+	reg uops_4_fp_ctrl_fma;
+	reg uops_4_fp_ctrl_div;
+	reg uops_4_fp_ctrl_sqrt;
+	reg uops_4_fp_ctrl_wflags;
+	reg uops_4_fp_ctrl_vec;
+	reg [4:0] uops_4_rob_idx;
+	reg [3:0] uops_4_ldq_idx;
+	reg [3:0] uops_4_stq_idx;
+	reg [1:0] uops_4_rxq_idx;
+	reg [5:0] uops_4_pdst;
+	reg [5:0] uops_4_prs1;
+	reg [5:0] uops_4_prs2;
+	reg [5:0] uops_4_prs3;
+	reg [3:0] uops_4_ppred;
+	reg uops_4_prs1_busy;
+	reg uops_4_prs2_busy;
+	reg uops_4_prs3_busy;
+	reg uops_4_ppred_busy;
+	reg [5:0] uops_4_stale_pdst;
+	reg uops_4_exception;
+	reg [63:0] uops_4_exc_cause;
+	reg [4:0] uops_4_mem_cmd;
+	reg [1:0] uops_4_mem_size;
+	reg uops_4_mem_signed;
+	reg uops_4_uses_ldq;
+	reg uops_4_uses_stq;
+	reg uops_4_is_unique;
+	reg uops_4_flush_on_commit;
+	reg [2:0] uops_4_csr_cmd;
+	reg uops_4_ldst_is_rs1;
+	reg [5:0] uops_4_ldst;
+	reg [5:0] uops_4_lrs1;
+	reg [5:0] uops_4_lrs2;
+	reg [5:0] uops_4_lrs3;
+	reg [1:0] uops_4_dst_rtype;
+	reg [1:0] uops_4_lrs1_rtype;
+	reg [1:0] uops_4_lrs2_rtype;
+	reg uops_4_frs3_en;
+	reg uops_4_fcn_dw;
+	reg [4:0] uops_4_fcn_op;
+	reg uops_4_fp_val;
+	reg [2:0] uops_4_fp_rm;
+	reg [1:0] uops_4_fp_typ;
+	reg uops_4_xcpt_pf_if;
+	reg uops_4_xcpt_ae_if;
+	reg uops_4_xcpt_ma_if;
+	reg uops_4_bp_debug_if;
+	reg uops_4_bp_xcpt_if;
+	reg [2:0] uops_4_debug_fsrc;
+	reg [2:0] uops_4_debug_tsrc;
+	reg [31:0] uops_5_inst;
+	reg [31:0] uops_5_debug_inst;
+	reg uops_5_is_rvc;
+	reg [39:0] uops_5_debug_pc;
+	reg uops_5_iq_type_0;
+	reg uops_5_iq_type_1;
+	reg uops_5_iq_type_2;
+	reg uops_5_iq_type_3;
+	reg uops_5_fu_code_0;
+	reg uops_5_fu_code_1;
+	reg uops_5_fu_code_2;
+	reg uops_5_fu_code_3;
+	reg uops_5_fu_code_4;
+	reg uops_5_fu_code_5;
+	reg uops_5_fu_code_6;
+	reg uops_5_fu_code_7;
+	reg uops_5_fu_code_8;
+	reg uops_5_fu_code_9;
+	reg uops_5_iw_issued;
+	reg uops_5_iw_issued_partial_agen;
+	reg uops_5_iw_issued_partial_dgen;
+	reg uops_5_iw_p1_speculative_child;
+	reg uops_5_iw_p2_speculative_child;
+	reg uops_5_iw_p1_bypass_hint;
+	reg uops_5_iw_p2_bypass_hint;
+	reg uops_5_iw_p3_bypass_hint;
+	reg uops_5_dis_col_sel;
+	reg [7:0] uops_5_br_mask;
+	reg [2:0] uops_5_br_tag;
+	reg [3:0] uops_5_br_type;
+	reg uops_5_is_sfb;
+	reg uops_5_is_fence;
+	reg uops_5_is_fencei;
+	reg uops_5_is_sfence;
+	reg uops_5_is_amo;
+	reg uops_5_is_eret;
+	reg uops_5_is_sys_pc2epc;
+	reg uops_5_is_rocc;
+	reg uops_5_is_mov;
+	reg [3:0] uops_5_ftq_idx;
+	reg uops_5_edge_inst;
+	reg [5:0] uops_5_pc_lob;
+	reg uops_5_taken;
+	reg uops_5_imm_rename;
+	reg [2:0] uops_5_imm_sel;
+	reg [4:0] uops_5_pimm;
+	reg [19:0] uops_5_imm_packed;
+	reg [1:0] uops_5_op1_sel;
+	reg [2:0] uops_5_op2_sel;
+	reg uops_5_fp_ctrl_ldst;
+	reg uops_5_fp_ctrl_wen;
+	reg uops_5_fp_ctrl_ren1;
+	reg uops_5_fp_ctrl_ren2;
+	reg uops_5_fp_ctrl_ren3;
+	reg uops_5_fp_ctrl_swap12;
+	reg uops_5_fp_ctrl_swap23;
+	reg [1:0] uops_5_fp_ctrl_typeTagIn;
+	reg [1:0] uops_5_fp_ctrl_typeTagOut;
+	reg uops_5_fp_ctrl_fromint;
+	reg uops_5_fp_ctrl_toint;
+	reg uops_5_fp_ctrl_fastpipe;
+	reg uops_5_fp_ctrl_fma;
+	reg uops_5_fp_ctrl_div;
+	reg uops_5_fp_ctrl_sqrt;
+	reg uops_5_fp_ctrl_wflags;
+	reg uops_5_fp_ctrl_vec;
+	reg [4:0] uops_5_rob_idx;
+	reg [3:0] uops_5_ldq_idx;
+	reg [3:0] uops_5_stq_idx;
+	reg [1:0] uops_5_rxq_idx;
+	reg [5:0] uops_5_pdst;
+	reg [5:0] uops_5_prs1;
+	reg [5:0] uops_5_prs2;
+	reg [5:0] uops_5_prs3;
+	reg [3:0] uops_5_ppred;
+	reg uops_5_prs1_busy;
+	reg uops_5_prs2_busy;
+	reg uops_5_prs3_busy;
+	reg uops_5_ppred_busy;
+	reg [5:0] uops_5_stale_pdst;
+	reg uops_5_exception;
+	reg [63:0] uops_5_exc_cause;
+	reg [4:0] uops_5_mem_cmd;
+	reg [1:0] uops_5_mem_size;
+	reg uops_5_mem_signed;
+	reg uops_5_uses_ldq;
+	reg uops_5_uses_stq;
+	reg uops_5_is_unique;
+	reg uops_5_flush_on_commit;
+	reg [2:0] uops_5_csr_cmd;
+	reg uops_5_ldst_is_rs1;
+	reg [5:0] uops_5_ldst;
+	reg [5:0] uops_5_lrs1;
+	reg [5:0] uops_5_lrs2;
+	reg [5:0] uops_5_lrs3;
+	reg [1:0] uops_5_dst_rtype;
+	reg [1:0] uops_5_lrs1_rtype;
+	reg [1:0] uops_5_lrs2_rtype;
+	reg uops_5_frs3_en;
+	reg uops_5_fcn_dw;
+	reg [4:0] uops_5_fcn_op;
+	reg uops_5_fp_val;
+	reg [2:0] uops_5_fp_rm;
+	reg [1:0] uops_5_fp_typ;
+	reg uops_5_xcpt_pf_if;
+	reg uops_5_xcpt_ae_if;
+	reg uops_5_xcpt_ma_if;
+	reg uops_5_bp_debug_if;
+	reg uops_5_bp_xcpt_if;
+	reg [2:0] uops_5_debug_fsrc;
+	reg [2:0] uops_5_debug_tsrc;
+	reg [31:0] uops_6_inst;
+	reg [31:0] uops_6_debug_inst;
+	reg uops_6_is_rvc;
+	reg [39:0] uops_6_debug_pc;
+	reg uops_6_iq_type_0;
+	reg uops_6_iq_type_1;
+	reg uops_6_iq_type_2;
+	reg uops_6_iq_type_3;
+	reg uops_6_fu_code_0;
+	reg uops_6_fu_code_1;
+	reg uops_6_fu_code_2;
+	reg uops_6_fu_code_3;
+	reg uops_6_fu_code_4;
+	reg uops_6_fu_code_5;
+	reg uops_6_fu_code_6;
+	reg uops_6_fu_code_7;
+	reg uops_6_fu_code_8;
+	reg uops_6_fu_code_9;
+	reg uops_6_iw_issued;
+	reg uops_6_iw_issued_partial_agen;
+	reg uops_6_iw_issued_partial_dgen;
+	reg uops_6_iw_p1_speculative_child;
+	reg uops_6_iw_p2_speculative_child;
+	reg uops_6_iw_p1_bypass_hint;
+	reg uops_6_iw_p2_bypass_hint;
+	reg uops_6_iw_p3_bypass_hint;
+	reg uops_6_dis_col_sel;
+	reg [7:0] uops_6_br_mask;
+	reg [2:0] uops_6_br_tag;
+	reg [3:0] uops_6_br_type;
+	reg uops_6_is_sfb;
+	reg uops_6_is_fence;
+	reg uops_6_is_fencei;
+	reg uops_6_is_sfence;
+	reg uops_6_is_amo;
+	reg uops_6_is_eret;
+	reg uops_6_is_sys_pc2epc;
+	reg uops_6_is_rocc;
+	reg uops_6_is_mov;
+	reg [3:0] uops_6_ftq_idx;
+	reg uops_6_edge_inst;
+	reg [5:0] uops_6_pc_lob;
+	reg uops_6_taken;
+	reg uops_6_imm_rename;
+	reg [2:0] uops_6_imm_sel;
+	reg [4:0] uops_6_pimm;
+	reg [19:0] uops_6_imm_packed;
+	reg [1:0] uops_6_op1_sel;
+	reg [2:0] uops_6_op2_sel;
+	reg uops_6_fp_ctrl_ldst;
+	reg uops_6_fp_ctrl_wen;
+	reg uops_6_fp_ctrl_ren1;
+	reg uops_6_fp_ctrl_ren2;
+	reg uops_6_fp_ctrl_ren3;
+	reg uops_6_fp_ctrl_swap12;
+	reg uops_6_fp_ctrl_swap23;
+	reg [1:0] uops_6_fp_ctrl_typeTagIn;
+	reg [1:0] uops_6_fp_ctrl_typeTagOut;
+	reg uops_6_fp_ctrl_fromint;
+	reg uops_6_fp_ctrl_toint;
+	reg uops_6_fp_ctrl_fastpipe;
+	reg uops_6_fp_ctrl_fma;
+	reg uops_6_fp_ctrl_div;
+	reg uops_6_fp_ctrl_sqrt;
+	reg uops_6_fp_ctrl_wflags;
+	reg uops_6_fp_ctrl_vec;
+	reg [4:0] uops_6_rob_idx;
+	reg [3:0] uops_6_ldq_idx;
+	reg [3:0] uops_6_stq_idx;
+	reg [1:0] uops_6_rxq_idx;
+	reg [5:0] uops_6_pdst;
+	reg [5:0] uops_6_prs1;
+	reg [5:0] uops_6_prs2;
+	reg [5:0] uops_6_prs3;
+	reg [3:0] uops_6_ppred;
+	reg uops_6_prs1_busy;
+	reg uops_6_prs2_busy;
+	reg uops_6_prs3_busy;
+	reg uops_6_ppred_busy;
+	reg [5:0] uops_6_stale_pdst;
+	reg uops_6_exception;
+	reg [63:0] uops_6_exc_cause;
+	reg [4:0] uops_6_mem_cmd;
+	reg [1:0] uops_6_mem_size;
+	reg uops_6_mem_signed;
+	reg uops_6_uses_ldq;
+	reg uops_6_uses_stq;
+	reg uops_6_is_unique;
+	reg uops_6_flush_on_commit;
+	reg [2:0] uops_6_csr_cmd;
+	reg uops_6_ldst_is_rs1;
+	reg [5:0] uops_6_ldst;
+	reg [5:0] uops_6_lrs1;
+	reg [5:0] uops_6_lrs2;
+	reg [5:0] uops_6_lrs3;
+	reg [1:0] uops_6_dst_rtype;
+	reg [1:0] uops_6_lrs1_rtype;
+	reg [1:0] uops_6_lrs2_rtype;
+	reg uops_6_frs3_en;
+	reg uops_6_fcn_dw;
+	reg [4:0] uops_6_fcn_op;
+	reg uops_6_fp_val;
+	reg [2:0] uops_6_fp_rm;
+	reg [1:0] uops_6_fp_typ;
+	reg uops_6_xcpt_pf_if;
+	reg uops_6_xcpt_ae_if;
+	reg uops_6_xcpt_ma_if;
+	reg uops_6_bp_debug_if;
+	reg uops_6_bp_xcpt_if;
+	reg [2:0] uops_6_debug_fsrc;
+	reg [2:0] uops_6_debug_tsrc;
+	reg [31:0] uops_7_inst;
+	reg [31:0] uops_7_debug_inst;
+	reg uops_7_is_rvc;
+	reg [39:0] uops_7_debug_pc;
+	reg uops_7_iq_type_0;
+	reg uops_7_iq_type_1;
+	reg uops_7_iq_type_2;
+	reg uops_7_iq_type_3;
+	reg uops_7_fu_code_0;
+	reg uops_7_fu_code_1;
+	reg uops_7_fu_code_2;
+	reg uops_7_fu_code_3;
+	reg uops_7_fu_code_4;
+	reg uops_7_fu_code_5;
+	reg uops_7_fu_code_6;
+	reg uops_7_fu_code_7;
+	reg uops_7_fu_code_8;
+	reg uops_7_fu_code_9;
+	reg uops_7_iw_issued;
+	reg uops_7_iw_issued_partial_agen;
+	reg uops_7_iw_issued_partial_dgen;
+	reg uops_7_iw_p1_speculative_child;
+	reg uops_7_iw_p2_speculative_child;
+	reg uops_7_iw_p1_bypass_hint;
+	reg uops_7_iw_p2_bypass_hint;
+	reg uops_7_iw_p3_bypass_hint;
+	reg uops_7_dis_col_sel;
+	reg [7:0] uops_7_br_mask;
+	reg [2:0] uops_7_br_tag;
+	reg [3:0] uops_7_br_type;
+	reg uops_7_is_sfb;
+	reg uops_7_is_fence;
+	reg uops_7_is_fencei;
+	reg uops_7_is_sfence;
+	reg uops_7_is_amo;
+	reg uops_7_is_eret;
+	reg uops_7_is_sys_pc2epc;
+	reg uops_7_is_rocc;
+	reg uops_7_is_mov;
+	reg [3:0] uops_7_ftq_idx;
+	reg uops_7_edge_inst;
+	reg [5:0] uops_7_pc_lob;
+	reg uops_7_taken;
+	reg uops_7_imm_rename;
+	reg [2:0] uops_7_imm_sel;
+	reg [4:0] uops_7_pimm;
+	reg [19:0] uops_7_imm_packed;
+	reg [1:0] uops_7_op1_sel;
+	reg [2:0] uops_7_op2_sel;
+	reg uops_7_fp_ctrl_ldst;
+	reg uops_7_fp_ctrl_wen;
+	reg uops_7_fp_ctrl_ren1;
+	reg uops_7_fp_ctrl_ren2;
+	reg uops_7_fp_ctrl_ren3;
+	reg uops_7_fp_ctrl_swap12;
+	reg uops_7_fp_ctrl_swap23;
+	reg [1:0] uops_7_fp_ctrl_typeTagIn;
+	reg [1:0] uops_7_fp_ctrl_typeTagOut;
+	reg uops_7_fp_ctrl_fromint;
+	reg uops_7_fp_ctrl_toint;
+	reg uops_7_fp_ctrl_fastpipe;
+	reg uops_7_fp_ctrl_fma;
+	reg uops_7_fp_ctrl_div;
+	reg uops_7_fp_ctrl_sqrt;
+	reg uops_7_fp_ctrl_wflags;
+	reg uops_7_fp_ctrl_vec;
+	reg [4:0] uops_7_rob_idx;
+	reg [3:0] uops_7_ldq_idx;
+	reg [3:0] uops_7_stq_idx;
+	reg [1:0] uops_7_rxq_idx;
+	reg [5:0] uops_7_pdst;
+	reg [5:0] uops_7_prs1;
+	reg [5:0] uops_7_prs2;
+	reg [5:0] uops_7_prs3;
+	reg [3:0] uops_7_ppred;
+	reg uops_7_prs1_busy;
+	reg uops_7_prs2_busy;
+	reg uops_7_prs3_busy;
+	reg uops_7_ppred_busy;
+	reg [5:0] uops_7_stale_pdst;
+	reg uops_7_exception;
+	reg [63:0] uops_7_exc_cause;
+	reg [4:0] uops_7_mem_cmd;
+	reg [1:0] uops_7_mem_size;
+	reg uops_7_mem_signed;
+	reg uops_7_uses_ldq;
+	reg uops_7_uses_stq;
+	reg uops_7_is_unique;
+	reg uops_7_flush_on_commit;
+	reg [2:0] uops_7_csr_cmd;
+	reg uops_7_ldst_is_rs1;
+	reg [5:0] uops_7_ldst;
+	reg [5:0] uops_7_lrs1;
+	reg [5:0] uops_7_lrs2;
+	reg [5:0] uops_7_lrs3;
+	reg [1:0] uops_7_dst_rtype;
+	reg [1:0] uops_7_lrs1_rtype;
+	reg [1:0] uops_7_lrs2_rtype;
+	reg uops_7_frs3_en;
+	reg uops_7_fcn_dw;
+	reg [4:0] uops_7_fcn_op;
+	reg uops_7_fp_val;
+	reg [2:0] uops_7_fp_rm;
+	reg [1:0] uops_7_fp_typ;
+	reg uops_7_xcpt_pf_if;
+	reg uops_7_xcpt_ae_if;
+	reg uops_7_xcpt_ma_if;
+	reg uops_7_bp_debug_if;
+	reg uops_7_bp_xcpt_if;
+	reg [2:0] uops_7_debug_fsrc;
+	reg [2:0] uops_7_debug_tsrc;
+	reg [2:0] enq_ptr_value;
+	reg [2:0] deq_ptr_value;
+	reg maybe_full;
+	wire ptr_match = enq_ptr_value == deq_ptr_value;
+	wire io_empty = ptr_match & ~maybe_full;
+	wire full = ptr_match & maybe_full;
+	wire do_enq = ((~full & io_enq_valid) & ((io_brupdate_b1_mispredict_mask & io_enq_bits_uop_br_mask) == 8'h00)) & ~io_flush;
+	wire [7:0] _GEN = {valids_7, valids_6, valids_5, valids_4, valids_3, valids_2, valids_1, valids_0};
+	wire _GEN_0 = _GEN[deq_ptr_value];
+	wire [255:0] _GEN_1 = {uops_7_inst, uops_6_inst, uops_5_inst, uops_4_inst, uops_3_inst, uops_2_inst, uops_1_inst, uops_0_inst};
+	wire [255:0] _GEN_2 = {uops_7_debug_inst, uops_6_debug_inst, uops_5_debug_inst, uops_4_debug_inst, uops_3_debug_inst, uops_2_debug_inst, uops_1_debug_inst, uops_0_debug_inst};
+	wire [7:0] _GEN_3 = {uops_7_is_rvc, uops_6_is_rvc, uops_5_is_rvc, uops_4_is_rvc, uops_3_is_rvc, uops_2_is_rvc, uops_1_is_rvc, uops_0_is_rvc};
+	wire [319:0] _GEN_4 = {uops_7_debug_pc, uops_6_debug_pc, uops_5_debug_pc, uops_4_debug_pc, uops_3_debug_pc, uops_2_debug_pc, uops_1_debug_pc, uops_0_debug_pc};
+	wire [7:0] _GEN_5 = {uops_7_iq_type_0, uops_6_iq_type_0, uops_5_iq_type_0, uops_4_iq_type_0, uops_3_iq_type_0, uops_2_iq_type_0, uops_1_iq_type_0, uops_0_iq_type_0};
+	wire [7:0] _GEN_6 = {uops_7_iq_type_1, uops_6_iq_type_1, uops_5_iq_type_1, uops_4_iq_type_1, uops_3_iq_type_1, uops_2_iq_type_1, uops_1_iq_type_1, uops_0_iq_type_1};
+	wire [7:0] _GEN_7 = {uops_7_iq_type_2, uops_6_iq_type_2, uops_5_iq_type_2, uops_4_iq_type_2, uops_3_iq_type_2, uops_2_iq_type_2, uops_1_iq_type_2, uops_0_iq_type_2};
+	wire [7:0] _GEN_8 = {uops_7_iq_type_3, uops_6_iq_type_3, uops_5_iq_type_3, uops_4_iq_type_3, uops_3_iq_type_3, uops_2_iq_type_3, uops_1_iq_type_3, uops_0_iq_type_3};
+	wire [7:0] _GEN_9 = {uops_7_fu_code_0, uops_6_fu_code_0, uops_5_fu_code_0, uops_4_fu_code_0, uops_3_fu_code_0, uops_2_fu_code_0, uops_1_fu_code_0, uops_0_fu_code_0};
+	wire [7:0] _GEN_10 = {uops_7_fu_code_1, uops_6_fu_code_1, uops_5_fu_code_1, uops_4_fu_code_1, uops_3_fu_code_1, uops_2_fu_code_1, uops_1_fu_code_1, uops_0_fu_code_1};
+	wire [7:0] _GEN_11 = {uops_7_fu_code_2, uops_6_fu_code_2, uops_5_fu_code_2, uops_4_fu_code_2, uops_3_fu_code_2, uops_2_fu_code_2, uops_1_fu_code_2, uops_0_fu_code_2};
+	wire [7:0] _GEN_12 = {uops_7_fu_code_3, uops_6_fu_code_3, uops_5_fu_code_3, uops_4_fu_code_3, uops_3_fu_code_3, uops_2_fu_code_3, uops_1_fu_code_3, uops_0_fu_code_3};
+	wire [7:0] _GEN_13 = {uops_7_fu_code_4, uops_6_fu_code_4, uops_5_fu_code_4, uops_4_fu_code_4, uops_3_fu_code_4, uops_2_fu_code_4, uops_1_fu_code_4, uops_0_fu_code_4};
+	wire [7:0] _GEN_14 = {uops_7_fu_code_5, uops_6_fu_code_5, uops_5_fu_code_5, uops_4_fu_code_5, uops_3_fu_code_5, uops_2_fu_code_5, uops_1_fu_code_5, uops_0_fu_code_5};
+	wire [7:0] _GEN_15 = {uops_7_fu_code_6, uops_6_fu_code_6, uops_5_fu_code_6, uops_4_fu_code_6, uops_3_fu_code_6, uops_2_fu_code_6, uops_1_fu_code_6, uops_0_fu_code_6};
+	wire [7:0] _GEN_16 = {uops_7_fu_code_7, uops_6_fu_code_7, uops_5_fu_code_7, uops_4_fu_code_7, uops_3_fu_code_7, uops_2_fu_code_7, uops_1_fu_code_7, uops_0_fu_code_7};
+	wire [7:0] _GEN_17 = {uops_7_fu_code_8, uops_6_fu_code_8, uops_5_fu_code_8, uops_4_fu_code_8, uops_3_fu_code_8, uops_2_fu_code_8, uops_1_fu_code_8, uops_0_fu_code_8};
+	wire [7:0] _GEN_18 = {uops_7_fu_code_9, uops_6_fu_code_9, uops_5_fu_code_9, uops_4_fu_code_9, uops_3_fu_code_9, uops_2_fu_code_9, uops_1_fu_code_9, uops_0_fu_code_9};
+	wire [7:0] _GEN_19 = {uops_7_iw_issued, uops_6_iw_issued, uops_5_iw_issued, uops_4_iw_issued, uops_3_iw_issued, uops_2_iw_issued, uops_1_iw_issued, uops_0_iw_issued};
+	wire [7:0] _GEN_20 = {uops_7_iw_issued_partial_agen, uops_6_iw_issued_partial_agen, uops_5_iw_issued_partial_agen, uops_4_iw_issued_partial_agen, uops_3_iw_issued_partial_agen, uops_2_iw_issued_partial_agen, uops_1_iw_issued_partial_agen, uops_0_iw_issued_partial_agen};
+	wire [7:0] _GEN_21 = {uops_7_iw_issued_partial_dgen, uops_6_iw_issued_partial_dgen, uops_5_iw_issued_partial_dgen, uops_4_iw_issued_partial_dgen, uops_3_iw_issued_partial_dgen, uops_2_iw_issued_partial_dgen, uops_1_iw_issued_partial_dgen, uops_0_iw_issued_partial_dgen};
+	wire [7:0] _GEN_22 = {uops_7_iw_p1_speculative_child, uops_6_iw_p1_speculative_child, uops_5_iw_p1_speculative_child, uops_4_iw_p1_speculative_child, uops_3_iw_p1_speculative_child, uops_2_iw_p1_speculative_child, uops_1_iw_p1_speculative_child, uops_0_iw_p1_speculative_child};
+	wire [7:0] _GEN_23 = {uops_7_iw_p2_speculative_child, uops_6_iw_p2_speculative_child, uops_5_iw_p2_speculative_child, uops_4_iw_p2_speculative_child, uops_3_iw_p2_speculative_child, uops_2_iw_p2_speculative_child, uops_1_iw_p2_speculative_child, uops_0_iw_p2_speculative_child};
+	wire [7:0] _GEN_24 = {uops_7_iw_p1_bypass_hint, uops_6_iw_p1_bypass_hint, uops_5_iw_p1_bypass_hint, uops_4_iw_p1_bypass_hint, uops_3_iw_p1_bypass_hint, uops_2_iw_p1_bypass_hint, uops_1_iw_p1_bypass_hint, uops_0_iw_p1_bypass_hint};
+	wire [7:0] _GEN_25 = {uops_7_iw_p2_bypass_hint, uops_6_iw_p2_bypass_hint, uops_5_iw_p2_bypass_hint, uops_4_iw_p2_bypass_hint, uops_3_iw_p2_bypass_hint, uops_2_iw_p2_bypass_hint, uops_1_iw_p2_bypass_hint, uops_0_iw_p2_bypass_hint};
+	wire [7:0] _GEN_26 = {uops_7_iw_p3_bypass_hint, uops_6_iw_p3_bypass_hint, uops_5_iw_p3_bypass_hint, uops_4_iw_p3_bypass_hint, uops_3_iw_p3_bypass_hint, uops_2_iw_p3_bypass_hint, uops_1_iw_p3_bypass_hint, uops_0_iw_p3_bypass_hint};
+	wire [7:0] _GEN_27 = {uops_7_dis_col_sel, uops_6_dis_col_sel, uops_5_dis_col_sel, uops_4_dis_col_sel, uops_3_dis_col_sel, uops_2_dis_col_sel, uops_1_dis_col_sel, uops_0_dis_col_sel};
+	wire [63:0] _GEN_28 = {uops_7_br_mask, uops_6_br_mask, uops_5_br_mask, uops_4_br_mask, uops_3_br_mask, uops_2_br_mask, uops_1_br_mask, uops_0_br_mask};
+	wire [23:0] _GEN_29 = {uops_7_br_tag, uops_6_br_tag, uops_5_br_tag, uops_4_br_tag, uops_3_br_tag, uops_2_br_tag, uops_1_br_tag, uops_0_br_tag};
+	wire [31:0] _GEN_30 = {uops_7_br_type, uops_6_br_type, uops_5_br_type, uops_4_br_type, uops_3_br_type, uops_2_br_type, uops_1_br_type, uops_0_br_type};
+	wire [7:0] _GEN_31 = {uops_7_is_sfb, uops_6_is_sfb, uops_5_is_sfb, uops_4_is_sfb, uops_3_is_sfb, uops_2_is_sfb, uops_1_is_sfb, uops_0_is_sfb};
+	wire [7:0] _GEN_32 = {uops_7_is_fence, uops_6_is_fence, uops_5_is_fence, uops_4_is_fence, uops_3_is_fence, uops_2_is_fence, uops_1_is_fence, uops_0_is_fence};
+	wire [7:0] _GEN_33 = {uops_7_is_fencei, uops_6_is_fencei, uops_5_is_fencei, uops_4_is_fencei, uops_3_is_fencei, uops_2_is_fencei, uops_1_is_fencei, uops_0_is_fencei};
+	wire [7:0] _GEN_34 = {uops_7_is_sfence, uops_6_is_sfence, uops_5_is_sfence, uops_4_is_sfence, uops_3_is_sfence, uops_2_is_sfence, uops_1_is_sfence, uops_0_is_sfence};
+	wire [7:0] _GEN_35 = {uops_7_is_amo, uops_6_is_amo, uops_5_is_amo, uops_4_is_amo, uops_3_is_amo, uops_2_is_amo, uops_1_is_amo, uops_0_is_amo};
+	wire [7:0] _GEN_36 = {uops_7_is_eret, uops_6_is_eret, uops_5_is_eret, uops_4_is_eret, uops_3_is_eret, uops_2_is_eret, uops_1_is_eret, uops_0_is_eret};
+	wire [7:0] _GEN_37 = {uops_7_is_sys_pc2epc, uops_6_is_sys_pc2epc, uops_5_is_sys_pc2epc, uops_4_is_sys_pc2epc, uops_3_is_sys_pc2epc, uops_2_is_sys_pc2epc, uops_1_is_sys_pc2epc, uops_0_is_sys_pc2epc};
+	wire [7:0] _GEN_38 = {uops_7_is_rocc, uops_6_is_rocc, uops_5_is_rocc, uops_4_is_rocc, uops_3_is_rocc, uops_2_is_rocc, uops_1_is_rocc, uops_0_is_rocc};
+	wire [7:0] _GEN_39 = {uops_7_is_mov, uops_6_is_mov, uops_5_is_mov, uops_4_is_mov, uops_3_is_mov, uops_2_is_mov, uops_1_is_mov, uops_0_is_mov};
+	wire [31:0] _GEN_40 = {uops_7_ftq_idx, uops_6_ftq_idx, uops_5_ftq_idx, uops_4_ftq_idx, uops_3_ftq_idx, uops_2_ftq_idx, uops_1_ftq_idx, uops_0_ftq_idx};
+	wire [7:0] _GEN_41 = {uops_7_edge_inst, uops_6_edge_inst, uops_5_edge_inst, uops_4_edge_inst, uops_3_edge_inst, uops_2_edge_inst, uops_1_edge_inst, uops_0_edge_inst};
+	wire [47:0] _GEN_42 = {uops_7_pc_lob, uops_6_pc_lob, uops_5_pc_lob, uops_4_pc_lob, uops_3_pc_lob, uops_2_pc_lob, uops_1_pc_lob, uops_0_pc_lob};
+	wire [7:0] _GEN_43 = {uops_7_taken, uops_6_taken, uops_5_taken, uops_4_taken, uops_3_taken, uops_2_taken, uops_1_taken, uops_0_taken};
+	wire [7:0] _GEN_44 = {uops_7_imm_rename, uops_6_imm_rename, uops_5_imm_rename, uops_4_imm_rename, uops_3_imm_rename, uops_2_imm_rename, uops_1_imm_rename, uops_0_imm_rename};
+	wire [23:0] _GEN_45 = {uops_7_imm_sel, uops_6_imm_sel, uops_5_imm_sel, uops_4_imm_sel, uops_3_imm_sel, uops_2_imm_sel, uops_1_imm_sel, uops_0_imm_sel};
+	wire [39:0] _GEN_46 = {uops_7_pimm, uops_6_pimm, uops_5_pimm, uops_4_pimm, uops_3_pimm, uops_2_pimm, uops_1_pimm, uops_0_pimm};
+	wire [159:0] _GEN_47 = {uops_7_imm_packed, uops_6_imm_packed, uops_5_imm_packed, uops_4_imm_packed, uops_3_imm_packed, uops_2_imm_packed, uops_1_imm_packed, uops_0_imm_packed};
+	wire [15:0] _GEN_48 = {uops_7_op1_sel, uops_6_op1_sel, uops_5_op1_sel, uops_4_op1_sel, uops_3_op1_sel, uops_2_op1_sel, uops_1_op1_sel, uops_0_op1_sel};
+	wire [23:0] _GEN_49 = {uops_7_op2_sel, uops_6_op2_sel, uops_5_op2_sel, uops_4_op2_sel, uops_3_op2_sel, uops_2_op2_sel, uops_1_op2_sel, uops_0_op2_sel};
+	wire [7:0] _GEN_50 = {uops_7_fp_ctrl_ldst, uops_6_fp_ctrl_ldst, uops_5_fp_ctrl_ldst, uops_4_fp_ctrl_ldst, uops_3_fp_ctrl_ldst, uops_2_fp_ctrl_ldst, uops_1_fp_ctrl_ldst, uops_0_fp_ctrl_ldst};
+	wire [7:0] _GEN_51 = {uops_7_fp_ctrl_wen, uops_6_fp_ctrl_wen, uops_5_fp_ctrl_wen, uops_4_fp_ctrl_wen, uops_3_fp_ctrl_wen, uops_2_fp_ctrl_wen, uops_1_fp_ctrl_wen, uops_0_fp_ctrl_wen};
+	wire [7:0] _GEN_52 = {uops_7_fp_ctrl_ren1, uops_6_fp_ctrl_ren1, uops_5_fp_ctrl_ren1, uops_4_fp_ctrl_ren1, uops_3_fp_ctrl_ren1, uops_2_fp_ctrl_ren1, uops_1_fp_ctrl_ren1, uops_0_fp_ctrl_ren1};
+	wire [7:0] _GEN_53 = {uops_7_fp_ctrl_ren2, uops_6_fp_ctrl_ren2, uops_5_fp_ctrl_ren2, uops_4_fp_ctrl_ren2, uops_3_fp_ctrl_ren2, uops_2_fp_ctrl_ren2, uops_1_fp_ctrl_ren2, uops_0_fp_ctrl_ren2};
+	wire [7:0] _GEN_54 = {uops_7_fp_ctrl_ren3, uops_6_fp_ctrl_ren3, uops_5_fp_ctrl_ren3, uops_4_fp_ctrl_ren3, uops_3_fp_ctrl_ren3, uops_2_fp_ctrl_ren3, uops_1_fp_ctrl_ren3, uops_0_fp_ctrl_ren3};
+	wire [7:0] _GEN_55 = {uops_7_fp_ctrl_swap12, uops_6_fp_ctrl_swap12, uops_5_fp_ctrl_swap12, uops_4_fp_ctrl_swap12, uops_3_fp_ctrl_swap12, uops_2_fp_ctrl_swap12, uops_1_fp_ctrl_swap12, uops_0_fp_ctrl_swap12};
+	wire [7:0] _GEN_56 = {uops_7_fp_ctrl_swap23, uops_6_fp_ctrl_swap23, uops_5_fp_ctrl_swap23, uops_4_fp_ctrl_swap23, uops_3_fp_ctrl_swap23, uops_2_fp_ctrl_swap23, uops_1_fp_ctrl_swap23, uops_0_fp_ctrl_swap23};
+	wire [15:0] _GEN_57 = {uops_7_fp_ctrl_typeTagIn, uops_6_fp_ctrl_typeTagIn, uops_5_fp_ctrl_typeTagIn, uops_4_fp_ctrl_typeTagIn, uops_3_fp_ctrl_typeTagIn, uops_2_fp_ctrl_typeTagIn, uops_1_fp_ctrl_typeTagIn, uops_0_fp_ctrl_typeTagIn};
+	wire [15:0] _GEN_58 = {uops_7_fp_ctrl_typeTagOut, uops_6_fp_ctrl_typeTagOut, uops_5_fp_ctrl_typeTagOut, uops_4_fp_ctrl_typeTagOut, uops_3_fp_ctrl_typeTagOut, uops_2_fp_ctrl_typeTagOut, uops_1_fp_ctrl_typeTagOut, uops_0_fp_ctrl_typeTagOut};
+	wire [7:0] _GEN_59 = {uops_7_fp_ctrl_fromint, uops_6_fp_ctrl_fromint, uops_5_fp_ctrl_fromint, uops_4_fp_ctrl_fromint, uops_3_fp_ctrl_fromint, uops_2_fp_ctrl_fromint, uops_1_fp_ctrl_fromint, uops_0_fp_ctrl_fromint};
+	wire [7:0] _GEN_60 = {uops_7_fp_ctrl_toint, uops_6_fp_ctrl_toint, uops_5_fp_ctrl_toint, uops_4_fp_ctrl_toint, uops_3_fp_ctrl_toint, uops_2_fp_ctrl_toint, uops_1_fp_ctrl_toint, uops_0_fp_ctrl_toint};
+	wire [7:0] _GEN_61 = {uops_7_fp_ctrl_fastpipe, uops_6_fp_ctrl_fastpipe, uops_5_fp_ctrl_fastpipe, uops_4_fp_ctrl_fastpipe, uops_3_fp_ctrl_fastpipe, uops_2_fp_ctrl_fastpipe, uops_1_fp_ctrl_fastpipe, uops_0_fp_ctrl_fastpipe};
+	wire [7:0] _GEN_62 = {uops_7_fp_ctrl_fma, uops_6_fp_ctrl_fma, uops_5_fp_ctrl_fma, uops_4_fp_ctrl_fma, uops_3_fp_ctrl_fma, uops_2_fp_ctrl_fma, uops_1_fp_ctrl_fma, uops_0_fp_ctrl_fma};
+	wire [7:0] _GEN_63 = {uops_7_fp_ctrl_div, uops_6_fp_ctrl_div, uops_5_fp_ctrl_div, uops_4_fp_ctrl_div, uops_3_fp_ctrl_div, uops_2_fp_ctrl_div, uops_1_fp_ctrl_div, uops_0_fp_ctrl_div};
+	wire [7:0] _GEN_64 = {uops_7_fp_ctrl_sqrt, uops_6_fp_ctrl_sqrt, uops_5_fp_ctrl_sqrt, uops_4_fp_ctrl_sqrt, uops_3_fp_ctrl_sqrt, uops_2_fp_ctrl_sqrt, uops_1_fp_ctrl_sqrt, uops_0_fp_ctrl_sqrt};
+	wire [7:0] _GEN_65 = {uops_7_fp_ctrl_wflags, uops_6_fp_ctrl_wflags, uops_5_fp_ctrl_wflags, uops_4_fp_ctrl_wflags, uops_3_fp_ctrl_wflags, uops_2_fp_ctrl_wflags, uops_1_fp_ctrl_wflags, uops_0_fp_ctrl_wflags};
+	wire [7:0] _GEN_66 = {uops_7_fp_ctrl_vec, uops_6_fp_ctrl_vec, uops_5_fp_ctrl_vec, uops_4_fp_ctrl_vec, uops_3_fp_ctrl_vec, uops_2_fp_ctrl_vec, uops_1_fp_ctrl_vec, uops_0_fp_ctrl_vec};
+	wire [39:0] _GEN_67 = {uops_7_rob_idx, uops_6_rob_idx, uops_5_rob_idx, uops_4_rob_idx, uops_3_rob_idx, uops_2_rob_idx, uops_1_rob_idx, uops_0_rob_idx};
+	wire [31:0] _GEN_68 = {uops_7_ldq_idx, uops_6_ldq_idx, uops_5_ldq_idx, uops_4_ldq_idx, uops_3_ldq_idx, uops_2_ldq_idx, uops_1_ldq_idx, uops_0_ldq_idx};
+	wire [31:0] _GEN_69 = {uops_7_stq_idx, uops_6_stq_idx, uops_5_stq_idx, uops_4_stq_idx, uops_3_stq_idx, uops_2_stq_idx, uops_1_stq_idx, uops_0_stq_idx};
+	wire [15:0] _GEN_70 = {uops_7_rxq_idx, uops_6_rxq_idx, uops_5_rxq_idx, uops_4_rxq_idx, uops_3_rxq_idx, uops_2_rxq_idx, uops_1_rxq_idx, uops_0_rxq_idx};
+	wire [47:0] _GEN_71 = {uops_7_pdst, uops_6_pdst, uops_5_pdst, uops_4_pdst, uops_3_pdst, uops_2_pdst, uops_1_pdst, uops_0_pdst};
+	wire [47:0] _GEN_72 = {uops_7_prs1, uops_6_prs1, uops_5_prs1, uops_4_prs1, uops_3_prs1, uops_2_prs1, uops_1_prs1, uops_0_prs1};
+	wire [47:0] _GEN_73 = {uops_7_prs2, uops_6_prs2, uops_5_prs2, uops_4_prs2, uops_3_prs2, uops_2_prs2, uops_1_prs2, uops_0_prs2};
+	wire [47:0] _GEN_74 = {uops_7_prs3, uops_6_prs3, uops_5_prs3, uops_4_prs3, uops_3_prs3, uops_2_prs3, uops_1_prs3, uops_0_prs3};
+	wire [31:0] _GEN_75 = {uops_7_ppred, uops_6_ppred, uops_5_ppred, uops_4_ppred, uops_3_ppred, uops_2_ppred, uops_1_ppred, uops_0_ppred};
+	wire [7:0] _GEN_76 = {uops_7_prs1_busy, uops_6_prs1_busy, uops_5_prs1_busy, uops_4_prs1_busy, uops_3_prs1_busy, uops_2_prs1_busy, uops_1_prs1_busy, uops_0_prs1_busy};
+	wire [7:0] _GEN_77 = {uops_7_prs2_busy, uops_6_prs2_busy, uops_5_prs2_busy, uops_4_prs2_busy, uops_3_prs2_busy, uops_2_prs2_busy, uops_1_prs2_busy, uops_0_prs2_busy};
+	wire [7:0] _GEN_78 = {uops_7_prs3_busy, uops_6_prs3_busy, uops_5_prs3_busy, uops_4_prs3_busy, uops_3_prs3_busy, uops_2_prs3_busy, uops_1_prs3_busy, uops_0_prs3_busy};
+	wire [7:0] _GEN_79 = {uops_7_ppred_busy, uops_6_ppred_busy, uops_5_ppred_busy, uops_4_ppred_busy, uops_3_ppred_busy, uops_2_ppred_busy, uops_1_ppred_busy, uops_0_ppred_busy};
+	wire [47:0] _GEN_80 = {uops_7_stale_pdst, uops_6_stale_pdst, uops_5_stale_pdst, uops_4_stale_pdst, uops_3_stale_pdst, uops_2_stale_pdst, uops_1_stale_pdst, uops_0_stale_pdst};
+	wire [7:0] _GEN_81 = {uops_7_exception, uops_6_exception, uops_5_exception, uops_4_exception, uops_3_exception, uops_2_exception, uops_1_exception, uops_0_exception};
+	wire [511:0] _GEN_82 = {uops_7_exc_cause, uops_6_exc_cause, uops_5_exc_cause, uops_4_exc_cause, uops_3_exc_cause, uops_2_exc_cause, uops_1_exc_cause, uops_0_exc_cause};
+	wire [39:0] _GEN_83 = {uops_7_mem_cmd, uops_6_mem_cmd, uops_5_mem_cmd, uops_4_mem_cmd, uops_3_mem_cmd, uops_2_mem_cmd, uops_1_mem_cmd, uops_0_mem_cmd};
+	wire [15:0] _GEN_84 = {uops_7_mem_size, uops_6_mem_size, uops_5_mem_size, uops_4_mem_size, uops_3_mem_size, uops_2_mem_size, uops_1_mem_size, uops_0_mem_size};
+	wire [7:0] _GEN_85 = {uops_7_mem_signed, uops_6_mem_signed, uops_5_mem_signed, uops_4_mem_signed, uops_3_mem_signed, uops_2_mem_signed, uops_1_mem_signed, uops_0_mem_signed};
+	wire [7:0] _GEN_86 = {uops_7_uses_ldq, uops_6_uses_ldq, uops_5_uses_ldq, uops_4_uses_ldq, uops_3_uses_ldq, uops_2_uses_ldq, uops_1_uses_ldq, uops_0_uses_ldq};
+	wire [7:0] _GEN_87 = {uops_7_uses_stq, uops_6_uses_stq, uops_5_uses_stq, uops_4_uses_stq, uops_3_uses_stq, uops_2_uses_stq, uops_1_uses_stq, uops_0_uses_stq};
+	wire [7:0] _GEN_88 = {uops_7_is_unique, uops_6_is_unique, uops_5_is_unique, uops_4_is_unique, uops_3_is_unique, uops_2_is_unique, uops_1_is_unique, uops_0_is_unique};
+	wire [7:0] _GEN_89 = {uops_7_flush_on_commit, uops_6_flush_on_commit, uops_5_flush_on_commit, uops_4_flush_on_commit, uops_3_flush_on_commit, uops_2_flush_on_commit, uops_1_flush_on_commit, uops_0_flush_on_commit};
+	wire [23:0] _GEN_90 = {uops_7_csr_cmd, uops_6_csr_cmd, uops_5_csr_cmd, uops_4_csr_cmd, uops_3_csr_cmd, uops_2_csr_cmd, uops_1_csr_cmd, uops_0_csr_cmd};
+	wire [7:0] _GEN_91 = {uops_7_ldst_is_rs1, uops_6_ldst_is_rs1, uops_5_ldst_is_rs1, uops_4_ldst_is_rs1, uops_3_ldst_is_rs1, uops_2_ldst_is_rs1, uops_1_ldst_is_rs1, uops_0_ldst_is_rs1};
+	wire [47:0] _GEN_92 = {uops_7_ldst, uops_6_ldst, uops_5_ldst, uops_4_ldst, uops_3_ldst, uops_2_ldst, uops_1_ldst, uops_0_ldst};
+	wire [47:0] _GEN_93 = {uops_7_lrs1, uops_6_lrs1, uops_5_lrs1, uops_4_lrs1, uops_3_lrs1, uops_2_lrs1, uops_1_lrs1, uops_0_lrs1};
+	wire [47:0] _GEN_94 = {uops_7_lrs2, uops_6_lrs2, uops_5_lrs2, uops_4_lrs2, uops_3_lrs2, uops_2_lrs2, uops_1_lrs2, uops_0_lrs2};
+	wire [47:0] _GEN_95 = {uops_7_lrs3, uops_6_lrs3, uops_5_lrs3, uops_4_lrs3, uops_3_lrs3, uops_2_lrs3, uops_1_lrs3, uops_0_lrs3};
+	wire [15:0] _GEN_96 = {uops_7_dst_rtype, uops_6_dst_rtype, uops_5_dst_rtype, uops_4_dst_rtype, uops_3_dst_rtype, uops_2_dst_rtype, uops_1_dst_rtype, uops_0_dst_rtype};
+	wire [15:0] _GEN_97 = {uops_7_lrs1_rtype, uops_6_lrs1_rtype, uops_5_lrs1_rtype, uops_4_lrs1_rtype, uops_3_lrs1_rtype, uops_2_lrs1_rtype, uops_1_lrs1_rtype, uops_0_lrs1_rtype};
+	wire [15:0] _GEN_98 = {uops_7_lrs2_rtype, uops_6_lrs2_rtype, uops_5_lrs2_rtype, uops_4_lrs2_rtype, uops_3_lrs2_rtype, uops_2_lrs2_rtype, uops_1_lrs2_rtype, uops_0_lrs2_rtype};
+	wire [7:0] _GEN_99 = {uops_7_frs3_en, uops_6_frs3_en, uops_5_frs3_en, uops_4_frs3_en, uops_3_frs3_en, uops_2_frs3_en, uops_1_frs3_en, uops_0_frs3_en};
+	wire [7:0] _GEN_100 = {uops_7_fcn_dw, uops_6_fcn_dw, uops_5_fcn_dw, uops_4_fcn_dw, uops_3_fcn_dw, uops_2_fcn_dw, uops_1_fcn_dw, uops_0_fcn_dw};
+	wire [39:0] _GEN_101 = {uops_7_fcn_op, uops_6_fcn_op, uops_5_fcn_op, uops_4_fcn_op, uops_3_fcn_op, uops_2_fcn_op, uops_1_fcn_op, uops_0_fcn_op};
+	wire [7:0] _GEN_102 = {uops_7_fp_val, uops_6_fp_val, uops_5_fp_val, uops_4_fp_val, uops_3_fp_val, uops_2_fp_val, uops_1_fp_val, uops_0_fp_val};
+	wire [23:0] _GEN_103 = {uops_7_fp_rm, uops_6_fp_rm, uops_5_fp_rm, uops_4_fp_rm, uops_3_fp_rm, uops_2_fp_rm, uops_1_fp_rm, uops_0_fp_rm};
+	wire [15:0] _GEN_104 = {uops_7_fp_typ, uops_6_fp_typ, uops_5_fp_typ, uops_4_fp_typ, uops_3_fp_typ, uops_2_fp_typ, uops_1_fp_typ, uops_0_fp_typ};
+	wire [7:0] _GEN_105 = {uops_7_xcpt_pf_if, uops_6_xcpt_pf_if, uops_5_xcpt_pf_if, uops_4_xcpt_pf_if, uops_3_xcpt_pf_if, uops_2_xcpt_pf_if, uops_1_xcpt_pf_if, uops_0_xcpt_pf_if};
+	wire [7:0] _GEN_106 = {uops_7_xcpt_ae_if, uops_6_xcpt_ae_if, uops_5_xcpt_ae_if, uops_4_xcpt_ae_if, uops_3_xcpt_ae_if, uops_2_xcpt_ae_if, uops_1_xcpt_ae_if, uops_0_xcpt_ae_if};
+	wire [7:0] _GEN_107 = {uops_7_xcpt_ma_if, uops_6_xcpt_ma_if, uops_5_xcpt_ma_if, uops_4_xcpt_ma_if, uops_3_xcpt_ma_if, uops_2_xcpt_ma_if, uops_1_xcpt_ma_if, uops_0_xcpt_ma_if};
+	wire [7:0] _GEN_108 = {uops_7_bp_debug_if, uops_6_bp_debug_if, uops_5_bp_debug_if, uops_4_bp_debug_if, uops_3_bp_debug_if, uops_2_bp_debug_if, uops_1_bp_debug_if, uops_0_bp_debug_if};
+	wire [7:0] _GEN_109 = {uops_7_bp_xcpt_if, uops_6_bp_xcpt_if, uops_5_bp_xcpt_if, uops_4_bp_xcpt_if, uops_3_bp_xcpt_if, uops_2_bp_xcpt_if, uops_1_bp_xcpt_if, uops_0_bp_xcpt_if};
+	wire [23:0] _GEN_110 = {uops_7_debug_fsrc, uops_6_debug_fsrc, uops_5_debug_fsrc, uops_4_debug_fsrc, uops_3_debug_fsrc, uops_2_debug_fsrc, uops_1_debug_fsrc, uops_0_debug_fsrc};
+	wire [23:0] _GEN_111 = {uops_7_debug_tsrc, uops_6_debug_tsrc, uops_5_debug_tsrc, uops_4_debug_tsrc, uops_3_debug_tsrc, uops_2_debug_tsrc, uops_1_debug_tsrc, uops_0_debug_tsrc};
+	always @(posedge clock) begin : sv2v_autoblock_1
+		reg _GEN_112;
+		reg _GEN_113;
+		reg _GEN_114;
+		reg _GEN_115;
+		reg _GEN_116;
+		reg _GEN_117;
+		reg _GEN_118;
+		reg _GEN_119;
+		reg _GEN_120;
+		reg _GEN_121;
+		reg _GEN_122;
+		reg _GEN_123;
+		reg _GEN_124;
+		reg _GEN_125;
+		reg _GEN_126;
+		reg [7:0] _uops_br_mask_T_1;
+		_GEN_112 = enq_ptr_value == 3'h0;
+		_GEN_113 = do_enq & _GEN_112;
+		_GEN_114 = enq_ptr_value == 3'h1;
+		_GEN_115 = do_enq & _GEN_114;
+		_GEN_116 = enq_ptr_value == 3'h2;
+		_GEN_117 = do_enq & _GEN_116;
+		_GEN_118 = enq_ptr_value == 3'h3;
+		_GEN_119 = do_enq & _GEN_118;
+		_GEN_120 = enq_ptr_value == 3'h4;
+		_GEN_121 = do_enq & _GEN_120;
+		_GEN_122 = enq_ptr_value == 3'h5;
+		_GEN_123 = do_enq & _GEN_122;
+		_GEN_124 = enq_ptr_value == 3'h6;
+		_GEN_125 = do_enq & _GEN_124;
+		_GEN_126 = do_enq & (&enq_ptr_value);
+		_uops_br_mask_T_1 = io_enq_bits_uop_br_mask & ~io_brupdate_b1_resolve_mask;
+		if (reset) begin
+			valids_0 <= 1'h0;
+			valids_1 <= 1'h0;
+			valids_2 <= 1'h0;
+			valids_3 <= 1'h0;
+			valids_4 <= 1'h0;
+			valids_5 <= 1'h0;
+			valids_6 <= 1'h0;
+			valids_7 <= 1'h0;
+			enq_ptr_value <= 3'h0;
+			deq_ptr_value <= 3'h0;
+			maybe_full <= 1'h0;
+		end
+		else begin : sv2v_autoblock_2
+			reg do_deq;
+			do_deq = (io_deq_ready | ~_GEN_0) & ~io_empty;
+			valids_0 <= ~(do_deq & (deq_ptr_value == 3'h0)) & (_GEN_113 | ((valids_0 & ((io_brupdate_b1_mispredict_mask & uops_0_br_mask) == 8'h00)) & ~io_flush));
+			valids_1 <= ~(do_deq & (deq_ptr_value == 3'h1)) & (_GEN_115 | ((valids_1 & ((io_brupdate_b1_mispredict_mask & uops_1_br_mask) == 8'h00)) & ~io_flush));
+			valids_2 <= ~(do_deq & (deq_ptr_value == 3'h2)) & (_GEN_117 | ((valids_2 & ((io_brupdate_b1_mispredict_mask & uops_2_br_mask) == 8'h00)) & ~io_flush));
+			valids_3 <= ~(do_deq & (deq_ptr_value == 3'h3)) & (_GEN_119 | ((valids_3 & ((io_brupdate_b1_mispredict_mask & uops_3_br_mask) == 8'h00)) & ~io_flush));
+			valids_4 <= ~(do_deq & (deq_ptr_value == 3'h4)) & (_GEN_121 | ((valids_4 & ((io_brupdate_b1_mispredict_mask & uops_4_br_mask) == 8'h00)) & ~io_flush));
+			valids_5 <= ~(do_deq & (deq_ptr_value == 3'h5)) & (_GEN_123 | ((valids_5 & ((io_brupdate_b1_mispredict_mask & uops_5_br_mask) == 8'h00)) & ~io_flush));
+			valids_6 <= ~(do_deq & (deq_ptr_value == 3'h6)) & (_GEN_125 | ((valids_6 & ((io_brupdate_b1_mispredict_mask & uops_6_br_mask) == 8'h00)) & ~io_flush));
+			valids_7 <= ~(do_deq & (&deq_ptr_value)) & (_GEN_126 | ((valids_7 & ((io_brupdate_b1_mispredict_mask & uops_7_br_mask) == 8'h00)) & ~io_flush));
+			if (do_enq)
+				enq_ptr_value <= enq_ptr_value + 3'h1;
+			if (do_deq)
+				deq_ptr_value <= deq_ptr_value + 3'h1;
+			if (~(do_enq == do_deq))
+				maybe_full <= do_enq;
+		end
+		if (_GEN_113) begin
+			uops_0_inst <= io_enq_bits_uop_inst;
+			uops_0_debug_inst <= io_enq_bits_uop_debug_inst;
+			uops_0_is_rvc <= io_enq_bits_uop_is_rvc;
+			uops_0_debug_pc <= io_enq_bits_uop_debug_pc;
+			uops_0_iq_type_0 <= io_enq_bits_uop_iq_type_0;
+			uops_0_iq_type_1 <= io_enq_bits_uop_iq_type_1;
+			uops_0_iq_type_2 <= io_enq_bits_uop_iq_type_2;
+			uops_0_iq_type_3 <= io_enq_bits_uop_iq_type_3;
+			uops_0_fu_code_0 <= io_enq_bits_uop_fu_code_0;
+			uops_0_fu_code_1 <= io_enq_bits_uop_fu_code_1;
+			uops_0_fu_code_2 <= io_enq_bits_uop_fu_code_2;
+			uops_0_fu_code_3 <= io_enq_bits_uop_fu_code_3;
+			uops_0_fu_code_4 <= io_enq_bits_uop_fu_code_4;
+			uops_0_fu_code_5 <= io_enq_bits_uop_fu_code_5;
+			uops_0_fu_code_6 <= io_enq_bits_uop_fu_code_6;
+			uops_0_fu_code_7 <= io_enq_bits_uop_fu_code_7;
+			uops_0_fu_code_8 <= io_enq_bits_uop_fu_code_8;
+			uops_0_fu_code_9 <= io_enq_bits_uop_fu_code_9;
+			uops_0_iw_issued <= io_enq_bits_uop_iw_issued;
+			uops_0_iw_issued_partial_agen <= io_enq_bits_uop_iw_issued_partial_agen;
+			uops_0_iw_issued_partial_dgen <= io_enq_bits_uop_iw_issued_partial_dgen;
+			uops_0_iw_p1_speculative_child <= io_enq_bits_uop_iw_p1_speculative_child;
+			uops_0_iw_p2_speculative_child <= io_enq_bits_uop_iw_p2_speculative_child;
+			uops_0_iw_p1_bypass_hint <= io_enq_bits_uop_iw_p1_bypass_hint;
+			uops_0_iw_p2_bypass_hint <= io_enq_bits_uop_iw_p2_bypass_hint;
+			uops_0_iw_p3_bypass_hint <= io_enq_bits_uop_iw_p3_bypass_hint;
+			uops_0_br_tag <= io_enq_bits_uop_br_tag;
+			uops_0_br_type <= io_enq_bits_uop_br_type;
+			uops_0_is_sfb <= io_enq_bits_uop_is_sfb;
+			uops_0_is_fence <= io_enq_bits_uop_is_fence;
+			uops_0_is_fencei <= io_enq_bits_uop_is_fencei;
+			uops_0_is_sfence <= io_enq_bits_uop_is_sfence;
+			uops_0_is_amo <= io_enq_bits_uop_is_amo;
+			uops_0_is_eret <= io_enq_bits_uop_is_eret;
+			uops_0_is_sys_pc2epc <= io_enq_bits_uop_is_sys_pc2epc;
+			uops_0_is_rocc <= io_enq_bits_uop_is_rocc;
+			uops_0_is_mov <= io_enq_bits_uop_is_mov;
+			uops_0_ftq_idx <= io_enq_bits_uop_ftq_idx;
+			uops_0_edge_inst <= io_enq_bits_uop_edge_inst;
+			uops_0_pc_lob <= io_enq_bits_uop_pc_lob;
+			uops_0_taken <= io_enq_bits_uop_taken;
+			uops_0_imm_rename <= io_enq_bits_uop_imm_rename;
+			uops_0_imm_sel <= io_enq_bits_uop_imm_sel;
+			uops_0_pimm <= io_enq_bits_uop_pimm;
+			uops_0_imm_packed <= io_enq_bits_uop_imm_packed;
+			uops_0_op1_sel <= io_enq_bits_uop_op1_sel;
+			uops_0_op2_sel <= io_enq_bits_uop_op2_sel;
+			uops_0_fp_ctrl_ldst <= io_enq_bits_uop_fp_ctrl_ldst;
+			uops_0_fp_ctrl_wen <= io_enq_bits_uop_fp_ctrl_wen;
+			uops_0_fp_ctrl_ren1 <= io_enq_bits_uop_fp_ctrl_ren1;
+			uops_0_fp_ctrl_ren2 <= io_enq_bits_uop_fp_ctrl_ren2;
+			uops_0_fp_ctrl_ren3 <= io_enq_bits_uop_fp_ctrl_ren3;
+			uops_0_fp_ctrl_swap12 <= io_enq_bits_uop_fp_ctrl_swap12;
+			uops_0_fp_ctrl_swap23 <= io_enq_bits_uop_fp_ctrl_swap23;
+			uops_0_fp_ctrl_typeTagIn <= io_enq_bits_uop_fp_ctrl_typeTagIn;
+			uops_0_fp_ctrl_typeTagOut <= io_enq_bits_uop_fp_ctrl_typeTagOut;
+			uops_0_fp_ctrl_fromint <= io_enq_bits_uop_fp_ctrl_fromint;
+			uops_0_fp_ctrl_toint <= io_enq_bits_uop_fp_ctrl_toint;
+			uops_0_fp_ctrl_fastpipe <= io_enq_bits_uop_fp_ctrl_fastpipe;
+			uops_0_fp_ctrl_fma <= io_enq_bits_uop_fp_ctrl_fma;
+			uops_0_fp_ctrl_div <= io_enq_bits_uop_fp_ctrl_div;
+			uops_0_fp_ctrl_sqrt <= io_enq_bits_uop_fp_ctrl_sqrt;
+			uops_0_fp_ctrl_wflags <= io_enq_bits_uop_fp_ctrl_wflags;
+			uops_0_fp_ctrl_vec <= io_enq_bits_uop_fp_ctrl_vec;
+			uops_0_rob_idx <= io_enq_bits_uop_rob_idx;
+			uops_0_ldq_idx <= io_enq_bits_uop_ldq_idx;
+			uops_0_stq_idx <= io_enq_bits_uop_stq_idx;
+			uops_0_rxq_idx <= io_enq_bits_uop_rxq_idx;
+			uops_0_pdst <= io_enq_bits_uop_pdst;
+			uops_0_prs1 <= io_enq_bits_uop_prs1;
+			uops_0_prs2 <= io_enq_bits_uop_prs2;
+			uops_0_prs3 <= io_enq_bits_uop_prs3;
+			uops_0_ppred <= io_enq_bits_uop_ppred;
+			uops_0_prs1_busy <= io_enq_bits_uop_prs1_busy;
+			uops_0_prs2_busy <= io_enq_bits_uop_prs2_busy;
+			uops_0_prs3_busy <= io_enq_bits_uop_prs3_busy;
+			uops_0_ppred_busy <= io_enq_bits_uop_ppred_busy;
+			uops_0_stale_pdst <= io_enq_bits_uop_stale_pdst;
+			uops_0_exception <= io_enq_bits_uop_exception;
+			uops_0_exc_cause <= io_enq_bits_uop_exc_cause;
+			uops_0_mem_cmd <= io_enq_bits_uop_mem_cmd;
+			uops_0_mem_size <= io_enq_bits_uop_mem_size;
+			uops_0_mem_signed <= io_enq_bits_uop_mem_signed;
+			uops_0_uses_ldq <= io_enq_bits_uop_uses_ldq;
+			uops_0_uses_stq <= io_enq_bits_uop_uses_stq;
+			uops_0_is_unique <= io_enq_bits_uop_is_unique;
+			uops_0_flush_on_commit <= io_enq_bits_uop_flush_on_commit;
+			uops_0_csr_cmd <= io_enq_bits_uop_csr_cmd;
+			uops_0_ldst_is_rs1 <= io_enq_bits_uop_ldst_is_rs1;
+			uops_0_ldst <= io_enq_bits_uop_ldst;
+			uops_0_lrs1 <= io_enq_bits_uop_lrs1;
+			uops_0_lrs2 <= io_enq_bits_uop_lrs2;
+			uops_0_lrs3 <= io_enq_bits_uop_lrs3;
+			uops_0_dst_rtype <= io_enq_bits_uop_dst_rtype;
+			uops_0_lrs1_rtype <= io_enq_bits_uop_lrs1_rtype;
+			uops_0_lrs2_rtype <= io_enq_bits_uop_lrs2_rtype;
+			uops_0_frs3_en <= io_enq_bits_uop_frs3_en;
+			uops_0_fcn_dw <= io_enq_bits_uop_fcn_dw;
+			uops_0_fcn_op <= io_enq_bits_uop_fcn_op;
+			uops_0_fp_val <= io_enq_bits_uop_fp_val;
+			uops_0_fp_rm <= io_enq_bits_uop_fp_rm;
+			uops_0_fp_typ <= io_enq_bits_uop_fp_typ;
+			uops_0_xcpt_pf_if <= io_enq_bits_uop_xcpt_pf_if;
+			uops_0_xcpt_ae_if <= io_enq_bits_uop_xcpt_ae_if;
+			uops_0_xcpt_ma_if <= io_enq_bits_uop_xcpt_ma_if;
+			uops_0_bp_debug_if <= io_enq_bits_uop_bp_debug_if;
+			uops_0_bp_xcpt_if <= io_enq_bits_uop_bp_xcpt_if;
+			uops_0_debug_fsrc <= io_enq_bits_uop_debug_fsrc;
+			uops_0_debug_tsrc <= io_enq_bits_uop_debug_tsrc;
+		end
+		uops_0_dis_col_sel <= ~_GEN_113 & uops_0_dis_col_sel;
+		if (do_enq & _GEN_112)
+			uops_0_br_mask <= _uops_br_mask_T_1;
+		else
+			uops_0_br_mask <= ({8 {~valids_0}} | ~io_brupdate_b1_resolve_mask) & uops_0_br_mask;
+		if (_GEN_115) begin
+			uops_1_inst <= io_enq_bits_uop_inst;
+			uops_1_debug_inst <= io_enq_bits_uop_debug_inst;
+			uops_1_is_rvc <= io_enq_bits_uop_is_rvc;
+			uops_1_debug_pc <= io_enq_bits_uop_debug_pc;
+			uops_1_iq_type_0 <= io_enq_bits_uop_iq_type_0;
+			uops_1_iq_type_1 <= io_enq_bits_uop_iq_type_1;
+			uops_1_iq_type_2 <= io_enq_bits_uop_iq_type_2;
+			uops_1_iq_type_3 <= io_enq_bits_uop_iq_type_3;
+			uops_1_fu_code_0 <= io_enq_bits_uop_fu_code_0;
+			uops_1_fu_code_1 <= io_enq_bits_uop_fu_code_1;
+			uops_1_fu_code_2 <= io_enq_bits_uop_fu_code_2;
+			uops_1_fu_code_3 <= io_enq_bits_uop_fu_code_3;
+			uops_1_fu_code_4 <= io_enq_bits_uop_fu_code_4;
+			uops_1_fu_code_5 <= io_enq_bits_uop_fu_code_5;
+			uops_1_fu_code_6 <= io_enq_bits_uop_fu_code_6;
+			uops_1_fu_code_7 <= io_enq_bits_uop_fu_code_7;
+			uops_1_fu_code_8 <= io_enq_bits_uop_fu_code_8;
+			uops_1_fu_code_9 <= io_enq_bits_uop_fu_code_9;
+			uops_1_iw_issued <= io_enq_bits_uop_iw_issued;
+			uops_1_iw_issued_partial_agen <= io_enq_bits_uop_iw_issued_partial_agen;
+			uops_1_iw_issued_partial_dgen <= io_enq_bits_uop_iw_issued_partial_dgen;
+			uops_1_iw_p1_speculative_child <= io_enq_bits_uop_iw_p1_speculative_child;
+			uops_1_iw_p2_speculative_child <= io_enq_bits_uop_iw_p2_speculative_child;
+			uops_1_iw_p1_bypass_hint <= io_enq_bits_uop_iw_p1_bypass_hint;
+			uops_1_iw_p2_bypass_hint <= io_enq_bits_uop_iw_p2_bypass_hint;
+			uops_1_iw_p3_bypass_hint <= io_enq_bits_uop_iw_p3_bypass_hint;
+			uops_1_br_tag <= io_enq_bits_uop_br_tag;
+			uops_1_br_type <= io_enq_bits_uop_br_type;
+			uops_1_is_sfb <= io_enq_bits_uop_is_sfb;
+			uops_1_is_fence <= io_enq_bits_uop_is_fence;
+			uops_1_is_fencei <= io_enq_bits_uop_is_fencei;
+			uops_1_is_sfence <= io_enq_bits_uop_is_sfence;
+			uops_1_is_amo <= io_enq_bits_uop_is_amo;
+			uops_1_is_eret <= io_enq_bits_uop_is_eret;
+			uops_1_is_sys_pc2epc <= io_enq_bits_uop_is_sys_pc2epc;
+			uops_1_is_rocc <= io_enq_bits_uop_is_rocc;
+			uops_1_is_mov <= io_enq_bits_uop_is_mov;
+			uops_1_ftq_idx <= io_enq_bits_uop_ftq_idx;
+			uops_1_edge_inst <= io_enq_bits_uop_edge_inst;
+			uops_1_pc_lob <= io_enq_bits_uop_pc_lob;
+			uops_1_taken <= io_enq_bits_uop_taken;
+			uops_1_imm_rename <= io_enq_bits_uop_imm_rename;
+			uops_1_imm_sel <= io_enq_bits_uop_imm_sel;
+			uops_1_pimm <= io_enq_bits_uop_pimm;
+			uops_1_imm_packed <= io_enq_bits_uop_imm_packed;
+			uops_1_op1_sel <= io_enq_bits_uop_op1_sel;
+			uops_1_op2_sel <= io_enq_bits_uop_op2_sel;
+			uops_1_fp_ctrl_ldst <= io_enq_bits_uop_fp_ctrl_ldst;
+			uops_1_fp_ctrl_wen <= io_enq_bits_uop_fp_ctrl_wen;
+			uops_1_fp_ctrl_ren1 <= io_enq_bits_uop_fp_ctrl_ren1;
+			uops_1_fp_ctrl_ren2 <= io_enq_bits_uop_fp_ctrl_ren2;
+			uops_1_fp_ctrl_ren3 <= io_enq_bits_uop_fp_ctrl_ren3;
+			uops_1_fp_ctrl_swap12 <= io_enq_bits_uop_fp_ctrl_swap12;
+			uops_1_fp_ctrl_swap23 <= io_enq_bits_uop_fp_ctrl_swap23;
+			uops_1_fp_ctrl_typeTagIn <= io_enq_bits_uop_fp_ctrl_typeTagIn;
+			uops_1_fp_ctrl_typeTagOut <= io_enq_bits_uop_fp_ctrl_typeTagOut;
+			uops_1_fp_ctrl_fromint <= io_enq_bits_uop_fp_ctrl_fromint;
+			uops_1_fp_ctrl_toint <= io_enq_bits_uop_fp_ctrl_toint;
+			uops_1_fp_ctrl_fastpipe <= io_enq_bits_uop_fp_ctrl_fastpipe;
+			uops_1_fp_ctrl_fma <= io_enq_bits_uop_fp_ctrl_fma;
+			uops_1_fp_ctrl_div <= io_enq_bits_uop_fp_ctrl_div;
+			uops_1_fp_ctrl_sqrt <= io_enq_bits_uop_fp_ctrl_sqrt;
+			uops_1_fp_ctrl_wflags <= io_enq_bits_uop_fp_ctrl_wflags;
+			uops_1_fp_ctrl_vec <= io_enq_bits_uop_fp_ctrl_vec;
+			uops_1_rob_idx <= io_enq_bits_uop_rob_idx;
+			uops_1_ldq_idx <= io_enq_bits_uop_ldq_idx;
+			uops_1_stq_idx <= io_enq_bits_uop_stq_idx;
+			uops_1_rxq_idx <= io_enq_bits_uop_rxq_idx;
+			uops_1_pdst <= io_enq_bits_uop_pdst;
+			uops_1_prs1 <= io_enq_bits_uop_prs1;
+			uops_1_prs2 <= io_enq_bits_uop_prs2;
+			uops_1_prs3 <= io_enq_bits_uop_prs3;
+			uops_1_ppred <= io_enq_bits_uop_ppred;
+			uops_1_prs1_busy <= io_enq_bits_uop_prs1_busy;
+			uops_1_prs2_busy <= io_enq_bits_uop_prs2_busy;
+			uops_1_prs3_busy <= io_enq_bits_uop_prs3_busy;
+			uops_1_ppred_busy <= io_enq_bits_uop_ppred_busy;
+			uops_1_stale_pdst <= io_enq_bits_uop_stale_pdst;
+			uops_1_exception <= io_enq_bits_uop_exception;
+			uops_1_exc_cause <= io_enq_bits_uop_exc_cause;
+			uops_1_mem_cmd <= io_enq_bits_uop_mem_cmd;
+			uops_1_mem_size <= io_enq_bits_uop_mem_size;
+			uops_1_mem_signed <= io_enq_bits_uop_mem_signed;
+			uops_1_uses_ldq <= io_enq_bits_uop_uses_ldq;
+			uops_1_uses_stq <= io_enq_bits_uop_uses_stq;
+			uops_1_is_unique <= io_enq_bits_uop_is_unique;
+			uops_1_flush_on_commit <= io_enq_bits_uop_flush_on_commit;
+			uops_1_csr_cmd <= io_enq_bits_uop_csr_cmd;
+			uops_1_ldst_is_rs1 <= io_enq_bits_uop_ldst_is_rs1;
+			uops_1_ldst <= io_enq_bits_uop_ldst;
+			uops_1_lrs1 <= io_enq_bits_uop_lrs1;
+			uops_1_lrs2 <= io_enq_bits_uop_lrs2;
+			uops_1_lrs3 <= io_enq_bits_uop_lrs3;
+			uops_1_dst_rtype <= io_enq_bits_uop_dst_rtype;
+			uops_1_lrs1_rtype <= io_enq_bits_uop_lrs1_rtype;
+			uops_1_lrs2_rtype <= io_enq_bits_uop_lrs2_rtype;
+			uops_1_frs3_en <= io_enq_bits_uop_frs3_en;
+			uops_1_fcn_dw <= io_enq_bits_uop_fcn_dw;
+			uops_1_fcn_op <= io_enq_bits_uop_fcn_op;
+			uops_1_fp_val <= io_enq_bits_uop_fp_val;
+			uops_1_fp_rm <= io_enq_bits_uop_fp_rm;
+			uops_1_fp_typ <= io_enq_bits_uop_fp_typ;
+			uops_1_xcpt_pf_if <= io_enq_bits_uop_xcpt_pf_if;
+			uops_1_xcpt_ae_if <= io_enq_bits_uop_xcpt_ae_if;
+			uops_1_xcpt_ma_if <= io_enq_bits_uop_xcpt_ma_if;
+			uops_1_bp_debug_if <= io_enq_bits_uop_bp_debug_if;
+			uops_1_bp_xcpt_if <= io_enq_bits_uop_bp_xcpt_if;
+			uops_1_debug_fsrc <= io_enq_bits_uop_debug_fsrc;
+			uops_1_debug_tsrc <= io_enq_bits_uop_debug_tsrc;
+		end
+		uops_1_dis_col_sel <= ~_GEN_115 & uops_1_dis_col_sel;
+		if (do_enq & _GEN_114)
+			uops_1_br_mask <= _uops_br_mask_T_1;
+		else
+			uops_1_br_mask <= ({8 {~valids_1}} | ~io_brupdate_b1_resolve_mask) & uops_1_br_mask;
+		if (_GEN_117) begin
+			uops_2_inst <= io_enq_bits_uop_inst;
+			uops_2_debug_inst <= io_enq_bits_uop_debug_inst;
+			uops_2_is_rvc <= io_enq_bits_uop_is_rvc;
+			uops_2_debug_pc <= io_enq_bits_uop_debug_pc;
+			uops_2_iq_type_0 <= io_enq_bits_uop_iq_type_0;
+			uops_2_iq_type_1 <= io_enq_bits_uop_iq_type_1;
+			uops_2_iq_type_2 <= io_enq_bits_uop_iq_type_2;
+			uops_2_iq_type_3 <= io_enq_bits_uop_iq_type_3;
+			uops_2_fu_code_0 <= io_enq_bits_uop_fu_code_0;
+			uops_2_fu_code_1 <= io_enq_bits_uop_fu_code_1;
+			uops_2_fu_code_2 <= io_enq_bits_uop_fu_code_2;
+			uops_2_fu_code_3 <= io_enq_bits_uop_fu_code_3;
+			uops_2_fu_code_4 <= io_enq_bits_uop_fu_code_4;
+			uops_2_fu_code_5 <= io_enq_bits_uop_fu_code_5;
+			uops_2_fu_code_6 <= io_enq_bits_uop_fu_code_6;
+			uops_2_fu_code_7 <= io_enq_bits_uop_fu_code_7;
+			uops_2_fu_code_8 <= io_enq_bits_uop_fu_code_8;
+			uops_2_fu_code_9 <= io_enq_bits_uop_fu_code_9;
+			uops_2_iw_issued <= io_enq_bits_uop_iw_issued;
+			uops_2_iw_issued_partial_agen <= io_enq_bits_uop_iw_issued_partial_agen;
+			uops_2_iw_issued_partial_dgen <= io_enq_bits_uop_iw_issued_partial_dgen;
+			uops_2_iw_p1_speculative_child <= io_enq_bits_uop_iw_p1_speculative_child;
+			uops_2_iw_p2_speculative_child <= io_enq_bits_uop_iw_p2_speculative_child;
+			uops_2_iw_p1_bypass_hint <= io_enq_bits_uop_iw_p1_bypass_hint;
+			uops_2_iw_p2_bypass_hint <= io_enq_bits_uop_iw_p2_bypass_hint;
+			uops_2_iw_p3_bypass_hint <= io_enq_bits_uop_iw_p3_bypass_hint;
+			uops_2_br_tag <= io_enq_bits_uop_br_tag;
+			uops_2_br_type <= io_enq_bits_uop_br_type;
+			uops_2_is_sfb <= io_enq_bits_uop_is_sfb;
+			uops_2_is_fence <= io_enq_bits_uop_is_fence;
+			uops_2_is_fencei <= io_enq_bits_uop_is_fencei;
+			uops_2_is_sfence <= io_enq_bits_uop_is_sfence;
+			uops_2_is_amo <= io_enq_bits_uop_is_amo;
+			uops_2_is_eret <= io_enq_bits_uop_is_eret;
+			uops_2_is_sys_pc2epc <= io_enq_bits_uop_is_sys_pc2epc;
+			uops_2_is_rocc <= io_enq_bits_uop_is_rocc;
+			uops_2_is_mov <= io_enq_bits_uop_is_mov;
+			uops_2_ftq_idx <= io_enq_bits_uop_ftq_idx;
+			uops_2_edge_inst <= io_enq_bits_uop_edge_inst;
+			uops_2_pc_lob <= io_enq_bits_uop_pc_lob;
+			uops_2_taken <= io_enq_bits_uop_taken;
+			uops_2_imm_rename <= io_enq_bits_uop_imm_rename;
+			uops_2_imm_sel <= io_enq_bits_uop_imm_sel;
+			uops_2_pimm <= io_enq_bits_uop_pimm;
+			uops_2_imm_packed <= io_enq_bits_uop_imm_packed;
+			uops_2_op1_sel <= io_enq_bits_uop_op1_sel;
+			uops_2_op2_sel <= io_enq_bits_uop_op2_sel;
+			uops_2_fp_ctrl_ldst <= io_enq_bits_uop_fp_ctrl_ldst;
+			uops_2_fp_ctrl_wen <= io_enq_bits_uop_fp_ctrl_wen;
+			uops_2_fp_ctrl_ren1 <= io_enq_bits_uop_fp_ctrl_ren1;
+			uops_2_fp_ctrl_ren2 <= io_enq_bits_uop_fp_ctrl_ren2;
+			uops_2_fp_ctrl_ren3 <= io_enq_bits_uop_fp_ctrl_ren3;
+			uops_2_fp_ctrl_swap12 <= io_enq_bits_uop_fp_ctrl_swap12;
+			uops_2_fp_ctrl_swap23 <= io_enq_bits_uop_fp_ctrl_swap23;
+			uops_2_fp_ctrl_typeTagIn <= io_enq_bits_uop_fp_ctrl_typeTagIn;
+			uops_2_fp_ctrl_typeTagOut <= io_enq_bits_uop_fp_ctrl_typeTagOut;
+			uops_2_fp_ctrl_fromint <= io_enq_bits_uop_fp_ctrl_fromint;
+			uops_2_fp_ctrl_toint <= io_enq_bits_uop_fp_ctrl_toint;
+			uops_2_fp_ctrl_fastpipe <= io_enq_bits_uop_fp_ctrl_fastpipe;
+			uops_2_fp_ctrl_fma <= io_enq_bits_uop_fp_ctrl_fma;
+			uops_2_fp_ctrl_div <= io_enq_bits_uop_fp_ctrl_div;
+			uops_2_fp_ctrl_sqrt <= io_enq_bits_uop_fp_ctrl_sqrt;
+			uops_2_fp_ctrl_wflags <= io_enq_bits_uop_fp_ctrl_wflags;
+			uops_2_fp_ctrl_vec <= io_enq_bits_uop_fp_ctrl_vec;
+			uops_2_rob_idx <= io_enq_bits_uop_rob_idx;
+			uops_2_ldq_idx <= io_enq_bits_uop_ldq_idx;
+			uops_2_stq_idx <= io_enq_bits_uop_stq_idx;
+			uops_2_rxq_idx <= io_enq_bits_uop_rxq_idx;
+			uops_2_pdst <= io_enq_bits_uop_pdst;
+			uops_2_prs1 <= io_enq_bits_uop_prs1;
+			uops_2_prs2 <= io_enq_bits_uop_prs2;
+			uops_2_prs3 <= io_enq_bits_uop_prs3;
+			uops_2_ppred <= io_enq_bits_uop_ppred;
+			uops_2_prs1_busy <= io_enq_bits_uop_prs1_busy;
+			uops_2_prs2_busy <= io_enq_bits_uop_prs2_busy;
+			uops_2_prs3_busy <= io_enq_bits_uop_prs3_busy;
+			uops_2_ppred_busy <= io_enq_bits_uop_ppred_busy;
+			uops_2_stale_pdst <= io_enq_bits_uop_stale_pdst;
+			uops_2_exception <= io_enq_bits_uop_exception;
+			uops_2_exc_cause <= io_enq_bits_uop_exc_cause;
+			uops_2_mem_cmd <= io_enq_bits_uop_mem_cmd;
+			uops_2_mem_size <= io_enq_bits_uop_mem_size;
+			uops_2_mem_signed <= io_enq_bits_uop_mem_signed;
+			uops_2_uses_ldq <= io_enq_bits_uop_uses_ldq;
+			uops_2_uses_stq <= io_enq_bits_uop_uses_stq;
+			uops_2_is_unique <= io_enq_bits_uop_is_unique;
+			uops_2_flush_on_commit <= io_enq_bits_uop_flush_on_commit;
+			uops_2_csr_cmd <= io_enq_bits_uop_csr_cmd;
+			uops_2_ldst_is_rs1 <= io_enq_bits_uop_ldst_is_rs1;
+			uops_2_ldst <= io_enq_bits_uop_ldst;
+			uops_2_lrs1 <= io_enq_bits_uop_lrs1;
+			uops_2_lrs2 <= io_enq_bits_uop_lrs2;
+			uops_2_lrs3 <= io_enq_bits_uop_lrs3;
+			uops_2_dst_rtype <= io_enq_bits_uop_dst_rtype;
+			uops_2_lrs1_rtype <= io_enq_bits_uop_lrs1_rtype;
+			uops_2_lrs2_rtype <= io_enq_bits_uop_lrs2_rtype;
+			uops_2_frs3_en <= io_enq_bits_uop_frs3_en;
+			uops_2_fcn_dw <= io_enq_bits_uop_fcn_dw;
+			uops_2_fcn_op <= io_enq_bits_uop_fcn_op;
+			uops_2_fp_val <= io_enq_bits_uop_fp_val;
+			uops_2_fp_rm <= io_enq_bits_uop_fp_rm;
+			uops_2_fp_typ <= io_enq_bits_uop_fp_typ;
+			uops_2_xcpt_pf_if <= io_enq_bits_uop_xcpt_pf_if;
+			uops_2_xcpt_ae_if <= io_enq_bits_uop_xcpt_ae_if;
+			uops_2_xcpt_ma_if <= io_enq_bits_uop_xcpt_ma_if;
+			uops_2_bp_debug_if <= io_enq_bits_uop_bp_debug_if;
+			uops_2_bp_xcpt_if <= io_enq_bits_uop_bp_xcpt_if;
+			uops_2_debug_fsrc <= io_enq_bits_uop_debug_fsrc;
+			uops_2_debug_tsrc <= io_enq_bits_uop_debug_tsrc;
+		end
+		uops_2_dis_col_sel <= ~_GEN_117 & uops_2_dis_col_sel;
+		if (do_enq & _GEN_116)
+			uops_2_br_mask <= _uops_br_mask_T_1;
+		else
+			uops_2_br_mask <= ({8 {~valids_2}} | ~io_brupdate_b1_resolve_mask) & uops_2_br_mask;
+		if (_GEN_119) begin
+			uops_3_inst <= io_enq_bits_uop_inst;
+			uops_3_debug_inst <= io_enq_bits_uop_debug_inst;
+			uops_3_is_rvc <= io_enq_bits_uop_is_rvc;
+			uops_3_debug_pc <= io_enq_bits_uop_debug_pc;
+			uops_3_iq_type_0 <= io_enq_bits_uop_iq_type_0;
+			uops_3_iq_type_1 <= io_enq_bits_uop_iq_type_1;
+			uops_3_iq_type_2 <= io_enq_bits_uop_iq_type_2;
+			uops_3_iq_type_3 <= io_enq_bits_uop_iq_type_3;
+			uops_3_fu_code_0 <= io_enq_bits_uop_fu_code_0;
+			uops_3_fu_code_1 <= io_enq_bits_uop_fu_code_1;
+			uops_3_fu_code_2 <= io_enq_bits_uop_fu_code_2;
+			uops_3_fu_code_3 <= io_enq_bits_uop_fu_code_3;
+			uops_3_fu_code_4 <= io_enq_bits_uop_fu_code_4;
+			uops_3_fu_code_5 <= io_enq_bits_uop_fu_code_5;
+			uops_3_fu_code_6 <= io_enq_bits_uop_fu_code_6;
+			uops_3_fu_code_7 <= io_enq_bits_uop_fu_code_7;
+			uops_3_fu_code_8 <= io_enq_bits_uop_fu_code_8;
+			uops_3_fu_code_9 <= io_enq_bits_uop_fu_code_9;
+			uops_3_iw_issued <= io_enq_bits_uop_iw_issued;
+			uops_3_iw_issued_partial_agen <= io_enq_bits_uop_iw_issued_partial_agen;
+			uops_3_iw_issued_partial_dgen <= io_enq_bits_uop_iw_issued_partial_dgen;
+			uops_3_iw_p1_speculative_child <= io_enq_bits_uop_iw_p1_speculative_child;
+			uops_3_iw_p2_speculative_child <= io_enq_bits_uop_iw_p2_speculative_child;
+			uops_3_iw_p1_bypass_hint <= io_enq_bits_uop_iw_p1_bypass_hint;
+			uops_3_iw_p2_bypass_hint <= io_enq_bits_uop_iw_p2_bypass_hint;
+			uops_3_iw_p3_bypass_hint <= io_enq_bits_uop_iw_p3_bypass_hint;
+			uops_3_br_tag <= io_enq_bits_uop_br_tag;
+			uops_3_br_type <= io_enq_bits_uop_br_type;
+			uops_3_is_sfb <= io_enq_bits_uop_is_sfb;
+			uops_3_is_fence <= io_enq_bits_uop_is_fence;
+			uops_3_is_fencei <= io_enq_bits_uop_is_fencei;
+			uops_3_is_sfence <= io_enq_bits_uop_is_sfence;
+			uops_3_is_amo <= io_enq_bits_uop_is_amo;
+			uops_3_is_eret <= io_enq_bits_uop_is_eret;
+			uops_3_is_sys_pc2epc <= io_enq_bits_uop_is_sys_pc2epc;
+			uops_3_is_rocc <= io_enq_bits_uop_is_rocc;
+			uops_3_is_mov <= io_enq_bits_uop_is_mov;
+			uops_3_ftq_idx <= io_enq_bits_uop_ftq_idx;
+			uops_3_edge_inst <= io_enq_bits_uop_edge_inst;
+			uops_3_pc_lob <= io_enq_bits_uop_pc_lob;
+			uops_3_taken <= io_enq_bits_uop_taken;
+			uops_3_imm_rename <= io_enq_bits_uop_imm_rename;
+			uops_3_imm_sel <= io_enq_bits_uop_imm_sel;
+			uops_3_pimm <= io_enq_bits_uop_pimm;
+			uops_3_imm_packed <= io_enq_bits_uop_imm_packed;
+			uops_3_op1_sel <= io_enq_bits_uop_op1_sel;
+			uops_3_op2_sel <= io_enq_bits_uop_op2_sel;
+			uops_3_fp_ctrl_ldst <= io_enq_bits_uop_fp_ctrl_ldst;
+			uops_3_fp_ctrl_wen <= io_enq_bits_uop_fp_ctrl_wen;
+			uops_3_fp_ctrl_ren1 <= io_enq_bits_uop_fp_ctrl_ren1;
+			uops_3_fp_ctrl_ren2 <= io_enq_bits_uop_fp_ctrl_ren2;
+			uops_3_fp_ctrl_ren3 <= io_enq_bits_uop_fp_ctrl_ren3;
+			uops_3_fp_ctrl_swap12 <= io_enq_bits_uop_fp_ctrl_swap12;
+			uops_3_fp_ctrl_swap23 <= io_enq_bits_uop_fp_ctrl_swap23;
+			uops_3_fp_ctrl_typeTagIn <= io_enq_bits_uop_fp_ctrl_typeTagIn;
+			uops_3_fp_ctrl_typeTagOut <= io_enq_bits_uop_fp_ctrl_typeTagOut;
+			uops_3_fp_ctrl_fromint <= io_enq_bits_uop_fp_ctrl_fromint;
+			uops_3_fp_ctrl_toint <= io_enq_bits_uop_fp_ctrl_toint;
+			uops_3_fp_ctrl_fastpipe <= io_enq_bits_uop_fp_ctrl_fastpipe;
+			uops_3_fp_ctrl_fma <= io_enq_bits_uop_fp_ctrl_fma;
+			uops_3_fp_ctrl_div <= io_enq_bits_uop_fp_ctrl_div;
+			uops_3_fp_ctrl_sqrt <= io_enq_bits_uop_fp_ctrl_sqrt;
+			uops_3_fp_ctrl_wflags <= io_enq_bits_uop_fp_ctrl_wflags;
+			uops_3_fp_ctrl_vec <= io_enq_bits_uop_fp_ctrl_vec;
+			uops_3_rob_idx <= io_enq_bits_uop_rob_idx;
+			uops_3_ldq_idx <= io_enq_bits_uop_ldq_idx;
+			uops_3_stq_idx <= io_enq_bits_uop_stq_idx;
+			uops_3_rxq_idx <= io_enq_bits_uop_rxq_idx;
+			uops_3_pdst <= io_enq_bits_uop_pdst;
+			uops_3_prs1 <= io_enq_bits_uop_prs1;
+			uops_3_prs2 <= io_enq_bits_uop_prs2;
+			uops_3_prs3 <= io_enq_bits_uop_prs3;
+			uops_3_ppred <= io_enq_bits_uop_ppred;
+			uops_3_prs1_busy <= io_enq_bits_uop_prs1_busy;
+			uops_3_prs2_busy <= io_enq_bits_uop_prs2_busy;
+			uops_3_prs3_busy <= io_enq_bits_uop_prs3_busy;
+			uops_3_ppred_busy <= io_enq_bits_uop_ppred_busy;
+			uops_3_stale_pdst <= io_enq_bits_uop_stale_pdst;
+			uops_3_exception <= io_enq_bits_uop_exception;
+			uops_3_exc_cause <= io_enq_bits_uop_exc_cause;
+			uops_3_mem_cmd <= io_enq_bits_uop_mem_cmd;
+			uops_3_mem_size <= io_enq_bits_uop_mem_size;
+			uops_3_mem_signed <= io_enq_bits_uop_mem_signed;
+			uops_3_uses_ldq <= io_enq_bits_uop_uses_ldq;
+			uops_3_uses_stq <= io_enq_bits_uop_uses_stq;
+			uops_3_is_unique <= io_enq_bits_uop_is_unique;
+			uops_3_flush_on_commit <= io_enq_bits_uop_flush_on_commit;
+			uops_3_csr_cmd <= io_enq_bits_uop_csr_cmd;
+			uops_3_ldst_is_rs1 <= io_enq_bits_uop_ldst_is_rs1;
+			uops_3_ldst <= io_enq_bits_uop_ldst;
+			uops_3_lrs1 <= io_enq_bits_uop_lrs1;
+			uops_3_lrs2 <= io_enq_bits_uop_lrs2;
+			uops_3_lrs3 <= io_enq_bits_uop_lrs3;
+			uops_3_dst_rtype <= io_enq_bits_uop_dst_rtype;
+			uops_3_lrs1_rtype <= io_enq_bits_uop_lrs1_rtype;
+			uops_3_lrs2_rtype <= io_enq_bits_uop_lrs2_rtype;
+			uops_3_frs3_en <= io_enq_bits_uop_frs3_en;
+			uops_3_fcn_dw <= io_enq_bits_uop_fcn_dw;
+			uops_3_fcn_op <= io_enq_bits_uop_fcn_op;
+			uops_3_fp_val <= io_enq_bits_uop_fp_val;
+			uops_3_fp_rm <= io_enq_bits_uop_fp_rm;
+			uops_3_fp_typ <= io_enq_bits_uop_fp_typ;
+			uops_3_xcpt_pf_if <= io_enq_bits_uop_xcpt_pf_if;
+			uops_3_xcpt_ae_if <= io_enq_bits_uop_xcpt_ae_if;
+			uops_3_xcpt_ma_if <= io_enq_bits_uop_xcpt_ma_if;
+			uops_3_bp_debug_if <= io_enq_bits_uop_bp_debug_if;
+			uops_3_bp_xcpt_if <= io_enq_bits_uop_bp_xcpt_if;
+			uops_3_debug_fsrc <= io_enq_bits_uop_debug_fsrc;
+			uops_3_debug_tsrc <= io_enq_bits_uop_debug_tsrc;
+		end
+		uops_3_dis_col_sel <= ~_GEN_119 & uops_3_dis_col_sel;
+		if (do_enq & _GEN_118)
+			uops_3_br_mask <= _uops_br_mask_T_1;
+		else
+			uops_3_br_mask <= ({8 {~valids_3}} | ~io_brupdate_b1_resolve_mask) & uops_3_br_mask;
+		if (_GEN_121) begin
+			uops_4_inst <= io_enq_bits_uop_inst;
+			uops_4_debug_inst <= io_enq_bits_uop_debug_inst;
+			uops_4_is_rvc <= io_enq_bits_uop_is_rvc;
+			uops_4_debug_pc <= io_enq_bits_uop_debug_pc;
+			uops_4_iq_type_0 <= io_enq_bits_uop_iq_type_0;
+			uops_4_iq_type_1 <= io_enq_bits_uop_iq_type_1;
+			uops_4_iq_type_2 <= io_enq_bits_uop_iq_type_2;
+			uops_4_iq_type_3 <= io_enq_bits_uop_iq_type_3;
+			uops_4_fu_code_0 <= io_enq_bits_uop_fu_code_0;
+			uops_4_fu_code_1 <= io_enq_bits_uop_fu_code_1;
+			uops_4_fu_code_2 <= io_enq_bits_uop_fu_code_2;
+			uops_4_fu_code_3 <= io_enq_bits_uop_fu_code_3;
+			uops_4_fu_code_4 <= io_enq_bits_uop_fu_code_4;
+			uops_4_fu_code_5 <= io_enq_bits_uop_fu_code_5;
+			uops_4_fu_code_6 <= io_enq_bits_uop_fu_code_6;
+			uops_4_fu_code_7 <= io_enq_bits_uop_fu_code_7;
+			uops_4_fu_code_8 <= io_enq_bits_uop_fu_code_8;
+			uops_4_fu_code_9 <= io_enq_bits_uop_fu_code_9;
+			uops_4_iw_issued <= io_enq_bits_uop_iw_issued;
+			uops_4_iw_issued_partial_agen <= io_enq_bits_uop_iw_issued_partial_agen;
+			uops_4_iw_issued_partial_dgen <= io_enq_bits_uop_iw_issued_partial_dgen;
+			uops_4_iw_p1_speculative_child <= io_enq_bits_uop_iw_p1_speculative_child;
+			uops_4_iw_p2_speculative_child <= io_enq_bits_uop_iw_p2_speculative_child;
+			uops_4_iw_p1_bypass_hint <= io_enq_bits_uop_iw_p1_bypass_hint;
+			uops_4_iw_p2_bypass_hint <= io_enq_bits_uop_iw_p2_bypass_hint;
+			uops_4_iw_p3_bypass_hint <= io_enq_bits_uop_iw_p3_bypass_hint;
+			uops_4_br_tag <= io_enq_bits_uop_br_tag;
+			uops_4_br_type <= io_enq_bits_uop_br_type;
+			uops_4_is_sfb <= io_enq_bits_uop_is_sfb;
+			uops_4_is_fence <= io_enq_bits_uop_is_fence;
+			uops_4_is_fencei <= io_enq_bits_uop_is_fencei;
+			uops_4_is_sfence <= io_enq_bits_uop_is_sfence;
+			uops_4_is_amo <= io_enq_bits_uop_is_amo;
+			uops_4_is_eret <= io_enq_bits_uop_is_eret;
+			uops_4_is_sys_pc2epc <= io_enq_bits_uop_is_sys_pc2epc;
+			uops_4_is_rocc <= io_enq_bits_uop_is_rocc;
+			uops_4_is_mov <= io_enq_bits_uop_is_mov;
+			uops_4_ftq_idx <= io_enq_bits_uop_ftq_idx;
+			uops_4_edge_inst <= io_enq_bits_uop_edge_inst;
+			uops_4_pc_lob <= io_enq_bits_uop_pc_lob;
+			uops_4_taken <= io_enq_bits_uop_taken;
+			uops_4_imm_rename <= io_enq_bits_uop_imm_rename;
+			uops_4_imm_sel <= io_enq_bits_uop_imm_sel;
+			uops_4_pimm <= io_enq_bits_uop_pimm;
+			uops_4_imm_packed <= io_enq_bits_uop_imm_packed;
+			uops_4_op1_sel <= io_enq_bits_uop_op1_sel;
+			uops_4_op2_sel <= io_enq_bits_uop_op2_sel;
+			uops_4_fp_ctrl_ldst <= io_enq_bits_uop_fp_ctrl_ldst;
+			uops_4_fp_ctrl_wen <= io_enq_bits_uop_fp_ctrl_wen;
+			uops_4_fp_ctrl_ren1 <= io_enq_bits_uop_fp_ctrl_ren1;
+			uops_4_fp_ctrl_ren2 <= io_enq_bits_uop_fp_ctrl_ren2;
+			uops_4_fp_ctrl_ren3 <= io_enq_bits_uop_fp_ctrl_ren3;
+			uops_4_fp_ctrl_swap12 <= io_enq_bits_uop_fp_ctrl_swap12;
+			uops_4_fp_ctrl_swap23 <= io_enq_bits_uop_fp_ctrl_swap23;
+			uops_4_fp_ctrl_typeTagIn <= io_enq_bits_uop_fp_ctrl_typeTagIn;
+			uops_4_fp_ctrl_typeTagOut <= io_enq_bits_uop_fp_ctrl_typeTagOut;
+			uops_4_fp_ctrl_fromint <= io_enq_bits_uop_fp_ctrl_fromint;
+			uops_4_fp_ctrl_toint <= io_enq_bits_uop_fp_ctrl_toint;
+			uops_4_fp_ctrl_fastpipe <= io_enq_bits_uop_fp_ctrl_fastpipe;
+			uops_4_fp_ctrl_fma <= io_enq_bits_uop_fp_ctrl_fma;
+			uops_4_fp_ctrl_div <= io_enq_bits_uop_fp_ctrl_div;
+			uops_4_fp_ctrl_sqrt <= io_enq_bits_uop_fp_ctrl_sqrt;
+			uops_4_fp_ctrl_wflags <= io_enq_bits_uop_fp_ctrl_wflags;
+			uops_4_fp_ctrl_vec <= io_enq_bits_uop_fp_ctrl_vec;
+			uops_4_rob_idx <= io_enq_bits_uop_rob_idx;
+			uops_4_ldq_idx <= io_enq_bits_uop_ldq_idx;
+			uops_4_stq_idx <= io_enq_bits_uop_stq_idx;
+			uops_4_rxq_idx <= io_enq_bits_uop_rxq_idx;
+			uops_4_pdst <= io_enq_bits_uop_pdst;
+			uops_4_prs1 <= io_enq_bits_uop_prs1;
+			uops_4_prs2 <= io_enq_bits_uop_prs2;
+			uops_4_prs3 <= io_enq_bits_uop_prs3;
+			uops_4_ppred <= io_enq_bits_uop_ppred;
+			uops_4_prs1_busy <= io_enq_bits_uop_prs1_busy;
+			uops_4_prs2_busy <= io_enq_bits_uop_prs2_busy;
+			uops_4_prs3_busy <= io_enq_bits_uop_prs3_busy;
+			uops_4_ppred_busy <= io_enq_bits_uop_ppred_busy;
+			uops_4_stale_pdst <= io_enq_bits_uop_stale_pdst;
+			uops_4_exception <= io_enq_bits_uop_exception;
+			uops_4_exc_cause <= io_enq_bits_uop_exc_cause;
+			uops_4_mem_cmd <= io_enq_bits_uop_mem_cmd;
+			uops_4_mem_size <= io_enq_bits_uop_mem_size;
+			uops_4_mem_signed <= io_enq_bits_uop_mem_signed;
+			uops_4_uses_ldq <= io_enq_bits_uop_uses_ldq;
+			uops_4_uses_stq <= io_enq_bits_uop_uses_stq;
+			uops_4_is_unique <= io_enq_bits_uop_is_unique;
+			uops_4_flush_on_commit <= io_enq_bits_uop_flush_on_commit;
+			uops_4_csr_cmd <= io_enq_bits_uop_csr_cmd;
+			uops_4_ldst_is_rs1 <= io_enq_bits_uop_ldst_is_rs1;
+			uops_4_ldst <= io_enq_bits_uop_ldst;
+			uops_4_lrs1 <= io_enq_bits_uop_lrs1;
+			uops_4_lrs2 <= io_enq_bits_uop_lrs2;
+			uops_4_lrs3 <= io_enq_bits_uop_lrs3;
+			uops_4_dst_rtype <= io_enq_bits_uop_dst_rtype;
+			uops_4_lrs1_rtype <= io_enq_bits_uop_lrs1_rtype;
+			uops_4_lrs2_rtype <= io_enq_bits_uop_lrs2_rtype;
+			uops_4_frs3_en <= io_enq_bits_uop_frs3_en;
+			uops_4_fcn_dw <= io_enq_bits_uop_fcn_dw;
+			uops_4_fcn_op <= io_enq_bits_uop_fcn_op;
+			uops_4_fp_val <= io_enq_bits_uop_fp_val;
+			uops_4_fp_rm <= io_enq_bits_uop_fp_rm;
+			uops_4_fp_typ <= io_enq_bits_uop_fp_typ;
+			uops_4_xcpt_pf_if <= io_enq_bits_uop_xcpt_pf_if;
+			uops_4_xcpt_ae_if <= io_enq_bits_uop_xcpt_ae_if;
+			uops_4_xcpt_ma_if <= io_enq_bits_uop_xcpt_ma_if;
+			uops_4_bp_debug_if <= io_enq_bits_uop_bp_debug_if;
+			uops_4_bp_xcpt_if <= io_enq_bits_uop_bp_xcpt_if;
+			uops_4_debug_fsrc <= io_enq_bits_uop_debug_fsrc;
+			uops_4_debug_tsrc <= io_enq_bits_uop_debug_tsrc;
+		end
+		uops_4_dis_col_sel <= ~_GEN_121 & uops_4_dis_col_sel;
+		if (do_enq & _GEN_120)
+			uops_4_br_mask <= _uops_br_mask_T_1;
+		else
+			uops_4_br_mask <= ({8 {~valids_4}} | ~io_brupdate_b1_resolve_mask) & uops_4_br_mask;
+		if (_GEN_123) begin
+			uops_5_inst <= io_enq_bits_uop_inst;
+			uops_5_debug_inst <= io_enq_bits_uop_debug_inst;
+			uops_5_is_rvc <= io_enq_bits_uop_is_rvc;
+			uops_5_debug_pc <= io_enq_bits_uop_debug_pc;
+			uops_5_iq_type_0 <= io_enq_bits_uop_iq_type_0;
+			uops_5_iq_type_1 <= io_enq_bits_uop_iq_type_1;
+			uops_5_iq_type_2 <= io_enq_bits_uop_iq_type_2;
+			uops_5_iq_type_3 <= io_enq_bits_uop_iq_type_3;
+			uops_5_fu_code_0 <= io_enq_bits_uop_fu_code_0;
+			uops_5_fu_code_1 <= io_enq_bits_uop_fu_code_1;
+			uops_5_fu_code_2 <= io_enq_bits_uop_fu_code_2;
+			uops_5_fu_code_3 <= io_enq_bits_uop_fu_code_3;
+			uops_5_fu_code_4 <= io_enq_bits_uop_fu_code_4;
+			uops_5_fu_code_5 <= io_enq_bits_uop_fu_code_5;
+			uops_5_fu_code_6 <= io_enq_bits_uop_fu_code_6;
+			uops_5_fu_code_7 <= io_enq_bits_uop_fu_code_7;
+			uops_5_fu_code_8 <= io_enq_bits_uop_fu_code_8;
+			uops_5_fu_code_9 <= io_enq_bits_uop_fu_code_9;
+			uops_5_iw_issued <= io_enq_bits_uop_iw_issued;
+			uops_5_iw_issued_partial_agen <= io_enq_bits_uop_iw_issued_partial_agen;
+			uops_5_iw_issued_partial_dgen <= io_enq_bits_uop_iw_issued_partial_dgen;
+			uops_5_iw_p1_speculative_child <= io_enq_bits_uop_iw_p1_speculative_child;
+			uops_5_iw_p2_speculative_child <= io_enq_bits_uop_iw_p2_speculative_child;
+			uops_5_iw_p1_bypass_hint <= io_enq_bits_uop_iw_p1_bypass_hint;
+			uops_5_iw_p2_bypass_hint <= io_enq_bits_uop_iw_p2_bypass_hint;
+			uops_5_iw_p3_bypass_hint <= io_enq_bits_uop_iw_p3_bypass_hint;
+			uops_5_br_tag <= io_enq_bits_uop_br_tag;
+			uops_5_br_type <= io_enq_bits_uop_br_type;
+			uops_5_is_sfb <= io_enq_bits_uop_is_sfb;
+			uops_5_is_fence <= io_enq_bits_uop_is_fence;
+			uops_5_is_fencei <= io_enq_bits_uop_is_fencei;
+			uops_5_is_sfence <= io_enq_bits_uop_is_sfence;
+			uops_5_is_amo <= io_enq_bits_uop_is_amo;
+			uops_5_is_eret <= io_enq_bits_uop_is_eret;
+			uops_5_is_sys_pc2epc <= io_enq_bits_uop_is_sys_pc2epc;
+			uops_5_is_rocc <= io_enq_bits_uop_is_rocc;
+			uops_5_is_mov <= io_enq_bits_uop_is_mov;
+			uops_5_ftq_idx <= io_enq_bits_uop_ftq_idx;
+			uops_5_edge_inst <= io_enq_bits_uop_edge_inst;
+			uops_5_pc_lob <= io_enq_bits_uop_pc_lob;
+			uops_5_taken <= io_enq_bits_uop_taken;
+			uops_5_imm_rename <= io_enq_bits_uop_imm_rename;
+			uops_5_imm_sel <= io_enq_bits_uop_imm_sel;
+			uops_5_pimm <= io_enq_bits_uop_pimm;
+			uops_5_imm_packed <= io_enq_bits_uop_imm_packed;
+			uops_5_op1_sel <= io_enq_bits_uop_op1_sel;
+			uops_5_op2_sel <= io_enq_bits_uop_op2_sel;
+			uops_5_fp_ctrl_ldst <= io_enq_bits_uop_fp_ctrl_ldst;
+			uops_5_fp_ctrl_wen <= io_enq_bits_uop_fp_ctrl_wen;
+			uops_5_fp_ctrl_ren1 <= io_enq_bits_uop_fp_ctrl_ren1;
+			uops_5_fp_ctrl_ren2 <= io_enq_bits_uop_fp_ctrl_ren2;
+			uops_5_fp_ctrl_ren3 <= io_enq_bits_uop_fp_ctrl_ren3;
+			uops_5_fp_ctrl_swap12 <= io_enq_bits_uop_fp_ctrl_swap12;
+			uops_5_fp_ctrl_swap23 <= io_enq_bits_uop_fp_ctrl_swap23;
+			uops_5_fp_ctrl_typeTagIn <= io_enq_bits_uop_fp_ctrl_typeTagIn;
+			uops_5_fp_ctrl_typeTagOut <= io_enq_bits_uop_fp_ctrl_typeTagOut;
+			uops_5_fp_ctrl_fromint <= io_enq_bits_uop_fp_ctrl_fromint;
+			uops_5_fp_ctrl_toint <= io_enq_bits_uop_fp_ctrl_toint;
+			uops_5_fp_ctrl_fastpipe <= io_enq_bits_uop_fp_ctrl_fastpipe;
+			uops_5_fp_ctrl_fma <= io_enq_bits_uop_fp_ctrl_fma;
+			uops_5_fp_ctrl_div <= io_enq_bits_uop_fp_ctrl_div;
+			uops_5_fp_ctrl_sqrt <= io_enq_bits_uop_fp_ctrl_sqrt;
+			uops_5_fp_ctrl_wflags <= io_enq_bits_uop_fp_ctrl_wflags;
+			uops_5_fp_ctrl_vec <= io_enq_bits_uop_fp_ctrl_vec;
+			uops_5_rob_idx <= io_enq_bits_uop_rob_idx;
+			uops_5_ldq_idx <= io_enq_bits_uop_ldq_idx;
+			uops_5_stq_idx <= io_enq_bits_uop_stq_idx;
+			uops_5_rxq_idx <= io_enq_bits_uop_rxq_idx;
+			uops_5_pdst <= io_enq_bits_uop_pdst;
+			uops_5_prs1 <= io_enq_bits_uop_prs1;
+			uops_5_prs2 <= io_enq_bits_uop_prs2;
+			uops_5_prs3 <= io_enq_bits_uop_prs3;
+			uops_5_ppred <= io_enq_bits_uop_ppred;
+			uops_5_prs1_busy <= io_enq_bits_uop_prs1_busy;
+			uops_5_prs2_busy <= io_enq_bits_uop_prs2_busy;
+			uops_5_prs3_busy <= io_enq_bits_uop_prs3_busy;
+			uops_5_ppred_busy <= io_enq_bits_uop_ppred_busy;
+			uops_5_stale_pdst <= io_enq_bits_uop_stale_pdst;
+			uops_5_exception <= io_enq_bits_uop_exception;
+			uops_5_exc_cause <= io_enq_bits_uop_exc_cause;
+			uops_5_mem_cmd <= io_enq_bits_uop_mem_cmd;
+			uops_5_mem_size <= io_enq_bits_uop_mem_size;
+			uops_5_mem_signed <= io_enq_bits_uop_mem_signed;
+			uops_5_uses_ldq <= io_enq_bits_uop_uses_ldq;
+			uops_5_uses_stq <= io_enq_bits_uop_uses_stq;
+			uops_5_is_unique <= io_enq_bits_uop_is_unique;
+			uops_5_flush_on_commit <= io_enq_bits_uop_flush_on_commit;
+			uops_5_csr_cmd <= io_enq_bits_uop_csr_cmd;
+			uops_5_ldst_is_rs1 <= io_enq_bits_uop_ldst_is_rs1;
+			uops_5_ldst <= io_enq_bits_uop_ldst;
+			uops_5_lrs1 <= io_enq_bits_uop_lrs1;
+			uops_5_lrs2 <= io_enq_bits_uop_lrs2;
+			uops_5_lrs3 <= io_enq_bits_uop_lrs3;
+			uops_5_dst_rtype <= io_enq_bits_uop_dst_rtype;
+			uops_5_lrs1_rtype <= io_enq_bits_uop_lrs1_rtype;
+			uops_5_lrs2_rtype <= io_enq_bits_uop_lrs2_rtype;
+			uops_5_frs3_en <= io_enq_bits_uop_frs3_en;
+			uops_5_fcn_dw <= io_enq_bits_uop_fcn_dw;
+			uops_5_fcn_op <= io_enq_bits_uop_fcn_op;
+			uops_5_fp_val <= io_enq_bits_uop_fp_val;
+			uops_5_fp_rm <= io_enq_bits_uop_fp_rm;
+			uops_5_fp_typ <= io_enq_bits_uop_fp_typ;
+			uops_5_xcpt_pf_if <= io_enq_bits_uop_xcpt_pf_if;
+			uops_5_xcpt_ae_if <= io_enq_bits_uop_xcpt_ae_if;
+			uops_5_xcpt_ma_if <= io_enq_bits_uop_xcpt_ma_if;
+			uops_5_bp_debug_if <= io_enq_bits_uop_bp_debug_if;
+			uops_5_bp_xcpt_if <= io_enq_bits_uop_bp_xcpt_if;
+			uops_5_debug_fsrc <= io_enq_bits_uop_debug_fsrc;
+			uops_5_debug_tsrc <= io_enq_bits_uop_debug_tsrc;
+		end
+		uops_5_dis_col_sel <= ~_GEN_123 & uops_5_dis_col_sel;
+		if (do_enq & _GEN_122)
+			uops_5_br_mask <= _uops_br_mask_T_1;
+		else
+			uops_5_br_mask <= ({8 {~valids_5}} | ~io_brupdate_b1_resolve_mask) & uops_5_br_mask;
+		if (_GEN_125) begin
+			uops_6_inst <= io_enq_bits_uop_inst;
+			uops_6_debug_inst <= io_enq_bits_uop_debug_inst;
+			uops_6_is_rvc <= io_enq_bits_uop_is_rvc;
+			uops_6_debug_pc <= io_enq_bits_uop_debug_pc;
+			uops_6_iq_type_0 <= io_enq_bits_uop_iq_type_0;
+			uops_6_iq_type_1 <= io_enq_bits_uop_iq_type_1;
+			uops_6_iq_type_2 <= io_enq_bits_uop_iq_type_2;
+			uops_6_iq_type_3 <= io_enq_bits_uop_iq_type_3;
+			uops_6_fu_code_0 <= io_enq_bits_uop_fu_code_0;
+			uops_6_fu_code_1 <= io_enq_bits_uop_fu_code_1;
+			uops_6_fu_code_2 <= io_enq_bits_uop_fu_code_2;
+			uops_6_fu_code_3 <= io_enq_bits_uop_fu_code_3;
+			uops_6_fu_code_4 <= io_enq_bits_uop_fu_code_4;
+			uops_6_fu_code_5 <= io_enq_bits_uop_fu_code_5;
+			uops_6_fu_code_6 <= io_enq_bits_uop_fu_code_6;
+			uops_6_fu_code_7 <= io_enq_bits_uop_fu_code_7;
+			uops_6_fu_code_8 <= io_enq_bits_uop_fu_code_8;
+			uops_6_fu_code_9 <= io_enq_bits_uop_fu_code_9;
+			uops_6_iw_issued <= io_enq_bits_uop_iw_issued;
+			uops_6_iw_issued_partial_agen <= io_enq_bits_uop_iw_issued_partial_agen;
+			uops_6_iw_issued_partial_dgen <= io_enq_bits_uop_iw_issued_partial_dgen;
+			uops_6_iw_p1_speculative_child <= io_enq_bits_uop_iw_p1_speculative_child;
+			uops_6_iw_p2_speculative_child <= io_enq_bits_uop_iw_p2_speculative_child;
+			uops_6_iw_p1_bypass_hint <= io_enq_bits_uop_iw_p1_bypass_hint;
+			uops_6_iw_p2_bypass_hint <= io_enq_bits_uop_iw_p2_bypass_hint;
+			uops_6_iw_p3_bypass_hint <= io_enq_bits_uop_iw_p3_bypass_hint;
+			uops_6_br_tag <= io_enq_bits_uop_br_tag;
+			uops_6_br_type <= io_enq_bits_uop_br_type;
+			uops_6_is_sfb <= io_enq_bits_uop_is_sfb;
+			uops_6_is_fence <= io_enq_bits_uop_is_fence;
+			uops_6_is_fencei <= io_enq_bits_uop_is_fencei;
+			uops_6_is_sfence <= io_enq_bits_uop_is_sfence;
+			uops_6_is_amo <= io_enq_bits_uop_is_amo;
+			uops_6_is_eret <= io_enq_bits_uop_is_eret;
+			uops_6_is_sys_pc2epc <= io_enq_bits_uop_is_sys_pc2epc;
+			uops_6_is_rocc <= io_enq_bits_uop_is_rocc;
+			uops_6_is_mov <= io_enq_bits_uop_is_mov;
+			uops_6_ftq_idx <= io_enq_bits_uop_ftq_idx;
+			uops_6_edge_inst <= io_enq_bits_uop_edge_inst;
+			uops_6_pc_lob <= io_enq_bits_uop_pc_lob;
+			uops_6_taken <= io_enq_bits_uop_taken;
+			uops_6_imm_rename <= io_enq_bits_uop_imm_rename;
+			uops_6_imm_sel <= io_enq_bits_uop_imm_sel;
+			uops_6_pimm <= io_enq_bits_uop_pimm;
+			uops_6_imm_packed <= io_enq_bits_uop_imm_packed;
+			uops_6_op1_sel <= io_enq_bits_uop_op1_sel;
+			uops_6_op2_sel <= io_enq_bits_uop_op2_sel;
+			uops_6_fp_ctrl_ldst <= io_enq_bits_uop_fp_ctrl_ldst;
+			uops_6_fp_ctrl_wen <= io_enq_bits_uop_fp_ctrl_wen;
+			uops_6_fp_ctrl_ren1 <= io_enq_bits_uop_fp_ctrl_ren1;
+			uops_6_fp_ctrl_ren2 <= io_enq_bits_uop_fp_ctrl_ren2;
+			uops_6_fp_ctrl_ren3 <= io_enq_bits_uop_fp_ctrl_ren3;
+			uops_6_fp_ctrl_swap12 <= io_enq_bits_uop_fp_ctrl_swap12;
+			uops_6_fp_ctrl_swap23 <= io_enq_bits_uop_fp_ctrl_swap23;
+			uops_6_fp_ctrl_typeTagIn <= io_enq_bits_uop_fp_ctrl_typeTagIn;
+			uops_6_fp_ctrl_typeTagOut <= io_enq_bits_uop_fp_ctrl_typeTagOut;
+			uops_6_fp_ctrl_fromint <= io_enq_bits_uop_fp_ctrl_fromint;
+			uops_6_fp_ctrl_toint <= io_enq_bits_uop_fp_ctrl_toint;
+			uops_6_fp_ctrl_fastpipe <= io_enq_bits_uop_fp_ctrl_fastpipe;
+			uops_6_fp_ctrl_fma <= io_enq_bits_uop_fp_ctrl_fma;
+			uops_6_fp_ctrl_div <= io_enq_bits_uop_fp_ctrl_div;
+			uops_6_fp_ctrl_sqrt <= io_enq_bits_uop_fp_ctrl_sqrt;
+			uops_6_fp_ctrl_wflags <= io_enq_bits_uop_fp_ctrl_wflags;
+			uops_6_fp_ctrl_vec <= io_enq_bits_uop_fp_ctrl_vec;
+			uops_6_rob_idx <= io_enq_bits_uop_rob_idx;
+			uops_6_ldq_idx <= io_enq_bits_uop_ldq_idx;
+			uops_6_stq_idx <= io_enq_bits_uop_stq_idx;
+			uops_6_rxq_idx <= io_enq_bits_uop_rxq_idx;
+			uops_6_pdst <= io_enq_bits_uop_pdst;
+			uops_6_prs1 <= io_enq_bits_uop_prs1;
+			uops_6_prs2 <= io_enq_bits_uop_prs2;
+			uops_6_prs3 <= io_enq_bits_uop_prs3;
+			uops_6_ppred <= io_enq_bits_uop_ppred;
+			uops_6_prs1_busy <= io_enq_bits_uop_prs1_busy;
+			uops_6_prs2_busy <= io_enq_bits_uop_prs2_busy;
+			uops_6_prs3_busy <= io_enq_bits_uop_prs3_busy;
+			uops_6_ppred_busy <= io_enq_bits_uop_ppred_busy;
+			uops_6_stale_pdst <= io_enq_bits_uop_stale_pdst;
+			uops_6_exception <= io_enq_bits_uop_exception;
+			uops_6_exc_cause <= io_enq_bits_uop_exc_cause;
+			uops_6_mem_cmd <= io_enq_bits_uop_mem_cmd;
+			uops_6_mem_size <= io_enq_bits_uop_mem_size;
+			uops_6_mem_signed <= io_enq_bits_uop_mem_signed;
+			uops_6_uses_ldq <= io_enq_bits_uop_uses_ldq;
+			uops_6_uses_stq <= io_enq_bits_uop_uses_stq;
+			uops_6_is_unique <= io_enq_bits_uop_is_unique;
+			uops_6_flush_on_commit <= io_enq_bits_uop_flush_on_commit;
+			uops_6_csr_cmd <= io_enq_bits_uop_csr_cmd;
+			uops_6_ldst_is_rs1 <= io_enq_bits_uop_ldst_is_rs1;
+			uops_6_ldst <= io_enq_bits_uop_ldst;
+			uops_6_lrs1 <= io_enq_bits_uop_lrs1;
+			uops_6_lrs2 <= io_enq_bits_uop_lrs2;
+			uops_6_lrs3 <= io_enq_bits_uop_lrs3;
+			uops_6_dst_rtype <= io_enq_bits_uop_dst_rtype;
+			uops_6_lrs1_rtype <= io_enq_bits_uop_lrs1_rtype;
+			uops_6_lrs2_rtype <= io_enq_bits_uop_lrs2_rtype;
+			uops_6_frs3_en <= io_enq_bits_uop_frs3_en;
+			uops_6_fcn_dw <= io_enq_bits_uop_fcn_dw;
+			uops_6_fcn_op <= io_enq_bits_uop_fcn_op;
+			uops_6_fp_val <= io_enq_bits_uop_fp_val;
+			uops_6_fp_rm <= io_enq_bits_uop_fp_rm;
+			uops_6_fp_typ <= io_enq_bits_uop_fp_typ;
+			uops_6_xcpt_pf_if <= io_enq_bits_uop_xcpt_pf_if;
+			uops_6_xcpt_ae_if <= io_enq_bits_uop_xcpt_ae_if;
+			uops_6_xcpt_ma_if <= io_enq_bits_uop_xcpt_ma_if;
+			uops_6_bp_debug_if <= io_enq_bits_uop_bp_debug_if;
+			uops_6_bp_xcpt_if <= io_enq_bits_uop_bp_xcpt_if;
+			uops_6_debug_fsrc <= io_enq_bits_uop_debug_fsrc;
+			uops_6_debug_tsrc <= io_enq_bits_uop_debug_tsrc;
+		end
+		uops_6_dis_col_sel <= ~_GEN_125 & uops_6_dis_col_sel;
+		if (do_enq & _GEN_124)
+			uops_6_br_mask <= _uops_br_mask_T_1;
+		else
+			uops_6_br_mask <= ({8 {~valids_6}} | ~io_brupdate_b1_resolve_mask) & uops_6_br_mask;
+		if (_GEN_126) begin
+			uops_7_inst <= io_enq_bits_uop_inst;
+			uops_7_debug_inst <= io_enq_bits_uop_debug_inst;
+			uops_7_is_rvc <= io_enq_bits_uop_is_rvc;
+			uops_7_debug_pc <= io_enq_bits_uop_debug_pc;
+			uops_7_iq_type_0 <= io_enq_bits_uop_iq_type_0;
+			uops_7_iq_type_1 <= io_enq_bits_uop_iq_type_1;
+			uops_7_iq_type_2 <= io_enq_bits_uop_iq_type_2;
+			uops_7_iq_type_3 <= io_enq_bits_uop_iq_type_3;
+			uops_7_fu_code_0 <= io_enq_bits_uop_fu_code_0;
+			uops_7_fu_code_1 <= io_enq_bits_uop_fu_code_1;
+			uops_7_fu_code_2 <= io_enq_bits_uop_fu_code_2;
+			uops_7_fu_code_3 <= io_enq_bits_uop_fu_code_3;
+			uops_7_fu_code_4 <= io_enq_bits_uop_fu_code_4;
+			uops_7_fu_code_5 <= io_enq_bits_uop_fu_code_5;
+			uops_7_fu_code_6 <= io_enq_bits_uop_fu_code_6;
+			uops_7_fu_code_7 <= io_enq_bits_uop_fu_code_7;
+			uops_7_fu_code_8 <= io_enq_bits_uop_fu_code_8;
+			uops_7_fu_code_9 <= io_enq_bits_uop_fu_code_9;
+			uops_7_iw_issued <= io_enq_bits_uop_iw_issued;
+			uops_7_iw_issued_partial_agen <= io_enq_bits_uop_iw_issued_partial_agen;
+			uops_7_iw_issued_partial_dgen <= io_enq_bits_uop_iw_issued_partial_dgen;
+			uops_7_iw_p1_speculative_child <= io_enq_bits_uop_iw_p1_speculative_child;
+			uops_7_iw_p2_speculative_child <= io_enq_bits_uop_iw_p2_speculative_child;
+			uops_7_iw_p1_bypass_hint <= io_enq_bits_uop_iw_p1_bypass_hint;
+			uops_7_iw_p2_bypass_hint <= io_enq_bits_uop_iw_p2_bypass_hint;
+			uops_7_iw_p3_bypass_hint <= io_enq_bits_uop_iw_p3_bypass_hint;
+			uops_7_br_tag <= io_enq_bits_uop_br_tag;
+			uops_7_br_type <= io_enq_bits_uop_br_type;
+			uops_7_is_sfb <= io_enq_bits_uop_is_sfb;
+			uops_7_is_fence <= io_enq_bits_uop_is_fence;
+			uops_7_is_fencei <= io_enq_bits_uop_is_fencei;
+			uops_7_is_sfence <= io_enq_bits_uop_is_sfence;
+			uops_7_is_amo <= io_enq_bits_uop_is_amo;
+			uops_7_is_eret <= io_enq_bits_uop_is_eret;
+			uops_7_is_sys_pc2epc <= io_enq_bits_uop_is_sys_pc2epc;
+			uops_7_is_rocc <= io_enq_bits_uop_is_rocc;
+			uops_7_is_mov <= io_enq_bits_uop_is_mov;
+			uops_7_ftq_idx <= io_enq_bits_uop_ftq_idx;
+			uops_7_edge_inst <= io_enq_bits_uop_edge_inst;
+			uops_7_pc_lob <= io_enq_bits_uop_pc_lob;
+			uops_7_taken <= io_enq_bits_uop_taken;
+			uops_7_imm_rename <= io_enq_bits_uop_imm_rename;
+			uops_7_imm_sel <= io_enq_bits_uop_imm_sel;
+			uops_7_pimm <= io_enq_bits_uop_pimm;
+			uops_7_imm_packed <= io_enq_bits_uop_imm_packed;
+			uops_7_op1_sel <= io_enq_bits_uop_op1_sel;
+			uops_7_op2_sel <= io_enq_bits_uop_op2_sel;
+			uops_7_fp_ctrl_ldst <= io_enq_bits_uop_fp_ctrl_ldst;
+			uops_7_fp_ctrl_wen <= io_enq_bits_uop_fp_ctrl_wen;
+			uops_7_fp_ctrl_ren1 <= io_enq_bits_uop_fp_ctrl_ren1;
+			uops_7_fp_ctrl_ren2 <= io_enq_bits_uop_fp_ctrl_ren2;
+			uops_7_fp_ctrl_ren3 <= io_enq_bits_uop_fp_ctrl_ren3;
+			uops_7_fp_ctrl_swap12 <= io_enq_bits_uop_fp_ctrl_swap12;
+			uops_7_fp_ctrl_swap23 <= io_enq_bits_uop_fp_ctrl_swap23;
+			uops_7_fp_ctrl_typeTagIn <= io_enq_bits_uop_fp_ctrl_typeTagIn;
+			uops_7_fp_ctrl_typeTagOut <= io_enq_bits_uop_fp_ctrl_typeTagOut;
+			uops_7_fp_ctrl_fromint <= io_enq_bits_uop_fp_ctrl_fromint;
+			uops_7_fp_ctrl_toint <= io_enq_bits_uop_fp_ctrl_toint;
+			uops_7_fp_ctrl_fastpipe <= io_enq_bits_uop_fp_ctrl_fastpipe;
+			uops_7_fp_ctrl_fma <= io_enq_bits_uop_fp_ctrl_fma;
+			uops_7_fp_ctrl_div <= io_enq_bits_uop_fp_ctrl_div;
+			uops_7_fp_ctrl_sqrt <= io_enq_bits_uop_fp_ctrl_sqrt;
+			uops_7_fp_ctrl_wflags <= io_enq_bits_uop_fp_ctrl_wflags;
+			uops_7_fp_ctrl_vec <= io_enq_bits_uop_fp_ctrl_vec;
+			uops_7_rob_idx <= io_enq_bits_uop_rob_idx;
+			uops_7_ldq_idx <= io_enq_bits_uop_ldq_idx;
+			uops_7_stq_idx <= io_enq_bits_uop_stq_idx;
+			uops_7_rxq_idx <= io_enq_bits_uop_rxq_idx;
+			uops_7_pdst <= io_enq_bits_uop_pdst;
+			uops_7_prs1 <= io_enq_bits_uop_prs1;
+			uops_7_prs2 <= io_enq_bits_uop_prs2;
+			uops_7_prs3 <= io_enq_bits_uop_prs3;
+			uops_7_ppred <= io_enq_bits_uop_ppred;
+			uops_7_prs1_busy <= io_enq_bits_uop_prs1_busy;
+			uops_7_prs2_busy <= io_enq_bits_uop_prs2_busy;
+			uops_7_prs3_busy <= io_enq_bits_uop_prs3_busy;
+			uops_7_ppred_busy <= io_enq_bits_uop_ppred_busy;
+			uops_7_stale_pdst <= io_enq_bits_uop_stale_pdst;
+			uops_7_exception <= io_enq_bits_uop_exception;
+			uops_7_exc_cause <= io_enq_bits_uop_exc_cause;
+			uops_7_mem_cmd <= io_enq_bits_uop_mem_cmd;
+			uops_7_mem_size <= io_enq_bits_uop_mem_size;
+			uops_7_mem_signed <= io_enq_bits_uop_mem_signed;
+			uops_7_uses_ldq <= io_enq_bits_uop_uses_ldq;
+			uops_7_uses_stq <= io_enq_bits_uop_uses_stq;
+			uops_7_is_unique <= io_enq_bits_uop_is_unique;
+			uops_7_flush_on_commit <= io_enq_bits_uop_flush_on_commit;
+			uops_7_csr_cmd <= io_enq_bits_uop_csr_cmd;
+			uops_7_ldst_is_rs1 <= io_enq_bits_uop_ldst_is_rs1;
+			uops_7_ldst <= io_enq_bits_uop_ldst;
+			uops_7_lrs1 <= io_enq_bits_uop_lrs1;
+			uops_7_lrs2 <= io_enq_bits_uop_lrs2;
+			uops_7_lrs3 <= io_enq_bits_uop_lrs3;
+			uops_7_dst_rtype <= io_enq_bits_uop_dst_rtype;
+			uops_7_lrs1_rtype <= io_enq_bits_uop_lrs1_rtype;
+			uops_7_lrs2_rtype <= io_enq_bits_uop_lrs2_rtype;
+			uops_7_frs3_en <= io_enq_bits_uop_frs3_en;
+			uops_7_fcn_dw <= io_enq_bits_uop_fcn_dw;
+			uops_7_fcn_op <= io_enq_bits_uop_fcn_op;
+			uops_7_fp_val <= io_enq_bits_uop_fp_val;
+			uops_7_fp_rm <= io_enq_bits_uop_fp_rm;
+			uops_7_fp_typ <= io_enq_bits_uop_fp_typ;
+			uops_7_xcpt_pf_if <= io_enq_bits_uop_xcpt_pf_if;
+			uops_7_xcpt_ae_if <= io_enq_bits_uop_xcpt_ae_if;
+			uops_7_xcpt_ma_if <= io_enq_bits_uop_xcpt_ma_if;
+			uops_7_bp_debug_if <= io_enq_bits_uop_bp_debug_if;
+			uops_7_bp_xcpt_if <= io_enq_bits_uop_bp_xcpt_if;
+			uops_7_debug_fsrc <= io_enq_bits_uop_debug_fsrc;
+			uops_7_debug_tsrc <= io_enq_bits_uop_debug_tsrc;
+		end
+		uops_7_dis_col_sel <= ~_GEN_126 & uops_7_dis_col_sel;
+		if (do_enq & (&enq_ptr_value))
+			uops_7_br_mask <= _uops_br_mask_T_1;
+		else
+			uops_7_br_mask <= ({8 {~valids_7}} | ~io_brupdate_b1_resolve_mask) & uops_7_br_mask;
+	end
+	ram_8x64 ram_ext(
+		.R0_addr(deq_ptr_value),
+		.R0_en(1'h1),
+		.R0_clk(clock),
+		.R0_data(io_deq_bits_data),
+		.W0_addr(enq_ptr_value),
+		.W0_en(do_enq),
+		.W0_clk(clock),
+		.W0_data(io_enq_bits_data)
+	);
+	assign io_enq_ready = ~full;
+	assign io_deq_valid = ~io_empty & _GEN_0;
+	assign io_deq_bits_uop_inst = _GEN_1[deq_ptr_value * 32+:32];
+	assign io_deq_bits_uop_debug_inst = _GEN_2[deq_ptr_value * 32+:32];
+	assign io_deq_bits_uop_is_rvc = _GEN_3[deq_ptr_value];
+	assign io_deq_bits_uop_debug_pc = _GEN_4[deq_ptr_value * 40+:40];
+	assign io_deq_bits_uop_iq_type_0 = _GEN_5[deq_ptr_value];
+	assign io_deq_bits_uop_iq_type_1 = _GEN_6[deq_ptr_value];
+	assign io_deq_bits_uop_iq_type_2 = _GEN_7[deq_ptr_value];
+	assign io_deq_bits_uop_iq_type_3 = _GEN_8[deq_ptr_value];
+	assign io_deq_bits_uop_fu_code_0 = _GEN_9[deq_ptr_value];
+	assign io_deq_bits_uop_fu_code_1 = _GEN_10[deq_ptr_value];
+	assign io_deq_bits_uop_fu_code_2 = _GEN_11[deq_ptr_value];
+	assign io_deq_bits_uop_fu_code_3 = _GEN_12[deq_ptr_value];
+	assign io_deq_bits_uop_fu_code_4 = _GEN_13[deq_ptr_value];
+	assign io_deq_bits_uop_fu_code_5 = _GEN_14[deq_ptr_value];
+	assign io_deq_bits_uop_fu_code_6 = _GEN_15[deq_ptr_value];
+	assign io_deq_bits_uop_fu_code_7 = _GEN_16[deq_ptr_value];
+	assign io_deq_bits_uop_fu_code_8 = _GEN_17[deq_ptr_value];
+	assign io_deq_bits_uop_fu_code_9 = _GEN_18[deq_ptr_value];
+	assign io_deq_bits_uop_iw_issued = _GEN_19[deq_ptr_value];
+	assign io_deq_bits_uop_iw_issued_partial_agen = _GEN_20[deq_ptr_value];
+	assign io_deq_bits_uop_iw_issued_partial_dgen = _GEN_21[deq_ptr_value];
+	assign io_deq_bits_uop_iw_p1_speculative_child = _GEN_22[deq_ptr_value];
+	assign io_deq_bits_uop_iw_p2_speculative_child = _GEN_23[deq_ptr_value];
+	assign io_deq_bits_uop_iw_p1_bypass_hint = _GEN_24[deq_ptr_value];
+	assign io_deq_bits_uop_iw_p2_bypass_hint = _GEN_25[deq_ptr_value];
+	assign io_deq_bits_uop_iw_p3_bypass_hint = _GEN_26[deq_ptr_value];
+	assign io_deq_bits_uop_dis_col_sel = _GEN_27[deq_ptr_value];
+	assign io_deq_bits_uop_br_mask = _GEN_28[deq_ptr_value * 8+:8];
+	assign io_deq_bits_uop_br_tag = _GEN_29[deq_ptr_value * 3+:3];
+	assign io_deq_bits_uop_br_type = _GEN_30[deq_ptr_value * 4+:4];
+	assign io_deq_bits_uop_is_sfb = _GEN_31[deq_ptr_value];
+	assign io_deq_bits_uop_is_fence = _GEN_32[deq_ptr_value];
+	assign io_deq_bits_uop_is_fencei = _GEN_33[deq_ptr_value];
+	assign io_deq_bits_uop_is_sfence = _GEN_34[deq_ptr_value];
+	assign io_deq_bits_uop_is_amo = _GEN_35[deq_ptr_value];
+	assign io_deq_bits_uop_is_eret = _GEN_36[deq_ptr_value];
+	assign io_deq_bits_uop_is_sys_pc2epc = _GEN_37[deq_ptr_value];
+	assign io_deq_bits_uop_is_rocc = _GEN_38[deq_ptr_value];
+	assign io_deq_bits_uop_is_mov = _GEN_39[deq_ptr_value];
+	assign io_deq_bits_uop_ftq_idx = _GEN_40[deq_ptr_value * 4+:4];
+	assign io_deq_bits_uop_edge_inst = _GEN_41[deq_ptr_value];
+	assign io_deq_bits_uop_pc_lob = _GEN_42[deq_ptr_value * 6+:6];
+	assign io_deq_bits_uop_taken = _GEN_43[deq_ptr_value];
+	assign io_deq_bits_uop_imm_rename = _GEN_44[deq_ptr_value];
+	assign io_deq_bits_uop_imm_sel = _GEN_45[deq_ptr_value * 3+:3];
+	assign io_deq_bits_uop_pimm = _GEN_46[deq_ptr_value * 5+:5];
+	assign io_deq_bits_uop_imm_packed = _GEN_47[deq_ptr_value * 20+:20];
+	assign io_deq_bits_uop_op1_sel = _GEN_48[deq_ptr_value * 2+:2];
+	assign io_deq_bits_uop_op2_sel = _GEN_49[deq_ptr_value * 3+:3];
+	assign io_deq_bits_uop_fp_ctrl_ldst = _GEN_50[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_wen = _GEN_51[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_ren1 = _GEN_52[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_ren2 = _GEN_53[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_ren3 = _GEN_54[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_swap12 = _GEN_55[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_swap23 = _GEN_56[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_typeTagIn = _GEN_57[deq_ptr_value * 2+:2];
+	assign io_deq_bits_uop_fp_ctrl_typeTagOut = _GEN_58[deq_ptr_value * 2+:2];
+	assign io_deq_bits_uop_fp_ctrl_fromint = _GEN_59[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_toint = _GEN_60[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_fastpipe = _GEN_61[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_fma = _GEN_62[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_div = _GEN_63[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_sqrt = _GEN_64[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_wflags = _GEN_65[deq_ptr_value];
+	assign io_deq_bits_uop_fp_ctrl_vec = _GEN_66[deq_ptr_value];
+	assign io_deq_bits_uop_rob_idx = _GEN_67[deq_ptr_value * 5+:5];
+	assign io_deq_bits_uop_ldq_idx = _GEN_68[deq_ptr_value * 4+:4];
+	assign io_deq_bits_uop_stq_idx = _GEN_69[deq_ptr_value * 4+:4];
+	assign io_deq_bits_uop_rxq_idx = _GEN_70[deq_ptr_value * 2+:2];
+	assign io_deq_bits_uop_pdst = _GEN_71[deq_ptr_value * 6+:6];
+	assign io_deq_bits_uop_prs1 = _GEN_72[deq_ptr_value * 6+:6];
+	assign io_deq_bits_uop_prs2 = _GEN_73[deq_ptr_value * 6+:6];
+	assign io_deq_bits_uop_prs3 = _GEN_74[deq_ptr_value * 6+:6];
+	assign io_deq_bits_uop_ppred = _GEN_75[deq_ptr_value * 4+:4];
+	assign io_deq_bits_uop_prs1_busy = _GEN_76[deq_ptr_value];
+	assign io_deq_bits_uop_prs2_busy = _GEN_77[deq_ptr_value];
+	assign io_deq_bits_uop_prs3_busy = _GEN_78[deq_ptr_value];
+	assign io_deq_bits_uop_ppred_busy = _GEN_79[deq_ptr_value];
+	assign io_deq_bits_uop_stale_pdst = _GEN_80[deq_ptr_value * 6+:6];
+	assign io_deq_bits_uop_exception = _GEN_81[deq_ptr_value];
+	assign io_deq_bits_uop_exc_cause = _GEN_82[deq_ptr_value * 64+:64];
+	assign io_deq_bits_uop_mem_cmd = _GEN_83[deq_ptr_value * 5+:5];
+	assign io_deq_bits_uop_mem_size = _GEN_84[deq_ptr_value * 2+:2];
+	assign io_deq_bits_uop_mem_signed = _GEN_85[deq_ptr_value];
+	assign io_deq_bits_uop_uses_ldq = _GEN_86[deq_ptr_value];
+	assign io_deq_bits_uop_uses_stq = _GEN_87[deq_ptr_value];
+	assign io_deq_bits_uop_is_unique = _GEN_88[deq_ptr_value];
+	assign io_deq_bits_uop_flush_on_commit = _GEN_89[deq_ptr_value];
+	assign io_deq_bits_uop_csr_cmd = _GEN_90[deq_ptr_value * 3+:3];
+	assign io_deq_bits_uop_ldst_is_rs1 = _GEN_91[deq_ptr_value];
+	assign io_deq_bits_uop_ldst = _GEN_92[deq_ptr_value * 6+:6];
+	assign io_deq_bits_uop_lrs1 = _GEN_93[deq_ptr_value * 6+:6];
+	assign io_deq_bits_uop_lrs2 = _GEN_94[deq_ptr_value * 6+:6];
+	assign io_deq_bits_uop_lrs3 = _GEN_95[deq_ptr_value * 6+:6];
+	assign io_deq_bits_uop_dst_rtype = _GEN_96[deq_ptr_value * 2+:2];
+	assign io_deq_bits_uop_lrs1_rtype = _GEN_97[deq_ptr_value * 2+:2];
+	assign io_deq_bits_uop_lrs2_rtype = _GEN_98[deq_ptr_value * 2+:2];
+	assign io_deq_bits_uop_frs3_en = _GEN_99[deq_ptr_value];
+	assign io_deq_bits_uop_fcn_dw = _GEN_100[deq_ptr_value];
+	assign io_deq_bits_uop_fcn_op = _GEN_101[deq_ptr_value * 5+:5];
+	assign io_deq_bits_uop_fp_val = _GEN_102[deq_ptr_value];
+	assign io_deq_bits_uop_fp_rm = _GEN_103[deq_ptr_value * 3+:3];
+	assign io_deq_bits_uop_fp_typ = _GEN_104[deq_ptr_value * 2+:2];
+	assign io_deq_bits_uop_xcpt_pf_if = _GEN_105[deq_ptr_value];
+	assign io_deq_bits_uop_xcpt_ae_if = _GEN_106[deq_ptr_value];
+	assign io_deq_bits_uop_xcpt_ma_if = _GEN_107[deq_ptr_value];
+	assign io_deq_bits_uop_bp_debug_if = _GEN_108[deq_ptr_value];
+	assign io_deq_bits_uop_bp_xcpt_if = _GEN_109[deq_ptr_value];
+	assign io_deq_bits_uop_debug_fsrc = _GEN_110[deq_ptr_value * 3+:3];
+	assign io_deq_bits_uop_debug_tsrc = _GEN_111[deq_ptr_value * 3+:3];
+endmodule

@@ -1,0 +1,126 @@
+module TLBuffer_a32d64s1k2z4u (
+	clock,
+	reset,
+	auto_in_a_ready,
+	auto_in_a_valid,
+	auto_in_a_bits_address,
+	auto_in_d_valid,
+	auto_in_d_bits_opcode,
+	auto_in_d_bits_size,
+	auto_in_d_bits_data,
+	auto_out_a_ready,
+	auto_out_a_valid,
+	auto_out_a_bits_opcode,
+	auto_out_a_bits_param,
+	auto_out_a_bits_size,
+	auto_out_a_bits_source,
+	auto_out_a_bits_address,
+	auto_out_a_bits_mask,
+	auto_out_a_bits_data,
+	auto_out_a_bits_corrupt,
+	auto_out_d_ready,
+	auto_out_d_valid,
+	auto_out_d_bits_opcode,
+	auto_out_d_bits_param,
+	auto_out_d_bits_size,
+	auto_out_d_bits_sink,
+	auto_out_d_bits_denied,
+	auto_out_d_bits_data,
+	auto_out_d_bits_corrupt
+);
+	input clock;
+	input reset;
+	output wire auto_in_a_ready;
+	input auto_in_a_valid;
+	input [31:0] auto_in_a_bits_address;
+	output wire auto_in_d_valid;
+	output wire [2:0] auto_in_d_bits_opcode;
+	output wire [3:0] auto_in_d_bits_size;
+	output wire [63:0] auto_in_d_bits_data;
+	input auto_out_a_ready;
+	output wire auto_out_a_valid;
+	output wire [2:0] auto_out_a_bits_opcode;
+	output wire [2:0] auto_out_a_bits_param;
+	output wire [3:0] auto_out_a_bits_size;
+	output wire auto_out_a_bits_source;
+	output wire [31:0] auto_out_a_bits_address;
+	output wire [7:0] auto_out_a_bits_mask;
+	output wire [63:0] auto_out_a_bits_data;
+	output wire auto_out_a_bits_corrupt;
+	output wire auto_out_d_ready;
+	input auto_out_d_valid;
+	input [2:0] auto_out_d_bits_opcode;
+	input [1:0] auto_out_d_bits_param;
+	input [3:0] auto_out_d_bits_size;
+	input [1:0] auto_out_d_bits_sink;
+	input auto_out_d_bits_denied;
+	input [63:0] auto_out_d_bits_data;
+	input auto_out_d_bits_corrupt;
+	wire _nodeIn_d_q_io_deq_valid;
+	wire [2:0] _nodeIn_d_q_io_deq_bits_opcode;
+	wire [1:0] _nodeIn_d_q_io_deq_bits_param;
+	wire [3:0] _nodeIn_d_q_io_deq_bits_size;
+	wire _nodeIn_d_q_io_deq_bits_source;
+	wire [1:0] _nodeIn_d_q_io_deq_bits_sink;
+	wire _nodeIn_d_q_io_deq_bits_denied;
+	wire _nodeIn_d_q_io_deq_bits_corrupt;
+	wire _nodeOut_a_q_io_enq_ready;
+	TLMonitor_26 monitor(
+		.clock(clock),
+		.reset(reset),
+		.io_in_a_ready(_nodeOut_a_q_io_enq_ready),
+		.io_in_a_valid(auto_in_a_valid),
+		.io_in_a_bits_address(auto_in_a_bits_address),
+		.io_in_d_valid(_nodeIn_d_q_io_deq_valid),
+		.io_in_d_bits_opcode(_nodeIn_d_q_io_deq_bits_opcode),
+		.io_in_d_bits_param(_nodeIn_d_q_io_deq_bits_param),
+		.io_in_d_bits_size(_nodeIn_d_q_io_deq_bits_size),
+		.io_in_d_bits_source(_nodeIn_d_q_io_deq_bits_source),
+		.io_in_d_bits_sink(_nodeIn_d_q_io_deq_bits_sink),
+		.io_in_d_bits_denied(_nodeIn_d_q_io_deq_bits_denied),
+		.io_in_d_bits_corrupt(_nodeIn_d_q_io_deq_bits_corrupt)
+	);
+	Queue2_TLBundleA_a32d64s1k2z4u nodeOut_a_q(
+		.clock(clock),
+		.reset(reset),
+		.io_enq_ready(_nodeOut_a_q_io_enq_ready),
+		.io_enq_valid(auto_in_a_valid),
+		.io_enq_bits_address(auto_in_a_bits_address),
+		.io_deq_ready(auto_out_a_ready),
+		.io_deq_valid(auto_out_a_valid),
+		.io_deq_bits_opcode(auto_out_a_bits_opcode),
+		.io_deq_bits_param(auto_out_a_bits_param),
+		.io_deq_bits_size(auto_out_a_bits_size),
+		.io_deq_bits_source(auto_out_a_bits_source),
+		.io_deq_bits_address(auto_out_a_bits_address),
+		.io_deq_bits_mask(auto_out_a_bits_mask),
+		.io_deq_bits_data(auto_out_a_bits_data),
+		.io_deq_bits_corrupt(auto_out_a_bits_corrupt)
+	);
+	Queue2_TLBundleD_a32d64s1k2z4u nodeIn_d_q(
+		.clock(clock),
+		.reset(reset),
+		.io_enq_ready(auto_out_d_ready),
+		.io_enq_valid(auto_out_d_valid),
+		.io_enq_bits_opcode(auto_out_d_bits_opcode),
+		.io_enq_bits_param(auto_out_d_bits_param),
+		.io_enq_bits_size(auto_out_d_bits_size),
+		.io_enq_bits_sink(auto_out_d_bits_sink),
+		.io_enq_bits_denied(auto_out_d_bits_denied),
+		.io_enq_bits_data(auto_out_d_bits_data),
+		.io_enq_bits_corrupt(auto_out_d_bits_corrupt),
+		.io_deq_valid(_nodeIn_d_q_io_deq_valid),
+		.io_deq_bits_opcode(_nodeIn_d_q_io_deq_bits_opcode),
+		.io_deq_bits_param(_nodeIn_d_q_io_deq_bits_param),
+		.io_deq_bits_size(_nodeIn_d_q_io_deq_bits_size),
+		.io_deq_bits_source(_nodeIn_d_q_io_deq_bits_source),
+		.io_deq_bits_sink(_nodeIn_d_q_io_deq_bits_sink),
+		.io_deq_bits_denied(_nodeIn_d_q_io_deq_bits_denied),
+		.io_deq_bits_data(auto_in_d_bits_data),
+		.io_deq_bits_corrupt(_nodeIn_d_q_io_deq_bits_corrupt)
+	);
+	assign auto_in_a_ready = _nodeOut_a_q_io_enq_ready;
+	assign auto_in_d_valid = _nodeIn_d_q_io_deq_valid;
+	assign auto_in_d_bits_opcode = _nodeIn_d_q_io_deq_bits_opcode;
+	assign auto_in_d_bits_size = _nodeIn_d_q_io_deq_bits_size;
+endmodule

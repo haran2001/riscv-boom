@@ -1,0 +1,1269 @@
+module ExampleRocketSystem (
+	io_aggregator_5_clock,
+	io_aggregator_5_reset,
+	io_aggregator_4_clock,
+	io_aggregator_4_reset,
+	io_aggregator_3_clock,
+	io_aggregator_3_reset,
+	io_aggregator_2_clock,
+	io_aggregator_2_reset,
+	io_aggregator_1_clock,
+	io_aggregator_1_reset,
+	io_aggregator_0_clock,
+	io_aggregator_0_reset,
+	resetctrl_hartIsInReset_0,
+	debug_clock,
+	debug_reset,
+	debug_clockeddmi_dmi_req_ready,
+	debug_clockeddmi_dmi_req_valid,
+	debug_clockeddmi_dmi_req_bits_addr,
+	debug_clockeddmi_dmi_req_bits_data,
+	debug_clockeddmi_dmi_req_bits_op,
+	debug_clockeddmi_dmi_resp_ready,
+	debug_clockeddmi_dmi_resp_valid,
+	debug_clockeddmi_dmi_resp_bits_data,
+	debug_clockeddmi_dmi_resp_bits_resp,
+	debug_clockeddmi_dmiClock,
+	debug_clockeddmi_dmiReset,
+	debug_ndreset,
+	debug_dmactive,
+	debug_dmactiveAck,
+	mem_axi4_0_aw_ready,
+	mem_axi4_0_aw_valid,
+	mem_axi4_0_aw_bits_id,
+	mem_axi4_0_aw_bits_addr,
+	mem_axi4_0_aw_bits_len,
+	mem_axi4_0_aw_bits_size,
+	mem_axi4_0_aw_bits_burst,
+	mem_axi4_0_aw_bits_lock,
+	mem_axi4_0_aw_bits_cache,
+	mem_axi4_0_aw_bits_prot,
+	mem_axi4_0_aw_bits_qos,
+	mem_axi4_0_w_ready,
+	mem_axi4_0_w_valid,
+	mem_axi4_0_w_bits_data,
+	mem_axi4_0_w_bits_strb,
+	mem_axi4_0_w_bits_last,
+	mem_axi4_0_b_ready,
+	mem_axi4_0_b_valid,
+	mem_axi4_0_b_bits_id,
+	mem_axi4_0_b_bits_resp,
+	mem_axi4_0_ar_ready,
+	mem_axi4_0_ar_valid,
+	mem_axi4_0_ar_bits_id,
+	mem_axi4_0_ar_bits_addr,
+	mem_axi4_0_ar_bits_len,
+	mem_axi4_0_ar_bits_size,
+	mem_axi4_0_ar_bits_burst,
+	mem_axi4_0_ar_bits_lock,
+	mem_axi4_0_ar_bits_cache,
+	mem_axi4_0_ar_bits_prot,
+	mem_axi4_0_ar_bits_qos,
+	mem_axi4_0_r_ready,
+	mem_axi4_0_r_valid,
+	mem_axi4_0_r_bits_id,
+	mem_axi4_0_r_bits_data,
+	mem_axi4_0_r_bits_resp,
+	mem_axi4_0_r_bits_last,
+	mmio_axi4_0_aw_ready,
+	mmio_axi4_0_aw_valid,
+	mmio_axi4_0_aw_bits_id,
+	mmio_axi4_0_aw_bits_addr,
+	mmio_axi4_0_aw_bits_len,
+	mmio_axi4_0_aw_bits_size,
+	mmio_axi4_0_aw_bits_burst,
+	mmio_axi4_0_aw_bits_lock,
+	mmio_axi4_0_aw_bits_cache,
+	mmio_axi4_0_aw_bits_prot,
+	mmio_axi4_0_aw_bits_qos,
+	mmio_axi4_0_w_ready,
+	mmio_axi4_0_w_valid,
+	mmio_axi4_0_w_bits_data,
+	mmio_axi4_0_w_bits_strb,
+	mmio_axi4_0_w_bits_last,
+	mmio_axi4_0_b_ready,
+	mmio_axi4_0_b_valid,
+	mmio_axi4_0_b_bits_id,
+	mmio_axi4_0_b_bits_resp,
+	mmio_axi4_0_ar_ready,
+	mmio_axi4_0_ar_valid,
+	mmio_axi4_0_ar_bits_id,
+	mmio_axi4_0_ar_bits_addr,
+	mmio_axi4_0_ar_bits_len,
+	mmio_axi4_0_ar_bits_size,
+	mmio_axi4_0_ar_bits_burst,
+	mmio_axi4_0_ar_bits_lock,
+	mmio_axi4_0_ar_bits_cache,
+	mmio_axi4_0_ar_bits_prot,
+	mmio_axi4_0_ar_bits_qos,
+	mmio_axi4_0_r_ready,
+	mmio_axi4_0_r_valid,
+	mmio_axi4_0_r_bits_id,
+	mmio_axi4_0_r_bits_data,
+	mmio_axi4_0_r_bits_resp,
+	mmio_axi4_0_r_bits_last,
+	l2_frontend_bus_axi4_0_aw_ready,
+	l2_frontend_bus_axi4_0_aw_valid,
+	l2_frontend_bus_axi4_0_aw_bits_id,
+	l2_frontend_bus_axi4_0_aw_bits_addr,
+	l2_frontend_bus_axi4_0_aw_bits_len,
+	l2_frontend_bus_axi4_0_aw_bits_size,
+	l2_frontend_bus_axi4_0_aw_bits_burst,
+	l2_frontend_bus_axi4_0_aw_bits_lock,
+	l2_frontend_bus_axi4_0_aw_bits_cache,
+	l2_frontend_bus_axi4_0_aw_bits_prot,
+	l2_frontend_bus_axi4_0_aw_bits_qos,
+	l2_frontend_bus_axi4_0_w_ready,
+	l2_frontend_bus_axi4_0_w_valid,
+	l2_frontend_bus_axi4_0_w_bits_data,
+	l2_frontend_bus_axi4_0_w_bits_strb,
+	l2_frontend_bus_axi4_0_w_bits_last,
+	l2_frontend_bus_axi4_0_b_ready,
+	l2_frontend_bus_axi4_0_b_valid,
+	l2_frontend_bus_axi4_0_b_bits_id,
+	l2_frontend_bus_axi4_0_b_bits_resp,
+	l2_frontend_bus_axi4_0_ar_ready,
+	l2_frontend_bus_axi4_0_ar_valid,
+	l2_frontend_bus_axi4_0_ar_bits_id,
+	l2_frontend_bus_axi4_0_ar_bits_addr,
+	l2_frontend_bus_axi4_0_ar_bits_len,
+	l2_frontend_bus_axi4_0_ar_bits_size,
+	l2_frontend_bus_axi4_0_ar_bits_burst,
+	l2_frontend_bus_axi4_0_ar_bits_lock,
+	l2_frontend_bus_axi4_0_ar_bits_cache,
+	l2_frontend_bus_axi4_0_ar_bits_prot,
+	l2_frontend_bus_axi4_0_ar_bits_qos,
+	l2_frontend_bus_axi4_0_r_ready,
+	l2_frontend_bus_axi4_0_r_valid,
+	l2_frontend_bus_axi4_0_r_bits_id,
+	l2_frontend_bus_axi4_0_r_bits_data,
+	l2_frontend_bus_axi4_0_r_bits_resp,
+	l2_frontend_bus_axi4_0_r_bits_last,
+	interrupts
+);
+	input io_aggregator_5_clock;
+	input io_aggregator_5_reset;
+	input io_aggregator_4_clock;
+	input io_aggregator_4_reset;
+	input io_aggregator_3_clock;
+	input io_aggregator_3_reset;
+	input io_aggregator_2_clock;
+	input io_aggregator_2_reset;
+	input io_aggregator_1_clock;
+	input io_aggregator_1_reset;
+	input io_aggregator_0_clock;
+	input io_aggregator_0_reset;
+	input resetctrl_hartIsInReset_0;
+	input debug_clock;
+	input debug_reset;
+	output wire debug_clockeddmi_dmi_req_ready;
+	input debug_clockeddmi_dmi_req_valid;
+	input [6:0] debug_clockeddmi_dmi_req_bits_addr;
+	input [31:0] debug_clockeddmi_dmi_req_bits_data;
+	input [1:0] debug_clockeddmi_dmi_req_bits_op;
+	input debug_clockeddmi_dmi_resp_ready;
+	output wire debug_clockeddmi_dmi_resp_valid;
+	output wire [31:0] debug_clockeddmi_dmi_resp_bits_data;
+	output wire [1:0] debug_clockeddmi_dmi_resp_bits_resp;
+	input debug_clockeddmi_dmiClock;
+	input debug_clockeddmi_dmiReset;
+	output wire debug_ndreset;
+	output wire debug_dmactive;
+	input debug_dmactiveAck;
+	input mem_axi4_0_aw_ready;
+	output wire mem_axi4_0_aw_valid;
+	output wire [3:0] mem_axi4_0_aw_bits_id;
+	output wire [31:0] mem_axi4_0_aw_bits_addr;
+	output wire [7:0] mem_axi4_0_aw_bits_len;
+	output wire [2:0] mem_axi4_0_aw_bits_size;
+	output wire [1:0] mem_axi4_0_aw_bits_burst;
+	output wire mem_axi4_0_aw_bits_lock;
+	output wire [3:0] mem_axi4_0_aw_bits_cache;
+	output wire [2:0] mem_axi4_0_aw_bits_prot;
+	output wire [3:0] mem_axi4_0_aw_bits_qos;
+	input mem_axi4_0_w_ready;
+	output wire mem_axi4_0_w_valid;
+	output wire [63:0] mem_axi4_0_w_bits_data;
+	output wire [7:0] mem_axi4_0_w_bits_strb;
+	output wire mem_axi4_0_w_bits_last;
+	output wire mem_axi4_0_b_ready;
+	input mem_axi4_0_b_valid;
+	input [3:0] mem_axi4_0_b_bits_id;
+	input [1:0] mem_axi4_0_b_bits_resp;
+	input mem_axi4_0_ar_ready;
+	output wire mem_axi4_0_ar_valid;
+	output wire [3:0] mem_axi4_0_ar_bits_id;
+	output wire [31:0] mem_axi4_0_ar_bits_addr;
+	output wire [7:0] mem_axi4_0_ar_bits_len;
+	output wire [2:0] mem_axi4_0_ar_bits_size;
+	output wire [1:0] mem_axi4_0_ar_bits_burst;
+	output wire mem_axi4_0_ar_bits_lock;
+	output wire [3:0] mem_axi4_0_ar_bits_cache;
+	output wire [2:0] mem_axi4_0_ar_bits_prot;
+	output wire [3:0] mem_axi4_0_ar_bits_qos;
+	output wire mem_axi4_0_r_ready;
+	input mem_axi4_0_r_valid;
+	input [3:0] mem_axi4_0_r_bits_id;
+	input [63:0] mem_axi4_0_r_bits_data;
+	input [1:0] mem_axi4_0_r_bits_resp;
+	input mem_axi4_0_r_bits_last;
+	input mmio_axi4_0_aw_ready;
+	output wire mmio_axi4_0_aw_valid;
+	output wire [3:0] mmio_axi4_0_aw_bits_id;
+	output wire [30:0] mmio_axi4_0_aw_bits_addr;
+	output wire [7:0] mmio_axi4_0_aw_bits_len;
+	output wire [2:0] mmio_axi4_0_aw_bits_size;
+	output wire [1:0] mmio_axi4_0_aw_bits_burst;
+	output wire mmio_axi4_0_aw_bits_lock;
+	output wire [3:0] mmio_axi4_0_aw_bits_cache;
+	output wire [2:0] mmio_axi4_0_aw_bits_prot;
+	output wire [3:0] mmio_axi4_0_aw_bits_qos;
+	input mmio_axi4_0_w_ready;
+	output wire mmio_axi4_0_w_valid;
+	output wire [63:0] mmio_axi4_0_w_bits_data;
+	output wire [7:0] mmio_axi4_0_w_bits_strb;
+	output wire mmio_axi4_0_w_bits_last;
+	output wire mmio_axi4_0_b_ready;
+	input mmio_axi4_0_b_valid;
+	input [3:0] mmio_axi4_0_b_bits_id;
+	input [1:0] mmio_axi4_0_b_bits_resp;
+	input mmio_axi4_0_ar_ready;
+	output wire mmio_axi4_0_ar_valid;
+	output wire [3:0] mmio_axi4_0_ar_bits_id;
+	output wire [30:0] mmio_axi4_0_ar_bits_addr;
+	output wire [7:0] mmio_axi4_0_ar_bits_len;
+	output wire [2:0] mmio_axi4_0_ar_bits_size;
+	output wire [1:0] mmio_axi4_0_ar_bits_burst;
+	output wire mmio_axi4_0_ar_bits_lock;
+	output wire [3:0] mmio_axi4_0_ar_bits_cache;
+	output wire [2:0] mmio_axi4_0_ar_bits_prot;
+	output wire [3:0] mmio_axi4_0_ar_bits_qos;
+	output wire mmio_axi4_0_r_ready;
+	input mmio_axi4_0_r_valid;
+	input [3:0] mmio_axi4_0_r_bits_id;
+	input [63:0] mmio_axi4_0_r_bits_data;
+	input [1:0] mmio_axi4_0_r_bits_resp;
+	input mmio_axi4_0_r_bits_last;
+	output wire l2_frontend_bus_axi4_0_aw_ready;
+	input l2_frontend_bus_axi4_0_aw_valid;
+	input [7:0] l2_frontend_bus_axi4_0_aw_bits_id;
+	input [31:0] l2_frontend_bus_axi4_0_aw_bits_addr;
+	input [7:0] l2_frontend_bus_axi4_0_aw_bits_len;
+	input [2:0] l2_frontend_bus_axi4_0_aw_bits_size;
+	input [1:0] l2_frontend_bus_axi4_0_aw_bits_burst;
+	input l2_frontend_bus_axi4_0_aw_bits_lock;
+	input [3:0] l2_frontend_bus_axi4_0_aw_bits_cache;
+	input [2:0] l2_frontend_bus_axi4_0_aw_bits_prot;
+	input [3:0] l2_frontend_bus_axi4_0_aw_bits_qos;
+	output wire l2_frontend_bus_axi4_0_w_ready;
+	input l2_frontend_bus_axi4_0_w_valid;
+	input [63:0] l2_frontend_bus_axi4_0_w_bits_data;
+	input [7:0] l2_frontend_bus_axi4_0_w_bits_strb;
+	input l2_frontend_bus_axi4_0_w_bits_last;
+	input l2_frontend_bus_axi4_0_b_ready;
+	output wire l2_frontend_bus_axi4_0_b_valid;
+	output wire [7:0] l2_frontend_bus_axi4_0_b_bits_id;
+	output wire [1:0] l2_frontend_bus_axi4_0_b_bits_resp;
+	output wire l2_frontend_bus_axi4_0_ar_ready;
+	input l2_frontend_bus_axi4_0_ar_valid;
+	input [7:0] l2_frontend_bus_axi4_0_ar_bits_id;
+	input [31:0] l2_frontend_bus_axi4_0_ar_bits_addr;
+	input [7:0] l2_frontend_bus_axi4_0_ar_bits_len;
+	input [2:0] l2_frontend_bus_axi4_0_ar_bits_size;
+	input [1:0] l2_frontend_bus_axi4_0_ar_bits_burst;
+	input l2_frontend_bus_axi4_0_ar_bits_lock;
+	input [3:0] l2_frontend_bus_axi4_0_ar_bits_cache;
+	input [2:0] l2_frontend_bus_axi4_0_ar_bits_prot;
+	input [3:0] l2_frontend_bus_axi4_0_ar_bits_qos;
+	input l2_frontend_bus_axi4_0_r_ready;
+	output wire l2_frontend_bus_axi4_0_r_valid;
+	output wire [7:0] l2_frontend_bus_axi4_0_r_bits_id;
+	output wire [63:0] l2_frontend_bus_axi4_0_r_bits_data;
+	output wire [1:0] l2_frontend_bus_axi4_0_r_bits_resp;
+	output wire l2_frontend_bus_axi4_0_r_bits_last;
+	input [1:0] interrupts;
+	wire _bootrom_domain_auto_bootrom_in_a_ready;
+	wire _bootrom_domain_auto_bootrom_in_d_valid;
+	wire [1:0] _bootrom_domain_auto_bootrom_in_d_bits_size;
+	wire [8:0] _bootrom_domain_auto_bootrom_in_d_bits_source;
+	wire [63:0] _bootrom_domain_auto_bootrom_in_d_bits_data;
+	wire _tlDM_auto_dmInner_dmInner_tl_in_a_ready;
+	wire _tlDM_auto_dmInner_dmInner_tl_in_d_valid;
+	wire [2:0] _tlDM_auto_dmInner_dmInner_tl_in_d_bits_opcode;
+	wire [1:0] _tlDM_auto_dmInner_dmInner_tl_in_d_bits_size;
+	wire [8:0] _tlDM_auto_dmInner_dmInner_tl_in_d_bits_source;
+	wire [63:0] _tlDM_auto_dmInner_dmInner_tl_in_d_bits_data;
+	wire _tlDM_auto_dmOuter_int_out_sync_0;
+	wire _plic_domain_auto_plic_in_a_ready;
+	wire _plic_domain_auto_plic_in_d_valid;
+	wire [2:0] _plic_domain_auto_plic_in_d_bits_opcode;
+	wire [1:0] _plic_domain_auto_plic_in_d_bits_size;
+	wire [8:0] _plic_domain_auto_plic_in_d_bits_source;
+	wire [63:0] _plic_domain_auto_plic_in_d_bits_data;
+	wire _plic_domain_auto_int_in_clock_xing_out_1_sync_0;
+	wire _plic_domain_auto_int_in_clock_xing_out_0_sync_0;
+	wire _clint_domain_auto_clint_in_a_ready;
+	wire _clint_domain_auto_clint_in_d_valid;
+	wire [2:0] _clint_domain_auto_clint_in_d_bits_opcode;
+	wire [1:0] _clint_domain_auto_clint_in_d_bits_size;
+	wire [8:0] _clint_domain_auto_clint_in_d_bits_source;
+	wire [63:0] _clint_domain_auto_clint_in_d_bits_data;
+	wire _clint_domain_auto_int_in_clock_xing_out_sync_0;
+	wire _clint_domain_auto_int_in_clock_xing_out_sync_1;
+	wire _clint_domain_clock;
+	wire _clint_domain_reset;
+	wire _tileHartIdNexusNode_auto_out;
+	wire _tile_prci_domain_auto_tl_master_clock_xing_out_a_valid;
+	wire [2:0] _tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_opcode;
+	wire [2:0] _tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_param;
+	wire [3:0] _tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_size;
+	wire [2:0] _tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_source;
+	wire [31:0] _tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_address;
+	wire [7:0] _tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_mask;
+	wire [63:0] _tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_data;
+	wire _tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_corrupt;
+	wire _tile_prci_domain_auto_tl_master_clock_xing_out_b_ready;
+	wire _tile_prci_domain_auto_tl_master_clock_xing_out_c_valid;
+	wire [2:0] _tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_opcode;
+	wire [2:0] _tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_param;
+	wire [3:0] _tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_size;
+	wire [2:0] _tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_source;
+	wire [31:0] _tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_address;
+	wire [63:0] _tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_data;
+	wire _tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_corrupt;
+	wire _tile_prci_domain_auto_tl_master_clock_xing_out_d_ready;
+	wire _tile_prci_domain_auto_tl_master_clock_xing_out_e_valid;
+	wire [1:0] _tile_prci_domain_auto_tl_master_clock_xing_out_e_bits_sink;
+	wire _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_valid;
+	wire [2:0] _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_opcode;
+	wire [2:0] _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_param;
+	wire [2:0] _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_size;
+	wire [6:0] _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_source;
+	wire [31:0] _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_address;
+	wire _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_bufferable;
+	wire _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_modifiable;
+	wire _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_readalloc;
+	wire _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_writealloc;
+	wire _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_privileged;
+	wire _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_secure;
+	wire _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_fetch;
+	wire [7:0] _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_mask;
+	wire [63:0] _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_data;
+	wire _coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_d_ready;
+	wire _coh_wrapper_auto_coherent_jbar_anon_in_a_ready;
+	wire _coh_wrapper_auto_coherent_jbar_anon_in_b_valid;
+	wire [1:0] _coh_wrapper_auto_coherent_jbar_anon_in_b_bits_param;
+	wire [31:0] _coh_wrapper_auto_coherent_jbar_anon_in_b_bits_address;
+	wire _coh_wrapper_auto_coherent_jbar_anon_in_c_ready;
+	wire _coh_wrapper_auto_coherent_jbar_anon_in_d_valid;
+	wire [2:0] _coh_wrapper_auto_coherent_jbar_anon_in_d_bits_opcode;
+	wire [1:0] _coh_wrapper_auto_coherent_jbar_anon_in_d_bits_param;
+	wire [2:0] _coh_wrapper_auto_coherent_jbar_anon_in_d_bits_size;
+	wire [4:0] _coh_wrapper_auto_coherent_jbar_anon_in_d_bits_source;
+	wire [1:0] _coh_wrapper_auto_coherent_jbar_anon_in_d_bits_sink;
+	wire _coh_wrapper_auto_coherent_jbar_anon_in_d_bits_denied;
+	wire [63:0] _coh_wrapper_auto_coherent_jbar_anon_in_d_bits_data;
+	wire _coh_wrapper_auto_coherent_jbar_anon_in_d_bits_corrupt;
+	wire _coh_wrapper_auto_coh_clock_groups_out_member_mbus_0_clock;
+	wire _coh_wrapper_auto_coh_clock_groups_out_member_mbus_0_reset;
+	wire _mbus_auto_bus_xing_in_a_ready;
+	wire _mbus_auto_bus_xing_in_d_valid;
+	wire [2:0] _mbus_auto_bus_xing_in_d_bits_opcode;
+	wire [2:0] _mbus_auto_bus_xing_in_d_bits_size;
+	wire [6:0] _mbus_auto_bus_xing_in_d_bits_source;
+	wire _mbus_auto_bus_xing_in_d_bits_denied;
+	wire [63:0] _mbus_auto_bus_xing_in_d_bits_data;
+	wire _mbus_auto_bus_xing_in_d_bits_corrupt;
+	wire _cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_valid;
+	wire [2:0] _cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_opcode;
+	wire [2:0] _cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_param;
+	wire [1:0] _cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_size;
+	wire [8:0] _cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_source;
+	wire [16:0] _cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_address;
+	wire [7:0] _cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_mask;
+	wire _cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_corrupt;
+	wire _cbus_auto_coupler_to_bootrom_fragmenter_anon_out_d_ready;
+	wire _cbus_auto_coupler_to_debug_fragmenter_anon_out_a_valid;
+	wire [2:0] _cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_opcode;
+	wire [2:0] _cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_param;
+	wire [1:0] _cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_size;
+	wire [8:0] _cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_source;
+	wire [11:0] _cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_address;
+	wire [7:0] _cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_mask;
+	wire [63:0] _cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_data;
+	wire _cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_corrupt;
+	wire _cbus_auto_coupler_to_debug_fragmenter_anon_out_d_ready;
+	wire _cbus_auto_coupler_to_plic_fragmenter_anon_out_a_valid;
+	wire [2:0] _cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_opcode;
+	wire [2:0] _cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_param;
+	wire [1:0] _cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_size;
+	wire [8:0] _cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_source;
+	wire [27:0] _cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_address;
+	wire [7:0] _cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_mask;
+	wire [63:0] _cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_data;
+	wire _cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_corrupt;
+	wire _cbus_auto_coupler_to_plic_fragmenter_anon_out_d_ready;
+	wire _cbus_auto_coupler_to_clint_fragmenter_anon_out_a_valid;
+	wire [2:0] _cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_opcode;
+	wire [2:0] _cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_param;
+	wire [1:0] _cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_size;
+	wire [8:0] _cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_source;
+	wire [25:0] _cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_address;
+	wire [7:0] _cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_mask;
+	wire [63:0] _cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_data;
+	wire _cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_corrupt;
+	wire _cbus_auto_coupler_to_clint_fragmenter_anon_out_d_ready;
+	wire _cbus_auto_fixedClockNode_anon_out_3_clock;
+	wire _cbus_auto_fixedClockNode_anon_out_3_reset;
+	wire _cbus_auto_fixedClockNode_anon_out_1_clock;
+	wire _cbus_auto_fixedClockNode_anon_out_1_reset;
+	wire _cbus_auto_fixedClockNode_anon_out_0_clock;
+	wire _cbus_auto_fixedClockNode_anon_out_0_reset;
+	wire _cbus_auto_bus_xing_in_a_ready;
+	wire _cbus_auto_bus_xing_in_d_valid;
+	wire [2:0] _cbus_auto_bus_xing_in_d_bits_opcode;
+	wire [1:0] _cbus_auto_bus_xing_in_d_bits_param;
+	wire [3:0] _cbus_auto_bus_xing_in_d_bits_size;
+	wire [4:0] _cbus_auto_bus_xing_in_d_bits_source;
+	wire _cbus_auto_bus_xing_in_d_bits_sink;
+	wire _cbus_auto_bus_xing_in_d_bits_denied;
+	wire [63:0] _cbus_auto_bus_xing_in_d_bits_data;
+	wire _cbus_auto_bus_xing_in_d_bits_corrupt;
+	wire _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_valid;
+	wire [2:0] _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_opcode;
+	wire [2:0] _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_param;
+	wire [3:0] _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_size;
+	wire [3:0] _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_source;
+	wire [31:0] _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_address;
+	wire _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_bufferable;
+	wire _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_modifiable;
+	wire _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_readalloc;
+	wire _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_writealloc;
+	wire _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_privileged;
+	wire _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_secure;
+	wire _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_fetch;
+	wire [7:0] _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_mask;
+	wire [63:0] _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_data;
+	wire _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_corrupt;
+	wire _fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_d_ready;
+	wire _fbus_buffer_auto_in_a_ready;
+	wire _fbus_buffer_auto_in_d_valid;
+	wire [2:0] _fbus_buffer_auto_in_d_bits_opcode;
+	wire [1:0] _fbus_buffer_auto_in_d_bits_param;
+	wire [3:0] _fbus_buffer_auto_in_d_bits_size;
+	wire [3:0] _fbus_buffer_auto_in_d_bits_source;
+	wire [1:0] _fbus_buffer_auto_in_d_bits_sink;
+	wire _fbus_buffer_auto_in_d_bits_denied;
+	wire [63:0] _fbus_buffer_auto_in_d_bits_data;
+	wire _fbus_buffer_auto_in_d_bits_corrupt;
+	wire _fbus_buffer_auto_out_a_valid;
+	wire [2:0] _fbus_buffer_auto_out_a_bits_opcode;
+	wire [2:0] _fbus_buffer_auto_out_a_bits_param;
+	wire [3:0] _fbus_buffer_auto_out_a_bits_size;
+	wire [3:0] _fbus_buffer_auto_out_a_bits_source;
+	wire [31:0] _fbus_buffer_auto_out_a_bits_address;
+	wire _fbus_buffer_auto_out_a_bits_user_amba_prot_bufferable;
+	wire _fbus_buffer_auto_out_a_bits_user_amba_prot_modifiable;
+	wire _fbus_buffer_auto_out_a_bits_user_amba_prot_readalloc;
+	wire _fbus_buffer_auto_out_a_bits_user_amba_prot_writealloc;
+	wire _fbus_buffer_auto_out_a_bits_user_amba_prot_privileged;
+	wire _fbus_buffer_auto_out_a_bits_user_amba_prot_secure;
+	wire _fbus_buffer_auto_out_a_bits_user_amba_prot_fetch;
+	wire [7:0] _fbus_buffer_auto_out_a_bits_mask;
+	wire [63:0] _fbus_buffer_auto_out_a_bits_data;
+	wire _fbus_buffer_auto_out_a_bits_corrupt;
+	wire _fbus_buffer_auto_out_d_ready;
+	wire _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_ready;
+	wire _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_valid;
+	wire [1:0] _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_bits_param;
+	wire [31:0] _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_bits_address;
+	wire _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_c_ready;
+	wire _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_valid;
+	wire [2:0] _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_opcode;
+	wire [1:0] _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_param;
+	wire [3:0] _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_size;
+	wire [2:0] _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_source;
+	wire [1:0] _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_sink;
+	wire _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_denied;
+	wire [63:0] _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_data;
+	wire _sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_corrupt;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_valid;
+	wire [2:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_opcode;
+	wire [2:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_param;
+	wire [2:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_size;
+	wire [4:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_source;
+	wire [31:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_address;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_bufferable;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_modifiable;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_readalloc;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_writealloc;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_privileged;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_secure;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_fetch;
+	wire [7:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_mask;
+	wire [63:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_data;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_corrupt;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_b_ready;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_valid;
+	wire [2:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_opcode;
+	wire [2:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_param;
+	wire [2:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_size;
+	wire [4:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_source;
+	wire [31:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_address;
+	wire [63:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_data;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_corrupt;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_d_ready;
+	wire _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_e_valid;
+	wire [1:0] _sbus_auto_coupler_to_bus_named_coh_widget_anon_out_e_bits_sink;
+	wire _sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_a_ready;
+	wire _sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_valid;
+	wire [2:0] _sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_opcode;
+	wire [1:0] _sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_param;
+	wire [3:0] _sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_size;
+	wire [3:0] _sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_source;
+	wire [1:0] _sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_sink;
+	wire _sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_denied;
+	wire [63:0] _sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_data;
+	wire _sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_corrupt;
+	wire _sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_valid;
+	wire [2:0] _sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_opcode;
+	wire [2:0] _sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_param;
+	wire [3:0] _sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_size;
+	wire [4:0] _sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_source;
+	wire [27:0] _sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_address;
+	wire [7:0] _sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_mask;
+	wire [63:0] _sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_data;
+	wire _sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_corrupt;
+	wire _sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_d_ready;
+	wire _sbus_auto_fixedClockNode_anon_out_1_clock;
+	wire _sbus_auto_fixedClockNode_anon_out_1_reset;
+	wire _sbus_auto_fixedClockNode_anon_out_0_clock;
+	wire _sbus_auto_fixedClockNode_anon_out_0_reset;
+	wire _sbus_auto_sbus_clock_groups_out_2_member_coh_1_clock;
+	wire _sbus_auto_sbus_clock_groups_out_2_member_coh_1_reset;
+	wire _sbus_auto_sbus_clock_groups_out_2_member_coh_0_clock;
+	wire _sbus_auto_sbus_clock_groups_out_2_member_coh_0_reset;
+	wire _sbus_auto_sbus_clock_groups_out_1_member_fbus_0_clock;
+	wire _sbus_auto_sbus_clock_groups_out_1_member_fbus_0_reset;
+	wire _sbus_auto_sbus_clock_groups_out_0_member_cbus_0_clock;
+	wire _sbus_auto_sbus_clock_groups_out_0_member_cbus_0_reset;
+	wire _ibus_intsource_auto_out_sync_0;
+	wire _ibus_intsource_auto_out_sync_1;
+	wire _ibus_intsink_auto_out_0;
+	wire _ibus_intsink_auto_out_1;
+	reg [6:0] int_rtc_tick_c_value;
+	wire int_rtc_tick = int_rtc_tick_c_value == 7'h63;
+	always @(posedge _clint_domain_clock)
+		if (_clint_domain_reset)
+			int_rtc_tick_c_value <= 7'h00;
+		else if (int_rtc_tick)
+			int_rtc_tick_c_value <= 7'h00;
+		else
+			int_rtc_tick_c_value <= int_rtc_tick_c_value + 7'h01;
+	IntSyncAsyncCrossingSink_n1x2 ibus_intsink(
+		.clock(_sbus_auto_fixedClockNode_anon_out_0_clock),
+		.auto_in_sync_0(_ibus_intsource_auto_out_sync_0),
+		.auto_in_sync_1(_ibus_intsource_auto_out_sync_1),
+		.auto_out_0(_ibus_intsink_auto_out_0),
+		.auto_out_1(_ibus_intsink_auto_out_1)
+	);
+	IntSyncCrossingSource_n1x2 ibus_intsource(
+		.clock(_sbus_auto_fixedClockNode_anon_out_0_clock),
+		.reset(_sbus_auto_fixedClockNode_anon_out_0_reset),
+		.auto_in_0(interrupts[0]),
+		.auto_in_1(interrupts[1]),
+		.auto_out_sync_0(_ibus_intsource_auto_out_sync_0),
+		.auto_out_sync_1(_ibus_intsource_auto_out_sync_1)
+	);
+	SystemBus sbus(
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_aw_ready(mmio_axi4_0_aw_ready),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_aw_valid(mmio_axi4_0_aw_valid),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_aw_bits_id(mmio_axi4_0_aw_bits_id),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_aw_bits_addr(mmio_axi4_0_aw_bits_addr),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_aw_bits_len(mmio_axi4_0_aw_bits_len),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_aw_bits_size(mmio_axi4_0_aw_bits_size),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_aw_bits_burst(mmio_axi4_0_aw_bits_burst),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_aw_bits_lock(mmio_axi4_0_aw_bits_lock),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_aw_bits_cache(mmio_axi4_0_aw_bits_cache),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_aw_bits_prot(mmio_axi4_0_aw_bits_prot),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_aw_bits_qos(mmio_axi4_0_aw_bits_qos),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_w_ready(mmio_axi4_0_w_ready),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_w_valid(mmio_axi4_0_w_valid),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_w_bits_data(mmio_axi4_0_w_bits_data),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_w_bits_strb(mmio_axi4_0_w_bits_strb),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_w_bits_last(mmio_axi4_0_w_bits_last),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_b_ready(mmio_axi4_0_b_ready),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_b_valid(mmio_axi4_0_b_valid),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_b_bits_id(mmio_axi4_0_b_bits_id),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_b_bits_resp(mmio_axi4_0_b_bits_resp),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_ar_ready(mmio_axi4_0_ar_ready),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_ar_valid(mmio_axi4_0_ar_valid),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_ar_bits_id(mmio_axi4_0_ar_bits_id),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_ar_bits_addr(mmio_axi4_0_ar_bits_addr),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_ar_bits_len(mmio_axi4_0_ar_bits_len),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_ar_bits_size(mmio_axi4_0_ar_bits_size),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_ar_bits_burst(mmio_axi4_0_ar_bits_burst),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_ar_bits_lock(mmio_axi4_0_ar_bits_lock),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_ar_bits_cache(mmio_axi4_0_ar_bits_cache),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_ar_bits_prot(mmio_axi4_0_ar_bits_prot),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_ar_bits_qos(mmio_axi4_0_ar_bits_qos),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_r_ready(mmio_axi4_0_r_ready),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_r_valid(mmio_axi4_0_r_valid),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_r_bits_id(mmio_axi4_0_r_bits_id),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_r_bits_data(mmio_axi4_0_r_bits_data),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_r_bits_resp(mmio_axi4_0_r_bits_resp),
+		.auto_coupler_to_port_named_mmio_port_axi4_axi4buf_out_r_bits_last(mmio_axi4_0_r_bits_last),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_ready(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_ready),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_valid(_tile_prci_domain_auto_tl_master_clock_xing_out_a_valid),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_bits_opcode(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_opcode),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_bits_param(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_param),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_bits_size(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_size),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_bits_source(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_source),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_bits_address(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_address),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_bits_mask(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_mask),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_bits_data(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_data),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_bits_corrupt(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_corrupt),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_ready(_tile_prci_domain_auto_tl_master_clock_xing_out_b_ready),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_valid(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_valid),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_bits_param(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_bits_param),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_bits_address(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_bits_address),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_c_ready(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_c_ready),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_c_valid(_tile_prci_domain_auto_tl_master_clock_xing_out_c_valid),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_c_bits_opcode(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_opcode),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_c_bits_param(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_param),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_c_bits_size(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_size),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_c_bits_source(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_source),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_c_bits_address(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_address),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_c_bits_data(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_data),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_c_bits_corrupt(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_corrupt),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_ready(_tile_prci_domain_auto_tl_master_clock_xing_out_d_ready),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_valid(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_valid),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_opcode(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_opcode),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_param(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_param),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_size(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_size),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_source(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_source),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_sink(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_sink),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_denied(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_denied),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_data(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_data),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_corrupt(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_corrupt),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_e_valid(_tile_prci_domain_auto_tl_master_clock_xing_out_e_valid),
+		.auto_coupler_from_boom_tile_tl_master_clock_xing_in_e_bits_sink(_tile_prci_domain_auto_tl_master_clock_xing_out_e_bits_sink),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_ready(_coh_wrapper_auto_coherent_jbar_anon_in_a_ready),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_valid(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_valid),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_opcode(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_opcode),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_param(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_param),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_size(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_size),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_source(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_source),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_address(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_address),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_bufferable(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_bufferable),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_modifiable(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_modifiable),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_readalloc(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_readalloc),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_writealloc(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_writealloc),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_privileged(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_privileged),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_secure(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_secure),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_fetch(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_fetch),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_mask(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_mask),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_data(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_data),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_corrupt(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_corrupt),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_b_ready(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_b_ready),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_b_valid(_coh_wrapper_auto_coherent_jbar_anon_in_b_valid),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_b_bits_param(_coh_wrapper_auto_coherent_jbar_anon_in_b_bits_param),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_b_bits_address(_coh_wrapper_auto_coherent_jbar_anon_in_b_bits_address),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_c_ready(_coh_wrapper_auto_coherent_jbar_anon_in_c_ready),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_c_valid(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_valid),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_opcode(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_opcode),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_param(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_param),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_size(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_size),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_source(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_source),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_address(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_address),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_data(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_data),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_corrupt(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_corrupt),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_d_ready(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_d_ready),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_d_valid(_coh_wrapper_auto_coherent_jbar_anon_in_d_valid),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_d_bits_opcode(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_opcode),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_d_bits_param(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_param),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_d_bits_size(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_size),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_d_bits_source(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_source),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_d_bits_sink(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_sink),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_d_bits_denied(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_denied),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_d_bits_data(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_data),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_d_bits_corrupt(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_corrupt),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_e_valid(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_e_valid),
+		.auto_coupler_to_bus_named_coh_widget_anon_out_e_bits_sink(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_e_bits_sink),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_ready(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_a_ready),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_valid(_fbus_buffer_auto_out_a_valid),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_opcode(_fbus_buffer_auto_out_a_bits_opcode),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_param(_fbus_buffer_auto_out_a_bits_param),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_size(_fbus_buffer_auto_out_a_bits_size),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_source(_fbus_buffer_auto_out_a_bits_source),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_address(_fbus_buffer_auto_out_a_bits_address),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_user_amba_prot_bufferable(_fbus_buffer_auto_out_a_bits_user_amba_prot_bufferable),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_user_amba_prot_modifiable(_fbus_buffer_auto_out_a_bits_user_amba_prot_modifiable),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_user_amba_prot_readalloc(_fbus_buffer_auto_out_a_bits_user_amba_prot_readalloc),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_user_amba_prot_writealloc(_fbus_buffer_auto_out_a_bits_user_amba_prot_writealloc),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_user_amba_prot_privileged(_fbus_buffer_auto_out_a_bits_user_amba_prot_privileged),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_user_amba_prot_secure(_fbus_buffer_auto_out_a_bits_user_amba_prot_secure),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_user_amba_prot_fetch(_fbus_buffer_auto_out_a_bits_user_amba_prot_fetch),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_mask(_fbus_buffer_auto_out_a_bits_mask),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_data(_fbus_buffer_auto_out_a_bits_data),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_a_bits_corrupt(_fbus_buffer_auto_out_a_bits_corrupt),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_d_ready(_fbus_buffer_auto_out_d_ready),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_d_valid(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_valid),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_opcode(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_opcode),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_param(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_param),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_size(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_size),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_source(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_source),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_sink(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_sink),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_denied(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_denied),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_data(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_data),
+		.auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_corrupt(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_corrupt),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_a_ready(_cbus_auto_bus_xing_in_a_ready),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_a_valid(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_valid),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_opcode(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_opcode),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_param(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_param),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_size(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_size),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_source(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_source),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_address(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_address),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_mask(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_mask),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_data(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_data),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_corrupt(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_corrupt),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_d_ready(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_d_ready),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_d_valid(_cbus_auto_bus_xing_in_d_valid),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_d_bits_opcode(_cbus_auto_bus_xing_in_d_bits_opcode),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_d_bits_param(_cbus_auto_bus_xing_in_d_bits_param),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_d_bits_size(_cbus_auto_bus_xing_in_d_bits_size),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_d_bits_source(_cbus_auto_bus_xing_in_d_bits_source),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_d_bits_sink(_cbus_auto_bus_xing_in_d_bits_sink),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_d_bits_denied(_cbus_auto_bus_xing_in_d_bits_denied),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_d_bits_data(_cbus_auto_bus_xing_in_d_bits_data),
+		.auto_coupler_to_bus_named_cbus_bus_xing_out_d_bits_corrupt(_cbus_auto_bus_xing_in_d_bits_corrupt),
+		.auto_fixedClockNode_anon_out_1_clock(_sbus_auto_fixedClockNode_anon_out_1_clock),
+		.auto_fixedClockNode_anon_out_1_reset(_sbus_auto_fixedClockNode_anon_out_1_reset),
+		.auto_fixedClockNode_anon_out_0_clock(_sbus_auto_fixedClockNode_anon_out_0_clock),
+		.auto_fixedClockNode_anon_out_0_reset(_sbus_auto_fixedClockNode_anon_out_0_reset),
+		.auto_sbus_clock_groups_in_member_sbus_5_clock(io_aggregator_5_clock),
+		.auto_sbus_clock_groups_in_member_sbus_5_reset(io_aggregator_5_reset),
+		.auto_sbus_clock_groups_in_member_sbus_4_clock(io_aggregator_4_clock),
+		.auto_sbus_clock_groups_in_member_sbus_4_reset(io_aggregator_4_reset),
+		.auto_sbus_clock_groups_in_member_sbus_3_clock(io_aggregator_3_clock),
+		.auto_sbus_clock_groups_in_member_sbus_3_reset(io_aggregator_3_reset),
+		.auto_sbus_clock_groups_in_member_sbus_1_clock(io_aggregator_1_clock),
+		.auto_sbus_clock_groups_in_member_sbus_1_reset(io_aggregator_1_reset),
+		.auto_sbus_clock_groups_in_member_sbus_0_clock(io_aggregator_0_clock),
+		.auto_sbus_clock_groups_in_member_sbus_0_reset(io_aggregator_0_reset),
+		.auto_sbus_clock_groups_out_2_member_coh_1_clock(_sbus_auto_sbus_clock_groups_out_2_member_coh_1_clock),
+		.auto_sbus_clock_groups_out_2_member_coh_1_reset(_sbus_auto_sbus_clock_groups_out_2_member_coh_1_reset),
+		.auto_sbus_clock_groups_out_2_member_coh_0_clock(_sbus_auto_sbus_clock_groups_out_2_member_coh_0_clock),
+		.auto_sbus_clock_groups_out_2_member_coh_0_reset(_sbus_auto_sbus_clock_groups_out_2_member_coh_0_reset),
+		.auto_sbus_clock_groups_out_1_member_fbus_0_clock(_sbus_auto_sbus_clock_groups_out_1_member_fbus_0_clock),
+		.auto_sbus_clock_groups_out_1_member_fbus_0_reset(_sbus_auto_sbus_clock_groups_out_1_member_fbus_0_reset),
+		.auto_sbus_clock_groups_out_0_member_cbus_0_clock(_sbus_auto_sbus_clock_groups_out_0_member_cbus_0_clock),
+		.auto_sbus_clock_groups_out_0_member_cbus_0_reset(_sbus_auto_sbus_clock_groups_out_0_member_cbus_0_reset)
+	);
+	TLBuffer_a32d64s4k2z4u fbus_buffer(
+		.clock(_sbus_auto_sbus_clock_groups_out_1_member_fbus_0_clock),
+		.reset(_sbus_auto_sbus_clock_groups_out_1_member_fbus_0_reset),
+		.auto_in_a_ready(_fbus_buffer_auto_in_a_ready),
+		.auto_in_a_valid(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_valid),
+		.auto_in_a_bits_opcode(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_opcode),
+		.auto_in_a_bits_param(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_param),
+		.auto_in_a_bits_size(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_size),
+		.auto_in_a_bits_source(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_source),
+		.auto_in_a_bits_address(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_address),
+		.auto_in_a_bits_user_amba_prot_bufferable(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_bufferable),
+		.auto_in_a_bits_user_amba_prot_modifiable(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_modifiable),
+		.auto_in_a_bits_user_amba_prot_readalloc(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_readalloc),
+		.auto_in_a_bits_user_amba_prot_writealloc(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_writealloc),
+		.auto_in_a_bits_user_amba_prot_privileged(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_privileged),
+		.auto_in_a_bits_user_amba_prot_secure(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_secure),
+		.auto_in_a_bits_user_amba_prot_fetch(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_fetch),
+		.auto_in_a_bits_mask(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_mask),
+		.auto_in_a_bits_data(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_data),
+		.auto_in_a_bits_corrupt(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_corrupt),
+		.auto_in_d_ready(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_d_ready),
+		.auto_in_d_valid(_fbus_buffer_auto_in_d_valid),
+		.auto_in_d_bits_opcode(_fbus_buffer_auto_in_d_bits_opcode),
+		.auto_in_d_bits_param(_fbus_buffer_auto_in_d_bits_param),
+		.auto_in_d_bits_size(_fbus_buffer_auto_in_d_bits_size),
+		.auto_in_d_bits_source(_fbus_buffer_auto_in_d_bits_source),
+		.auto_in_d_bits_sink(_fbus_buffer_auto_in_d_bits_sink),
+		.auto_in_d_bits_denied(_fbus_buffer_auto_in_d_bits_denied),
+		.auto_in_d_bits_data(_fbus_buffer_auto_in_d_bits_data),
+		.auto_in_d_bits_corrupt(_fbus_buffer_auto_in_d_bits_corrupt),
+		.auto_out_a_ready(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_a_ready),
+		.auto_out_a_valid(_fbus_buffer_auto_out_a_valid),
+		.auto_out_a_bits_opcode(_fbus_buffer_auto_out_a_bits_opcode),
+		.auto_out_a_bits_param(_fbus_buffer_auto_out_a_bits_param),
+		.auto_out_a_bits_size(_fbus_buffer_auto_out_a_bits_size),
+		.auto_out_a_bits_source(_fbus_buffer_auto_out_a_bits_source),
+		.auto_out_a_bits_address(_fbus_buffer_auto_out_a_bits_address),
+		.auto_out_a_bits_user_amba_prot_bufferable(_fbus_buffer_auto_out_a_bits_user_amba_prot_bufferable),
+		.auto_out_a_bits_user_amba_prot_modifiable(_fbus_buffer_auto_out_a_bits_user_amba_prot_modifiable),
+		.auto_out_a_bits_user_amba_prot_readalloc(_fbus_buffer_auto_out_a_bits_user_amba_prot_readalloc),
+		.auto_out_a_bits_user_amba_prot_writealloc(_fbus_buffer_auto_out_a_bits_user_amba_prot_writealloc),
+		.auto_out_a_bits_user_amba_prot_privileged(_fbus_buffer_auto_out_a_bits_user_amba_prot_privileged),
+		.auto_out_a_bits_user_amba_prot_secure(_fbus_buffer_auto_out_a_bits_user_amba_prot_secure),
+		.auto_out_a_bits_user_amba_prot_fetch(_fbus_buffer_auto_out_a_bits_user_amba_prot_fetch),
+		.auto_out_a_bits_mask(_fbus_buffer_auto_out_a_bits_mask),
+		.auto_out_a_bits_data(_fbus_buffer_auto_out_a_bits_data),
+		.auto_out_a_bits_corrupt(_fbus_buffer_auto_out_a_bits_corrupt),
+		.auto_out_d_ready(_fbus_buffer_auto_out_d_ready),
+		.auto_out_d_valid(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_valid),
+		.auto_out_d_bits_opcode(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_opcode),
+		.auto_out_d_bits_param(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_param),
+		.auto_out_d_bits_size(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_size),
+		.auto_out_d_bits_source(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_source),
+		.auto_out_d_bits_sink(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_sink),
+		.auto_out_d_bits_denied(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_denied),
+		.auto_out_d_bits_data(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_data),
+		.auto_out_d_bits_corrupt(_sbus_auto_coupler_from_bus_named_fbus_bus_xing_in_d_bits_corrupt)
+	);
+	TLInterconnectCoupler_fbus_from_port_named_slave_port_axi4 fbus_coupler_from_port_named_slave_port_axi4(
+		.clock(_sbus_auto_sbus_clock_groups_out_1_member_fbus_0_clock),
+		.reset(_sbus_auto_sbus_clock_groups_out_1_member_fbus_0_reset),
+		.auto_axi4index_in_aw_ready(l2_frontend_bus_axi4_0_aw_ready),
+		.auto_axi4index_in_aw_valid(l2_frontend_bus_axi4_0_aw_valid),
+		.auto_axi4index_in_aw_bits_id(l2_frontend_bus_axi4_0_aw_bits_id),
+		.auto_axi4index_in_aw_bits_addr(l2_frontend_bus_axi4_0_aw_bits_addr),
+		.auto_axi4index_in_aw_bits_len(l2_frontend_bus_axi4_0_aw_bits_len),
+		.auto_axi4index_in_aw_bits_size(l2_frontend_bus_axi4_0_aw_bits_size),
+		.auto_axi4index_in_aw_bits_burst(l2_frontend_bus_axi4_0_aw_bits_burst),
+		.auto_axi4index_in_aw_bits_lock(l2_frontend_bus_axi4_0_aw_bits_lock),
+		.auto_axi4index_in_aw_bits_cache(l2_frontend_bus_axi4_0_aw_bits_cache),
+		.auto_axi4index_in_aw_bits_prot(l2_frontend_bus_axi4_0_aw_bits_prot),
+		.auto_axi4index_in_aw_bits_qos(l2_frontend_bus_axi4_0_aw_bits_qos),
+		.auto_axi4index_in_w_ready(l2_frontend_bus_axi4_0_w_ready),
+		.auto_axi4index_in_w_valid(l2_frontend_bus_axi4_0_w_valid),
+		.auto_axi4index_in_w_bits_data(l2_frontend_bus_axi4_0_w_bits_data),
+		.auto_axi4index_in_w_bits_strb(l2_frontend_bus_axi4_0_w_bits_strb),
+		.auto_axi4index_in_w_bits_last(l2_frontend_bus_axi4_0_w_bits_last),
+		.auto_axi4index_in_b_ready(l2_frontend_bus_axi4_0_b_ready),
+		.auto_axi4index_in_b_valid(l2_frontend_bus_axi4_0_b_valid),
+		.auto_axi4index_in_b_bits_id(l2_frontend_bus_axi4_0_b_bits_id),
+		.auto_axi4index_in_b_bits_resp(l2_frontend_bus_axi4_0_b_bits_resp),
+		.auto_axi4index_in_ar_ready(l2_frontend_bus_axi4_0_ar_ready),
+		.auto_axi4index_in_ar_valid(l2_frontend_bus_axi4_0_ar_valid),
+		.auto_axi4index_in_ar_bits_id(l2_frontend_bus_axi4_0_ar_bits_id),
+		.auto_axi4index_in_ar_bits_addr(l2_frontend_bus_axi4_0_ar_bits_addr),
+		.auto_axi4index_in_ar_bits_len(l2_frontend_bus_axi4_0_ar_bits_len),
+		.auto_axi4index_in_ar_bits_size(l2_frontend_bus_axi4_0_ar_bits_size),
+		.auto_axi4index_in_ar_bits_burst(l2_frontend_bus_axi4_0_ar_bits_burst),
+		.auto_axi4index_in_ar_bits_lock(l2_frontend_bus_axi4_0_ar_bits_lock),
+		.auto_axi4index_in_ar_bits_cache(l2_frontend_bus_axi4_0_ar_bits_cache),
+		.auto_axi4index_in_ar_bits_prot(l2_frontend_bus_axi4_0_ar_bits_prot),
+		.auto_axi4index_in_ar_bits_qos(l2_frontend_bus_axi4_0_ar_bits_qos),
+		.auto_axi4index_in_r_ready(l2_frontend_bus_axi4_0_r_ready),
+		.auto_axi4index_in_r_valid(l2_frontend_bus_axi4_0_r_valid),
+		.auto_axi4index_in_r_bits_id(l2_frontend_bus_axi4_0_r_bits_id),
+		.auto_axi4index_in_r_bits_data(l2_frontend_bus_axi4_0_r_bits_data),
+		.auto_axi4index_in_r_bits_resp(l2_frontend_bus_axi4_0_r_bits_resp),
+		.auto_axi4index_in_r_bits_last(l2_frontend_bus_axi4_0_r_bits_last),
+		.auto_tl_out_a_ready(_fbus_buffer_auto_in_a_ready),
+		.auto_tl_out_a_valid(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_valid),
+		.auto_tl_out_a_bits_opcode(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_opcode),
+		.auto_tl_out_a_bits_param(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_param),
+		.auto_tl_out_a_bits_size(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_size),
+		.auto_tl_out_a_bits_source(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_source),
+		.auto_tl_out_a_bits_address(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_address),
+		.auto_tl_out_a_bits_user_amba_prot_bufferable(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_bufferable),
+		.auto_tl_out_a_bits_user_amba_prot_modifiable(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_modifiable),
+		.auto_tl_out_a_bits_user_amba_prot_readalloc(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_readalloc),
+		.auto_tl_out_a_bits_user_amba_prot_writealloc(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_writealloc),
+		.auto_tl_out_a_bits_user_amba_prot_privileged(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_privileged),
+		.auto_tl_out_a_bits_user_amba_prot_secure(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_secure),
+		.auto_tl_out_a_bits_user_amba_prot_fetch(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_user_amba_prot_fetch),
+		.auto_tl_out_a_bits_mask(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_mask),
+		.auto_tl_out_a_bits_data(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_data),
+		.auto_tl_out_a_bits_corrupt(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_a_bits_corrupt),
+		.auto_tl_out_d_ready(_fbus_coupler_from_port_named_slave_port_axi4_auto_tl_out_d_ready),
+		.auto_tl_out_d_valid(_fbus_buffer_auto_in_d_valid),
+		.auto_tl_out_d_bits_opcode(_fbus_buffer_auto_in_d_bits_opcode),
+		.auto_tl_out_d_bits_param(_fbus_buffer_auto_in_d_bits_param),
+		.auto_tl_out_d_bits_size(_fbus_buffer_auto_in_d_bits_size),
+		.auto_tl_out_d_bits_source(_fbus_buffer_auto_in_d_bits_source),
+		.auto_tl_out_d_bits_sink(_fbus_buffer_auto_in_d_bits_sink),
+		.auto_tl_out_d_bits_denied(_fbus_buffer_auto_in_d_bits_denied),
+		.auto_tl_out_d_bits_data(_fbus_buffer_auto_in_d_bits_data),
+		.auto_tl_out_d_bits_corrupt(_fbus_buffer_auto_in_d_bits_corrupt)
+	);
+	PeripheryBus_cbus cbus(
+		.auto_coupler_to_bootrom_fragmenter_anon_out_a_ready(_bootrom_domain_auto_bootrom_in_a_ready),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_a_valid(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_valid),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_opcode(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_opcode),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_param(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_param),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_size(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_size),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_source(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_source),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_address(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_address),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_mask(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_mask),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_corrupt(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_corrupt),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_d_ready(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_d_ready),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_d_valid(_bootrom_domain_auto_bootrom_in_d_valid),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_d_bits_size(_bootrom_domain_auto_bootrom_in_d_bits_size),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_d_bits_source(_bootrom_domain_auto_bootrom_in_d_bits_source),
+		.auto_coupler_to_bootrom_fragmenter_anon_out_d_bits_data(_bootrom_domain_auto_bootrom_in_d_bits_data),
+		.auto_coupler_to_debug_fragmenter_anon_out_a_ready(_tlDM_auto_dmInner_dmInner_tl_in_a_ready),
+		.auto_coupler_to_debug_fragmenter_anon_out_a_valid(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_valid),
+		.auto_coupler_to_debug_fragmenter_anon_out_a_bits_opcode(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_opcode),
+		.auto_coupler_to_debug_fragmenter_anon_out_a_bits_param(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_param),
+		.auto_coupler_to_debug_fragmenter_anon_out_a_bits_size(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_size),
+		.auto_coupler_to_debug_fragmenter_anon_out_a_bits_source(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_source),
+		.auto_coupler_to_debug_fragmenter_anon_out_a_bits_address(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_address),
+		.auto_coupler_to_debug_fragmenter_anon_out_a_bits_mask(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_mask),
+		.auto_coupler_to_debug_fragmenter_anon_out_a_bits_data(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_data),
+		.auto_coupler_to_debug_fragmenter_anon_out_a_bits_corrupt(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_corrupt),
+		.auto_coupler_to_debug_fragmenter_anon_out_d_ready(_cbus_auto_coupler_to_debug_fragmenter_anon_out_d_ready),
+		.auto_coupler_to_debug_fragmenter_anon_out_d_valid(_tlDM_auto_dmInner_dmInner_tl_in_d_valid),
+		.auto_coupler_to_debug_fragmenter_anon_out_d_bits_opcode(_tlDM_auto_dmInner_dmInner_tl_in_d_bits_opcode),
+		.auto_coupler_to_debug_fragmenter_anon_out_d_bits_size(_tlDM_auto_dmInner_dmInner_tl_in_d_bits_size),
+		.auto_coupler_to_debug_fragmenter_anon_out_d_bits_source(_tlDM_auto_dmInner_dmInner_tl_in_d_bits_source),
+		.auto_coupler_to_debug_fragmenter_anon_out_d_bits_data(_tlDM_auto_dmInner_dmInner_tl_in_d_bits_data),
+		.auto_coupler_to_plic_fragmenter_anon_out_a_ready(_plic_domain_auto_plic_in_a_ready),
+		.auto_coupler_to_plic_fragmenter_anon_out_a_valid(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_valid),
+		.auto_coupler_to_plic_fragmenter_anon_out_a_bits_opcode(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_opcode),
+		.auto_coupler_to_plic_fragmenter_anon_out_a_bits_param(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_param),
+		.auto_coupler_to_plic_fragmenter_anon_out_a_bits_size(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_size),
+		.auto_coupler_to_plic_fragmenter_anon_out_a_bits_source(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_source),
+		.auto_coupler_to_plic_fragmenter_anon_out_a_bits_address(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_address),
+		.auto_coupler_to_plic_fragmenter_anon_out_a_bits_mask(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_mask),
+		.auto_coupler_to_plic_fragmenter_anon_out_a_bits_data(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_data),
+		.auto_coupler_to_plic_fragmenter_anon_out_a_bits_corrupt(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_corrupt),
+		.auto_coupler_to_plic_fragmenter_anon_out_d_ready(_cbus_auto_coupler_to_plic_fragmenter_anon_out_d_ready),
+		.auto_coupler_to_plic_fragmenter_anon_out_d_valid(_plic_domain_auto_plic_in_d_valid),
+		.auto_coupler_to_plic_fragmenter_anon_out_d_bits_opcode(_plic_domain_auto_plic_in_d_bits_opcode),
+		.auto_coupler_to_plic_fragmenter_anon_out_d_bits_size(_plic_domain_auto_plic_in_d_bits_size),
+		.auto_coupler_to_plic_fragmenter_anon_out_d_bits_source(_plic_domain_auto_plic_in_d_bits_source),
+		.auto_coupler_to_plic_fragmenter_anon_out_d_bits_data(_plic_domain_auto_plic_in_d_bits_data),
+		.auto_coupler_to_clint_fragmenter_anon_out_a_ready(_clint_domain_auto_clint_in_a_ready),
+		.auto_coupler_to_clint_fragmenter_anon_out_a_valid(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_valid),
+		.auto_coupler_to_clint_fragmenter_anon_out_a_bits_opcode(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_opcode),
+		.auto_coupler_to_clint_fragmenter_anon_out_a_bits_param(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_param),
+		.auto_coupler_to_clint_fragmenter_anon_out_a_bits_size(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_size),
+		.auto_coupler_to_clint_fragmenter_anon_out_a_bits_source(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_source),
+		.auto_coupler_to_clint_fragmenter_anon_out_a_bits_address(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_address),
+		.auto_coupler_to_clint_fragmenter_anon_out_a_bits_mask(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_mask),
+		.auto_coupler_to_clint_fragmenter_anon_out_a_bits_data(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_data),
+		.auto_coupler_to_clint_fragmenter_anon_out_a_bits_corrupt(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_corrupt),
+		.auto_coupler_to_clint_fragmenter_anon_out_d_ready(_cbus_auto_coupler_to_clint_fragmenter_anon_out_d_ready),
+		.auto_coupler_to_clint_fragmenter_anon_out_d_valid(_clint_domain_auto_clint_in_d_valid),
+		.auto_coupler_to_clint_fragmenter_anon_out_d_bits_opcode(_clint_domain_auto_clint_in_d_bits_opcode),
+		.auto_coupler_to_clint_fragmenter_anon_out_d_bits_size(_clint_domain_auto_clint_in_d_bits_size),
+		.auto_coupler_to_clint_fragmenter_anon_out_d_bits_source(_clint_domain_auto_clint_in_d_bits_source),
+		.auto_coupler_to_clint_fragmenter_anon_out_d_bits_data(_clint_domain_auto_clint_in_d_bits_data),
+		.auto_fixedClockNode_anon_out_3_clock(_cbus_auto_fixedClockNode_anon_out_3_clock),
+		.auto_fixedClockNode_anon_out_3_reset(_cbus_auto_fixedClockNode_anon_out_3_reset),
+		.auto_fixedClockNode_anon_out_1_clock(_cbus_auto_fixedClockNode_anon_out_1_clock),
+		.auto_fixedClockNode_anon_out_1_reset(_cbus_auto_fixedClockNode_anon_out_1_reset),
+		.auto_fixedClockNode_anon_out_0_clock(_cbus_auto_fixedClockNode_anon_out_0_clock),
+		.auto_fixedClockNode_anon_out_0_reset(_cbus_auto_fixedClockNode_anon_out_0_reset),
+		.auto_cbus_clock_groups_in_member_cbus_0_clock(_sbus_auto_sbus_clock_groups_out_0_member_cbus_0_clock),
+		.auto_cbus_clock_groups_in_member_cbus_0_reset(_sbus_auto_sbus_clock_groups_out_0_member_cbus_0_reset),
+		.auto_bus_xing_in_a_ready(_cbus_auto_bus_xing_in_a_ready),
+		.auto_bus_xing_in_a_valid(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_valid),
+		.auto_bus_xing_in_a_bits_opcode(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_opcode),
+		.auto_bus_xing_in_a_bits_param(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_param),
+		.auto_bus_xing_in_a_bits_size(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_size),
+		.auto_bus_xing_in_a_bits_source(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_source),
+		.auto_bus_xing_in_a_bits_address(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_address),
+		.auto_bus_xing_in_a_bits_mask(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_mask),
+		.auto_bus_xing_in_a_bits_data(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_data),
+		.auto_bus_xing_in_a_bits_corrupt(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_a_bits_corrupt),
+		.auto_bus_xing_in_d_ready(_sbus_auto_coupler_to_bus_named_cbus_bus_xing_out_d_ready),
+		.auto_bus_xing_in_d_valid(_cbus_auto_bus_xing_in_d_valid),
+		.auto_bus_xing_in_d_bits_opcode(_cbus_auto_bus_xing_in_d_bits_opcode),
+		.auto_bus_xing_in_d_bits_param(_cbus_auto_bus_xing_in_d_bits_param),
+		.auto_bus_xing_in_d_bits_size(_cbus_auto_bus_xing_in_d_bits_size),
+		.auto_bus_xing_in_d_bits_source(_cbus_auto_bus_xing_in_d_bits_source),
+		.auto_bus_xing_in_d_bits_sink(_cbus_auto_bus_xing_in_d_bits_sink),
+		.auto_bus_xing_in_d_bits_denied(_cbus_auto_bus_xing_in_d_bits_denied),
+		.auto_bus_xing_in_d_bits_data(_cbus_auto_bus_xing_in_d_bits_data),
+		.auto_bus_xing_in_d_bits_corrupt(_cbus_auto_bus_xing_in_d_bits_corrupt)
+	);
+	MemoryBus mbus(
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_aw_ready(mem_axi4_0_aw_ready),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_aw_valid(mem_axi4_0_aw_valid),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_aw_bits_id(mem_axi4_0_aw_bits_id),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_aw_bits_addr(mem_axi4_0_aw_bits_addr),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_aw_bits_len(mem_axi4_0_aw_bits_len),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_aw_bits_size(mem_axi4_0_aw_bits_size),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_aw_bits_burst(mem_axi4_0_aw_bits_burst),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_aw_bits_lock(mem_axi4_0_aw_bits_lock),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_aw_bits_cache(mem_axi4_0_aw_bits_cache),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_aw_bits_prot(mem_axi4_0_aw_bits_prot),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_aw_bits_qos(mem_axi4_0_aw_bits_qos),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_w_ready(mem_axi4_0_w_ready),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_w_valid(mem_axi4_0_w_valid),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_w_bits_data(mem_axi4_0_w_bits_data),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_w_bits_strb(mem_axi4_0_w_bits_strb),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_w_bits_last(mem_axi4_0_w_bits_last),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_b_ready(mem_axi4_0_b_ready),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_b_valid(mem_axi4_0_b_valid),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_b_bits_id(mem_axi4_0_b_bits_id),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_b_bits_resp(mem_axi4_0_b_bits_resp),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_ar_ready(mem_axi4_0_ar_ready),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_ar_valid(mem_axi4_0_ar_valid),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_ar_bits_id(mem_axi4_0_ar_bits_id),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_ar_bits_addr(mem_axi4_0_ar_bits_addr),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_ar_bits_len(mem_axi4_0_ar_bits_len),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_ar_bits_size(mem_axi4_0_ar_bits_size),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_ar_bits_burst(mem_axi4_0_ar_bits_burst),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_ar_bits_lock(mem_axi4_0_ar_bits_lock),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_ar_bits_cache(mem_axi4_0_ar_bits_cache),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_ar_bits_prot(mem_axi4_0_ar_bits_prot),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_ar_bits_qos(mem_axi4_0_ar_bits_qos),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_r_ready(mem_axi4_0_r_ready),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_r_valid(mem_axi4_0_r_valid),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_r_bits_id(mem_axi4_0_r_bits_id),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_r_bits_data(mem_axi4_0_r_bits_data),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_r_bits_resp(mem_axi4_0_r_bits_resp),
+		.auto_coupler_to_memory_controller_port_named_axi4_axi4yank_out_r_bits_last(mem_axi4_0_r_bits_last),
+		.auto_mbus_clock_groups_in_member_mbus_0_clock(_coh_wrapper_auto_coh_clock_groups_out_member_mbus_0_clock),
+		.auto_mbus_clock_groups_in_member_mbus_0_reset(_coh_wrapper_auto_coh_clock_groups_out_member_mbus_0_reset),
+		.auto_bus_xing_in_a_ready(_mbus_auto_bus_xing_in_a_ready),
+		.auto_bus_xing_in_a_valid(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_valid),
+		.auto_bus_xing_in_a_bits_opcode(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_opcode),
+		.auto_bus_xing_in_a_bits_param(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_param),
+		.auto_bus_xing_in_a_bits_size(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_size),
+		.auto_bus_xing_in_a_bits_source(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_source),
+		.auto_bus_xing_in_a_bits_address(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_address),
+		.auto_bus_xing_in_a_bits_user_amba_prot_bufferable(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_bufferable),
+		.auto_bus_xing_in_a_bits_user_amba_prot_modifiable(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_modifiable),
+		.auto_bus_xing_in_a_bits_user_amba_prot_readalloc(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_readalloc),
+		.auto_bus_xing_in_a_bits_user_amba_prot_writealloc(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_writealloc),
+		.auto_bus_xing_in_a_bits_user_amba_prot_privileged(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_privileged),
+		.auto_bus_xing_in_a_bits_user_amba_prot_secure(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_secure),
+		.auto_bus_xing_in_a_bits_user_amba_prot_fetch(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_fetch),
+		.auto_bus_xing_in_a_bits_mask(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_mask),
+		.auto_bus_xing_in_a_bits_data(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_data),
+		.auto_bus_xing_in_d_ready(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_d_ready),
+		.auto_bus_xing_in_d_valid(_mbus_auto_bus_xing_in_d_valid),
+		.auto_bus_xing_in_d_bits_opcode(_mbus_auto_bus_xing_in_d_bits_opcode),
+		.auto_bus_xing_in_d_bits_size(_mbus_auto_bus_xing_in_d_bits_size),
+		.auto_bus_xing_in_d_bits_source(_mbus_auto_bus_xing_in_d_bits_source),
+		.auto_bus_xing_in_d_bits_denied(_mbus_auto_bus_xing_in_d_bits_denied),
+		.auto_bus_xing_in_d_bits_data(_mbus_auto_bus_xing_in_d_bits_data),
+		.auto_bus_xing_in_d_bits_corrupt(_mbus_auto_bus_xing_in_d_bits_corrupt)
+	);
+	CoherenceManagerWrapper coh_wrapper(
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_ready(_mbus_auto_bus_xing_in_a_ready),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_valid(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_valid),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_opcode(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_opcode),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_param(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_param),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_size(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_size),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_source(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_source),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_address(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_address),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_bufferable(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_bufferable),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_modifiable(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_modifiable),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_readalloc(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_readalloc),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_writealloc(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_writealloc),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_privileged(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_privileged),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_secure(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_secure),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_fetch(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_user_amba_prot_fetch),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_mask(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_mask),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_data(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_a_bits_data),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_d_ready(_coh_wrapper_auto_coupler_to_bus_named_mbus_bus_xing_out_d_ready),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_d_valid(_mbus_auto_bus_xing_in_d_valid),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_d_bits_opcode(_mbus_auto_bus_xing_in_d_bits_opcode),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_d_bits_size(_mbus_auto_bus_xing_in_d_bits_size),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_d_bits_source(_mbus_auto_bus_xing_in_d_bits_source),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_d_bits_denied(_mbus_auto_bus_xing_in_d_bits_denied),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_d_bits_data(_mbus_auto_bus_xing_in_d_bits_data),
+		.auto_coupler_to_bus_named_mbus_bus_xing_out_d_bits_corrupt(_mbus_auto_bus_xing_in_d_bits_corrupt),
+		.auto_coherent_jbar_anon_in_a_ready(_coh_wrapper_auto_coherent_jbar_anon_in_a_ready),
+		.auto_coherent_jbar_anon_in_a_valid(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_valid),
+		.auto_coherent_jbar_anon_in_a_bits_opcode(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_opcode),
+		.auto_coherent_jbar_anon_in_a_bits_param(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_param),
+		.auto_coherent_jbar_anon_in_a_bits_size(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_size),
+		.auto_coherent_jbar_anon_in_a_bits_source(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_source),
+		.auto_coherent_jbar_anon_in_a_bits_address(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_address),
+		.auto_coherent_jbar_anon_in_a_bits_user_amba_prot_bufferable(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_bufferable),
+		.auto_coherent_jbar_anon_in_a_bits_user_amba_prot_modifiable(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_modifiable),
+		.auto_coherent_jbar_anon_in_a_bits_user_amba_prot_readalloc(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_readalloc),
+		.auto_coherent_jbar_anon_in_a_bits_user_amba_prot_writealloc(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_writealloc),
+		.auto_coherent_jbar_anon_in_a_bits_user_amba_prot_privileged(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_privileged),
+		.auto_coherent_jbar_anon_in_a_bits_user_amba_prot_secure(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_secure),
+		.auto_coherent_jbar_anon_in_a_bits_user_amba_prot_fetch(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_user_amba_prot_fetch),
+		.auto_coherent_jbar_anon_in_a_bits_mask(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_mask),
+		.auto_coherent_jbar_anon_in_a_bits_data(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_data),
+		.auto_coherent_jbar_anon_in_a_bits_corrupt(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_a_bits_corrupt),
+		.auto_coherent_jbar_anon_in_b_ready(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_b_ready),
+		.auto_coherent_jbar_anon_in_b_valid(_coh_wrapper_auto_coherent_jbar_anon_in_b_valid),
+		.auto_coherent_jbar_anon_in_b_bits_param(_coh_wrapper_auto_coherent_jbar_anon_in_b_bits_param),
+		.auto_coherent_jbar_anon_in_b_bits_address(_coh_wrapper_auto_coherent_jbar_anon_in_b_bits_address),
+		.auto_coherent_jbar_anon_in_c_ready(_coh_wrapper_auto_coherent_jbar_anon_in_c_ready),
+		.auto_coherent_jbar_anon_in_c_valid(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_valid),
+		.auto_coherent_jbar_anon_in_c_bits_opcode(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_opcode),
+		.auto_coherent_jbar_anon_in_c_bits_param(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_param),
+		.auto_coherent_jbar_anon_in_c_bits_size(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_size),
+		.auto_coherent_jbar_anon_in_c_bits_source(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_source),
+		.auto_coherent_jbar_anon_in_c_bits_address(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_address),
+		.auto_coherent_jbar_anon_in_c_bits_data(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_data),
+		.auto_coherent_jbar_anon_in_c_bits_corrupt(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_c_bits_corrupt),
+		.auto_coherent_jbar_anon_in_d_ready(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_d_ready),
+		.auto_coherent_jbar_anon_in_d_valid(_coh_wrapper_auto_coherent_jbar_anon_in_d_valid),
+		.auto_coherent_jbar_anon_in_d_bits_opcode(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_opcode),
+		.auto_coherent_jbar_anon_in_d_bits_param(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_param),
+		.auto_coherent_jbar_anon_in_d_bits_size(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_size),
+		.auto_coherent_jbar_anon_in_d_bits_source(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_source),
+		.auto_coherent_jbar_anon_in_d_bits_sink(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_sink),
+		.auto_coherent_jbar_anon_in_d_bits_denied(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_denied),
+		.auto_coherent_jbar_anon_in_d_bits_data(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_data),
+		.auto_coherent_jbar_anon_in_d_bits_corrupt(_coh_wrapper_auto_coherent_jbar_anon_in_d_bits_corrupt),
+		.auto_coherent_jbar_anon_in_e_valid(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_e_valid),
+		.auto_coherent_jbar_anon_in_e_bits_sink(_sbus_auto_coupler_to_bus_named_coh_widget_anon_out_e_bits_sink),
+		.auto_coh_clock_groups_in_member_coh_1_clock(_sbus_auto_sbus_clock_groups_out_2_member_coh_1_clock),
+		.auto_coh_clock_groups_in_member_coh_1_reset(_sbus_auto_sbus_clock_groups_out_2_member_coh_1_reset),
+		.auto_coh_clock_groups_in_member_coh_0_clock(_sbus_auto_sbus_clock_groups_out_2_member_coh_0_clock),
+		.auto_coh_clock_groups_in_member_coh_0_reset(_sbus_auto_sbus_clock_groups_out_2_member_coh_0_reset),
+		.auto_coh_clock_groups_out_member_mbus_0_clock(_coh_wrapper_auto_coh_clock_groups_out_member_mbus_0_clock),
+		.auto_coh_clock_groups_out_member_mbus_0_reset(_coh_wrapper_auto_coh_clock_groups_out_member_mbus_0_reset)
+	);
+	TilePRCIDomain tile_prci_domain(
+		.auto_intsink_in_sync_0(_tlDM_auto_dmOuter_int_out_sync_0),
+		.auto_element_reset_domain_boom_tile_hartid_in(_tileHartIdNexusNode_auto_out),
+		.auto_int_in_clock_xing_in_2_sync_0(_plic_domain_auto_int_in_clock_xing_out_1_sync_0),
+		.auto_int_in_clock_xing_in_1_sync_0(_plic_domain_auto_int_in_clock_xing_out_0_sync_0),
+		.auto_int_in_clock_xing_in_0_sync_0(_clint_domain_auto_int_in_clock_xing_out_sync_0),
+		.auto_int_in_clock_xing_in_0_sync_1(_clint_domain_auto_int_in_clock_xing_out_sync_1),
+		.auto_tl_master_clock_xing_out_a_ready(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_a_ready),
+		.auto_tl_master_clock_xing_out_a_valid(_tile_prci_domain_auto_tl_master_clock_xing_out_a_valid),
+		.auto_tl_master_clock_xing_out_a_bits_opcode(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_opcode),
+		.auto_tl_master_clock_xing_out_a_bits_param(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_param),
+		.auto_tl_master_clock_xing_out_a_bits_size(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_size),
+		.auto_tl_master_clock_xing_out_a_bits_source(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_source),
+		.auto_tl_master_clock_xing_out_a_bits_address(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_address),
+		.auto_tl_master_clock_xing_out_a_bits_mask(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_mask),
+		.auto_tl_master_clock_xing_out_a_bits_data(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_data),
+		.auto_tl_master_clock_xing_out_a_bits_corrupt(_tile_prci_domain_auto_tl_master_clock_xing_out_a_bits_corrupt),
+		.auto_tl_master_clock_xing_out_b_ready(_tile_prci_domain_auto_tl_master_clock_xing_out_b_ready),
+		.auto_tl_master_clock_xing_out_b_valid(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_valid),
+		.auto_tl_master_clock_xing_out_b_bits_param(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_bits_param),
+		.auto_tl_master_clock_xing_out_b_bits_address(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_b_bits_address),
+		.auto_tl_master_clock_xing_out_c_ready(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_c_ready),
+		.auto_tl_master_clock_xing_out_c_valid(_tile_prci_domain_auto_tl_master_clock_xing_out_c_valid),
+		.auto_tl_master_clock_xing_out_c_bits_opcode(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_opcode),
+		.auto_tl_master_clock_xing_out_c_bits_param(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_param),
+		.auto_tl_master_clock_xing_out_c_bits_size(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_size),
+		.auto_tl_master_clock_xing_out_c_bits_source(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_source),
+		.auto_tl_master_clock_xing_out_c_bits_address(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_address),
+		.auto_tl_master_clock_xing_out_c_bits_data(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_data),
+		.auto_tl_master_clock_xing_out_c_bits_corrupt(_tile_prci_domain_auto_tl_master_clock_xing_out_c_bits_corrupt),
+		.auto_tl_master_clock_xing_out_d_ready(_tile_prci_domain_auto_tl_master_clock_xing_out_d_ready),
+		.auto_tl_master_clock_xing_out_d_valid(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_valid),
+		.auto_tl_master_clock_xing_out_d_bits_opcode(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_opcode),
+		.auto_tl_master_clock_xing_out_d_bits_param(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_param),
+		.auto_tl_master_clock_xing_out_d_bits_size(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_size),
+		.auto_tl_master_clock_xing_out_d_bits_source(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_source),
+		.auto_tl_master_clock_xing_out_d_bits_sink(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_sink),
+		.auto_tl_master_clock_xing_out_d_bits_denied(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_denied),
+		.auto_tl_master_clock_xing_out_d_bits_data(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_data),
+		.auto_tl_master_clock_xing_out_d_bits_corrupt(_sbus_auto_coupler_from_boom_tile_tl_master_clock_xing_in_d_bits_corrupt),
+		.auto_tl_master_clock_xing_out_e_valid(_tile_prci_domain_auto_tl_master_clock_xing_out_e_valid),
+		.auto_tl_master_clock_xing_out_e_bits_sink(_tile_prci_domain_auto_tl_master_clock_xing_out_e_bits_sink),
+		.auto_tap_clock_in_clock(_sbus_auto_fixedClockNode_anon_out_1_clock),
+		.auto_tap_clock_in_reset(_sbus_auto_fixedClockNode_anon_out_1_reset)
+	);
+	BundleBridgeNexus_UInt1_1 tileHartIdNexusNode(.auto_out(_tileHartIdNexusNode_auto_out));
+	CLINTClockSinkDomain clint_domain(
+		.auto_clint_in_a_ready(_clint_domain_auto_clint_in_a_ready),
+		.auto_clint_in_a_valid(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_valid),
+		.auto_clint_in_a_bits_opcode(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_opcode),
+		.auto_clint_in_a_bits_param(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_param),
+		.auto_clint_in_a_bits_size(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_size),
+		.auto_clint_in_a_bits_source(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_source),
+		.auto_clint_in_a_bits_address(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_address),
+		.auto_clint_in_a_bits_mask(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_mask),
+		.auto_clint_in_a_bits_data(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_data),
+		.auto_clint_in_a_bits_corrupt(_cbus_auto_coupler_to_clint_fragmenter_anon_out_a_bits_corrupt),
+		.auto_clint_in_d_ready(_cbus_auto_coupler_to_clint_fragmenter_anon_out_d_ready),
+		.auto_clint_in_d_valid(_clint_domain_auto_clint_in_d_valid),
+		.auto_clint_in_d_bits_opcode(_clint_domain_auto_clint_in_d_bits_opcode),
+		.auto_clint_in_d_bits_size(_clint_domain_auto_clint_in_d_bits_size),
+		.auto_clint_in_d_bits_source(_clint_domain_auto_clint_in_d_bits_source),
+		.auto_clint_in_d_bits_data(_clint_domain_auto_clint_in_d_bits_data),
+		.auto_int_in_clock_xing_out_sync_0(_clint_domain_auto_int_in_clock_xing_out_sync_0),
+		.auto_int_in_clock_xing_out_sync_1(_clint_domain_auto_int_in_clock_xing_out_sync_1),
+		.auto_clock_in_clock(_cbus_auto_fixedClockNode_anon_out_0_clock),
+		.auto_clock_in_reset(_cbus_auto_fixedClockNode_anon_out_0_reset),
+		.tick(int_rtc_tick),
+		.clock(_clint_domain_clock),
+		.reset(_clint_domain_reset)
+	);
+	PLICClockSinkDomain plic_domain(
+		.auto_plic_int_in_0(_ibus_intsink_auto_out_0),
+		.auto_plic_int_in_1(_ibus_intsink_auto_out_1),
+		.auto_plic_in_a_ready(_plic_domain_auto_plic_in_a_ready),
+		.auto_plic_in_a_valid(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_valid),
+		.auto_plic_in_a_bits_opcode(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_opcode),
+		.auto_plic_in_a_bits_param(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_param),
+		.auto_plic_in_a_bits_size(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_size),
+		.auto_plic_in_a_bits_source(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_source),
+		.auto_plic_in_a_bits_address(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_address),
+		.auto_plic_in_a_bits_mask(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_mask),
+		.auto_plic_in_a_bits_data(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_data),
+		.auto_plic_in_a_bits_corrupt(_cbus_auto_coupler_to_plic_fragmenter_anon_out_a_bits_corrupt),
+		.auto_plic_in_d_ready(_cbus_auto_coupler_to_plic_fragmenter_anon_out_d_ready),
+		.auto_plic_in_d_valid(_plic_domain_auto_plic_in_d_valid),
+		.auto_plic_in_d_bits_opcode(_plic_domain_auto_plic_in_d_bits_opcode),
+		.auto_plic_in_d_bits_size(_plic_domain_auto_plic_in_d_bits_size),
+		.auto_plic_in_d_bits_source(_plic_domain_auto_plic_in_d_bits_source),
+		.auto_plic_in_d_bits_data(_plic_domain_auto_plic_in_d_bits_data),
+		.auto_int_in_clock_xing_out_1_sync_0(_plic_domain_auto_int_in_clock_xing_out_1_sync_0),
+		.auto_int_in_clock_xing_out_0_sync_0(_plic_domain_auto_int_in_clock_xing_out_0_sync_0),
+		.auto_clock_in_clock(_cbus_auto_fixedClockNode_anon_out_1_clock),
+		.auto_clock_in_reset(_cbus_auto_fixedClockNode_anon_out_1_reset)
+	);
+	TLDebugModule tlDM(
+		.auto_dmInner_dmInner_tl_in_a_ready(_tlDM_auto_dmInner_dmInner_tl_in_a_ready),
+		.auto_dmInner_dmInner_tl_in_a_valid(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_valid),
+		.auto_dmInner_dmInner_tl_in_a_bits_opcode(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_opcode),
+		.auto_dmInner_dmInner_tl_in_a_bits_param(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_param),
+		.auto_dmInner_dmInner_tl_in_a_bits_size(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_size),
+		.auto_dmInner_dmInner_tl_in_a_bits_source(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_source),
+		.auto_dmInner_dmInner_tl_in_a_bits_address(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_address),
+		.auto_dmInner_dmInner_tl_in_a_bits_mask(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_mask),
+		.auto_dmInner_dmInner_tl_in_a_bits_data(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_data),
+		.auto_dmInner_dmInner_tl_in_a_bits_corrupt(_cbus_auto_coupler_to_debug_fragmenter_anon_out_a_bits_corrupt),
+		.auto_dmInner_dmInner_tl_in_d_ready(_cbus_auto_coupler_to_debug_fragmenter_anon_out_d_ready),
+		.auto_dmInner_dmInner_tl_in_d_valid(_tlDM_auto_dmInner_dmInner_tl_in_d_valid),
+		.auto_dmInner_dmInner_tl_in_d_bits_opcode(_tlDM_auto_dmInner_dmInner_tl_in_d_bits_opcode),
+		.auto_dmInner_dmInner_tl_in_d_bits_size(_tlDM_auto_dmInner_dmInner_tl_in_d_bits_size),
+		.auto_dmInner_dmInner_tl_in_d_bits_source(_tlDM_auto_dmInner_dmInner_tl_in_d_bits_source),
+		.auto_dmInner_dmInner_tl_in_d_bits_data(_tlDM_auto_dmInner_dmInner_tl_in_d_bits_data),
+		.auto_dmOuter_int_out_sync_0(_tlDM_auto_dmOuter_int_out_sync_0),
+		.io_debug_clock(debug_clock),
+		.io_debug_reset(debug_reset),
+		.io_ctrl_ndreset(debug_ndreset),
+		.io_ctrl_dmactive(debug_dmactive),
+		.io_ctrl_dmactiveAck(debug_dmactiveAck),
+		.io_dmi_dmi_req_ready(debug_clockeddmi_dmi_req_ready),
+		.io_dmi_dmi_req_valid(debug_clockeddmi_dmi_req_valid),
+		.io_dmi_dmi_req_bits_addr(debug_clockeddmi_dmi_req_bits_addr),
+		.io_dmi_dmi_req_bits_data(debug_clockeddmi_dmi_req_bits_data),
+		.io_dmi_dmi_req_bits_op(debug_clockeddmi_dmi_req_bits_op),
+		.io_dmi_dmi_resp_ready(debug_clockeddmi_dmi_resp_ready),
+		.io_dmi_dmi_resp_valid(debug_clockeddmi_dmi_resp_valid),
+		.io_dmi_dmi_resp_bits_data(debug_clockeddmi_dmi_resp_bits_data),
+		.io_dmi_dmi_resp_bits_resp(debug_clockeddmi_dmi_resp_bits_resp),
+		.io_dmi_dmiClock(debug_clockeddmi_dmiClock),
+		.io_dmi_dmiReset(debug_clockeddmi_dmiReset),
+		.io_hartIsInReset_0(resetctrl_hartIsInReset_0)
+	);
+	bootromClockSinkDomain bootrom_domain(
+		.auto_bootrom_in_a_ready(_bootrom_domain_auto_bootrom_in_a_ready),
+		.auto_bootrom_in_a_valid(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_valid),
+		.auto_bootrom_in_a_bits_opcode(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_opcode),
+		.auto_bootrom_in_a_bits_param(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_param),
+		.auto_bootrom_in_a_bits_size(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_size),
+		.auto_bootrom_in_a_bits_source(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_source),
+		.auto_bootrom_in_a_bits_address(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_address),
+		.auto_bootrom_in_a_bits_mask(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_mask),
+		.auto_bootrom_in_a_bits_corrupt(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_a_bits_corrupt),
+		.auto_bootrom_in_d_ready(_cbus_auto_coupler_to_bootrom_fragmenter_anon_out_d_ready),
+		.auto_bootrom_in_d_valid(_bootrom_domain_auto_bootrom_in_d_valid),
+		.auto_bootrom_in_d_bits_size(_bootrom_domain_auto_bootrom_in_d_bits_size),
+		.auto_bootrom_in_d_bits_source(_bootrom_domain_auto_bootrom_in_d_bits_source),
+		.auto_bootrom_in_d_bits_data(_bootrom_domain_auto_bootrom_in_d_bits_data),
+		.auto_clock_in_clock(_cbus_auto_fixedClockNode_anon_out_3_clock),
+		.auto_clock_in_reset(_cbus_auto_fixedClockNode_anon_out_3_reset)
+	);
+endmodule

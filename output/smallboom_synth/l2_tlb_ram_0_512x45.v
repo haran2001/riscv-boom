@@ -1,0 +1,27 @@
+module l2_tlb_ram_0_512x45 (
+	RW0_addr,
+	RW0_en,
+	RW0_clk,
+	RW0_wmode,
+	RW0_wdata,
+	RW0_rdata
+);
+	input [8:0] RW0_addr;
+	input RW0_en;
+	input RW0_clk;
+	input RW0_wmode;
+	input [44:0] RW0_wdata;
+	output wire [44:0] RW0_rdata;
+	reg [44:0] Memory [0:511];
+	reg [8:0] _RW0_raddr_d0;
+	reg _RW0_ren_d0;
+	reg _RW0_rmode_d0;
+	always @(posedge RW0_clk) begin
+		_RW0_raddr_d0 <= RW0_addr;
+		_RW0_ren_d0 <= RW0_en;
+		_RW0_rmode_d0 <= RW0_wmode;
+		if ((RW0_en & RW0_wmode) & 1'h1)
+			Memory[RW0_addr] <= RW0_wdata;
+	end
+	assign RW0_rdata = (_RW0_ren_d0 & ~_RW0_rmode_d0 ? Memory[_RW0_raddr_d0] : 45'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx);
+endmodule
